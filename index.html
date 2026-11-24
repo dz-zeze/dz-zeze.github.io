@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZEZE CLOUD</title>
+<title>ZEZE</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -46,7 +46,7 @@ button,input,select{font:inherit}
 button{cursor:pointer}
 .wrap{width:min(1080px,100%);margin:auto;padding:22px 16px 50px}
 .glass,.menu,.hero,.folder,.upload-panel,.video-card,.file-card,
-.music-panel,.empty,.modal,.theme-box,.search,.refresh{
+.music-panel,.empty,.modal,.theme-box{
 background:var(--panel);backdrop-filter:blur(22px);
 -webkit-backdrop-filter:blur(22px);border:1px solid var(--border);
 box-shadow:var(--shadow);
@@ -150,14 +150,25 @@ color:white;flex-shrink:0;
 .song-info small{color:var(--muted);font-size:10px}
 .folders{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:22px}
 .folder{
-color:var(--text);text-align:left;padding:16px 12px;
-border-radius:19px;min-width:0;
+color:var(--text);text-align:left;padding:19px 14px;
+border-radius:19px;min-width:0;position:relative;overflow:hidden;
 }
-.folder.active{border-color:var(--cyan);box-shadow:0 0 22px #42d9ff25,inset 0 0 25px #8b62ff15}
-.folder-icon{font-size:25px;display:block;margin-bottom:12px}
-.folder strong{display:block;font-size:13px}
+.folder.active{
+border-color:var(--cyan);
+box-shadow:0 0 22px #42d9ff35,inset 0 0 25px #8b62ff20;
+}
+.folder-icon{
+width:64px;height:64px;display:grid;place-items:center;
+margin-bottom:13px;border-radius:19px;
+font-size:36px;color:white;
+background:linear-gradient(135deg,rgba(163,108,255,.35),rgba(66,217,255,.2));
+border:1px solid rgba(100,210,255,.4);
+box-shadow:0 0 22px #8b62ff55,inset 0 0 18px #42d9ff20;
+text-shadow:0 0 15px var(--cyan);
+}
+.folder strong{display:block;font-size:14px;letter-spacing:1px}
 .folder small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
-.folder-count{float:right;color:var(--cyan);font-size:10px}
+.folder-count{float:right;color:var(--cyan);font-size:11px}
 .upload-panel{padding:18px;border-radius:21px;margin-bottom:22px}
 .panel-heading{display:flex;justify-content:space-between}
 .admin-pill{color:#43dfa5;font-size:10px}
@@ -177,13 +188,6 @@ background:linear-gradient(110deg,var(--accent),#4bafff);
 .upload-status,.file-meta{font-size:11px;color:var(--muted);margin-top:9px}
 .progress{height:5px;background:var(--panel2);border-radius:9px;margin-top:8px;display:none}
 .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan))}
-.toolbar{display:flex;gap:9px;margin:18px 0}
-.search{
-flex:1;min-width:0;padding:13px;border-radius:13px;color:var(--text);outline:none;
-}
-.refresh{
-width:45px;height:45px;border-radius:14px;font-size:20px;color:var(--text);
-}
 .list-heading{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 13px}
 .list-heading h3{font-size:17px;margin:0}
 .list-heading span{font-size:11px;color:var(--muted)}
@@ -249,10 +253,11 @@ padding:12px 17px;border-radius:13px;z-index:50;font-size:12px;transition:.2s;
 @media(min-width:700px){
 .wrap{padding-top:30px}
 .file-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-.file-preview{height:155px}.folders{gap:15px}.folder{padding:20px}
+.file-preview{height:155px}.folders{gap:15px}.folder{padding:22px}
 }
 @media(max-width:380px){
-.folder{padding:13px 9px}.folder strong{font-size:11px}.album{width:72px;height:72px}
+.folder{padding:13px 9px}.folder strong{font-size:12px}.album{width:72px;height:72px}
+.folder-icon{width:57px;height:57px;font-size:31px}
 }
 </style>
 </head>
@@ -262,12 +267,12 @@ padding:12px 17px;border-radius:13px;z-index:50;font-size:12px;transition:.2s;
 <header>
 <div class="brand">
 <div class="logo">☁</div>
-<div><h1>ZEZE CLOUD</h1><small>Your personal media space</small></div>
+<div><h1>ZEZE</h1><small>Your personal media space</small></div>
 </div>
 <div class="menu-wrap">
 <button class="menu-btn" id="menuButton" aria-label="Menu">⋮</button>
 <div class="menu" id="menu">
-<div class="menu-title">ZEZE CLOUD MENU</div>
+<div class="menu-title">ZEZE MENU</div>
 <div class="menu-grid">
 <button class="menu-card" id="loginMenu">
 <strong id="loginCardTitle">🔐 Login Admin</strong>
@@ -310,7 +315,7 @@ padding:12px 17px;border-radius:13px;z-index:50;font-size:12px;transition:.2s;
 <section class="folders">
 <button class="folder active" id="videoFolder">
 <span class="folder-count" id="videoCount">0</span>
-<span class="folder-icon">▶️</span>
+<span class="folder-icon">▶</span>
 <strong>VIDEO</strong><small>Koleksi video</small>
 </button>
 <button class="folder" id="fileFolder">
@@ -335,15 +340,11 @@ padding:12px 17px;border-radius:13px;z-index:50;font-size:12px;transition:.2s;
 </div>
 </section>
 
-<div class="toolbar">
-<input class="search" id="searchInput" placeholder="⌕ Cari nama file..." autocomplete="off">
-<button class="refresh" id="refreshButton">↻</button>
-</div>
 <div class="list-heading">
 <h3 id="listTitle">▶ Video</h3><span id="itemCount">Memuat...</span>
 </div>
 <main id="content"><div class="empty">☁<strong>Memuat penyimpanan...</strong></div></main>
-<footer>ZEZE CLOUD · YOUR FILES, YOUR SPACE</footer>
+<footer>ZEZE · YOUR FILES, YOUR SPACE</footer>
 </div>
 
 <div class="modal-bg" id="loginModal">
@@ -439,14 +440,12 @@ $('hdModal').addEventListener('click',e=>{if(e.target===$('hdModal'))$('hdModal'
 /* TAB */
 $('videoFolder').onclick=()=>switchTab('video');
 $('fileFolder').onclick=()=>switchTab('file');
-$('refreshButton').onclick=loadFiles;
-$('searchInput').oninput=renderFiles;
 function switchTab(t){
 currentTab=t;
 $('videoFolder').classList.toggle('active',t==='video');
 $('fileFolder').classList.toggle('active',t==='file');
 $('listTitle').textContent=t==='video'?'▶ Video':'▤ File';
-$('searchInput').value='';renderFiles();
+renderFiles();
 }
 
 /* ADMIN */
@@ -523,20 +522,19 @@ toast('File berhasil dihapus');await loadFiles();
 
 /* RENDER FILE: AUDIO DISEMBUNYIKAN DARI FOLDER FILE */
 function renderFiles(){
-let q=$('searchInput').value.toLowerCase().trim();
 let videos=allFiles.filter(isVideo);
 let others=allFiles.filter(f=>!isVideo(f)&&!isAudio(f));
 
 $('videoCount').textContent=videos.length;
 $('fileCount').textContent=others.length;
 
-let list=(currentTab==='video'?videos:others).filter(f=>f.name.toLowerCase().includes(q));
+let list=currentTab==='video'?videos:others;
 $('itemCount').textContent=list.length+' item';
 
 if(!list.length){
 $('content').innerHTML=`<div class="empty"><div style="font-size:35px">☁</div>
-<strong>${q?'File tidak ditemukan':'Belum ada file di sini'}</strong>
-${q?'Coba kata pencarian lain.':'File yang diunggah akan muncul di sini.'}</div>`;
+<strong>Belum ada file di sini</strong>
+File yang diunggah akan muncul di sini.</div>`;
 return;
 }
 if(currentTab==='video'){
@@ -581,7 +579,7 @@ $('musicContent').innerHTML=`
 <div class="album">♫</div>
 <div style="min-width:0">
 <div class="music-title" id="nowTitle">${esc(f.name)}</div>
-<div class="music-sub">ZEZE CLOUD · MUSIC PLAYER</div>
+<div class="music-sub">ZEZE · MUSIC PLAYER</div>
 <div class="eq">${'<i></i>'.repeat(14)}</div>
 </div>
 </div>
