@@ -3,40 +3,82 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
 <title>Zeze Cloud</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0b1020;color:#f4f6ff;font-family:Arial,sans-serif}
-header{padding:22px 18px;background:#121a30;border-bottom:1px solid #293550}
-.wrap{max-width:1050px;margin:auto;padding:20px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.logo{font-size:27px;font-weight:bold;color:#8b9cff}
-.sub,.muted{color:#9ba8c5;font-size:13px}
-button{background:#647cff;color:white;border:0;border-radius:9px;padding:11px 15px;cursor:pointer;font-weight:bold}
-button:disabled{opacity:.5;cursor:wait}
-input{width:100%;padding:12px;margin:8px 0;background:#151f36;border:1px solid #34415e;border-radius:9px;color:white}
-.panel{background:#121a30;border:1px solid #293550;padding:18px;border-radius:15px;margin:20px 0}
-h2{font-size:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:15px;margin-top:18px}
-.file{background:#151f36;border:1px solid #293550;border-radius:13px;overflow:hidden;min-width:0}
-.preview{height:145px;background:#0b1020;display:flex;align-items:center;justify-content:center;overflow:hidden}
+:root{
+ --bg:#0c1220;--surface:#141e30;--card:#19253a;
+ --text:#f4f6ff;--muted:#98a7c2;--border:#293750;
+ --accent:#8799ff;--accent2:#5269c9;--shadow:0 12px 35px #0003;
+}
+body.light{
+ --bg:#f2f4fa;--surface:#fff;--card:#f7f8fc;
+ --text:#182237;--muted:#68758c;--border:#e0e5ef;
+ --accent:#5269c9;--accent2:#4058bb;--shadow:0 10px 30px #23304a12;
+}
+*{transition:background-color .2s,color .2s,border-color .2s}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;min-height:100vh}
+header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-icon{width:43px;height:43px;border-radius:13px;background:linear-gradient(135deg,#8498ff,#5366bd);display:grid;place-items:center;color:white;font-size:23px}
+.logo{font-weight:800;font-size:21px;letter-spacing:1px;color:var(--accent)}
+.sub{font-size:11px;color:var(--muted);margin-top:4px}
+button{font:inherit;cursor:pointer}
+.menu-wrap{position:relative}
+.menu-btn{width:42px;height:42px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font-size:23px}
+.dropdown{position:absolute;right:0;top:51px;width:245px;background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:13px;box-shadow:var(--shadow);z-index:20}
+.menu-brand{display:flex;align-items:center;gap:9px;padding:8px 5px 13px;border-bottom:1px solid var(--border);margin-bottom:10px}
+.menu-brand .brand-icon{width:34px;height:34px;font-size:18px}
+.menu-item{width:100%;text-align:left;padding:12px;border:0;background:transparent;color:var(--text);border-radius:9px}
+.menu-item:hover{background:var(--card)}
+.theme-title{font-size:11px;color:var(--muted);padding:12px 10px 5px}
+.theme-options{display:flex;gap:5px}
+.theme-options button{flex:1;padding:9px 4px;font-size:11px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px}
+.theme-options button.active{border-color:var(--accent);background:var(--accent2);color:white}
+.hero{padding:32px 0 20px}
+.hero h1{font-size:27px;margin:0 0 9px}
+.hero p{color:var(--muted);font-size:14px;line-height:1.6;margin:0}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.tab{padding:17px 13px;border:1px solid var(--border);background:var(--surface);border-radius:15px;color:var(--text);text-align:left}
+.tab.active{border:1px solid var(--accent);background:var(--card);box-shadow:0 0 0 1px var(--accent) inset}
+.tab-icon{font-size:24px;display:block;margin-bottom:9px}
+.tab strong{font-size:15px}
+.tab small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
+.toolbar{display:flex;gap:10px;align-items:center;margin:22px 0 12px}
+.search{width:100%;padding:13px 15px;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:11px;outline:none}
+.search:focus{border-color:var(--accent)}
+.count{color:var(--muted);font-size:12px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:15px}
+.file{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;min-width:0}
+.preview{height:155px;background:var(--card);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .preview img,.preview video{width:100%;height:100%;object-fit:cover}
-.fileinfo{padding:12px}
-.filename{font-size:14px;word-break:break-word;margin-bottom:10px}
+.fileinfo{padding:13px}
+.filename{font-size:13px;word-break:break-word;line-height:1.5;margin-bottom:11px}
 .actions{display:flex;gap:7px;flex-wrap:wrap}
-.actions a,.actions button{font-size:12px;text-decoration:none;padding:9px;border:0;border-radius:8px}
-.actions a{background:#26385f;color:white}
-.danger{background:#a63b50}
+.actions a,.actions button{font-size:11px;text-decoration:none;border:0;border-radius:8px;padding:9px 11px}
+.open{background:var(--card);color:var(--text)}
+.download{background:var(--accent2);color:white}
+.danger{background:#a83f55;color:white}
+.empty{background:var(--surface);border:1px dashed var(--border);border-radius:14px;padding:40px 15px;text-align:center;color:var(--muted);grid-column:1/-1}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:18px;margin:20px 0}
+.panel h2{font-size:17px;margin:0 0 13px}
+.field{width:100%;padding:12px;margin:7px 0;background:var(--card);border:1px solid var(--border);border-radius:9px;color:var(--text)}
+.primary{padding:12px 16px;background:var(--accent2);color:white;border:0;border-radius:9px;font-weight:bold}
 .hidden{display:none!important}
-#status{font-size:13px;color:#aab8d7;margin-top:12px}
-footer{text-align:center;padding:30px;color:#7886a5;font-size:12px}
-@media(max-width:480px){
- .logo{font-size:22px}
+.muted{font-size:12px;color:var(--muted)}
+footer{text-align:center;padding:35px 15px;color:var(--muted);font-size:11px}
+@media(max-width:500px){
  .wrap{padding:14px}
+ .hero h1{font-size:24px}
  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
  .preview{height:120px}
+ .fileinfo{padding:10px}
+ .actions a,.actions button{padding:8px}
 }
 </style>
 </head>
@@ -44,74 +86,157 @@ footer{text-align:center;padding:30px;color:#7886a5;font-size:12px}
 
 <header>
  <div class="wrap top">
-  <div>
-   <div class="logo">☁ ZEZE CLOUD</div>
-   <div class="sub">Your personal file sharing space</div>
+  <div class="brand">
+   <div class="brand-icon">☁</div>
+   <div>
+    <div class="logo">ZEZE CLOUD</div>
+    <div class="sub">PERSONAL FILE STORAGE</div>
+   </div>
   </div>
-  <button id="loginBtn" onclick="showLogin()">Admin Login</button>
+
+  <div class="menu-wrap">
+   <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">⋮</button>
+   <div id="dropdown" class="dropdown hidden">
+    <div class="menu-brand">
+     <div class="brand-icon">☁</div>
+     <div>
+      <b>ZEZE CLOUD</b>
+      <div class="sub">Personal cloud space</div>
+     </div>
+    </div>
+    <button class="menu-item" id="loginMenu" onclick="openLogin()">♙ &nbsp; Admin Login</button>
+    <button class="menu-item hidden" id="logoutMenu" onclick="logout()">↪ &nbsp; Admin Logout</button>
+    <div class="theme-title">PILIHAN TEMA</div>
+    <div class="theme-options">
+     <button id="darkBtn" onclick="setTheme('dark')">🌙 Dark</button>
+     <button id="lightBtn" onclick="setTheme('light')">☀ Light</button>
+     <button id="autoBtn" onclick="setTheme('auto')">◐ Auto</button>
+    </div>
+   </div>
+  </div>
  </div>
 </header>
 
 <main class="wrap">
 
- <div class="panel">
-  <h2>Selamat datang di Zeze Cloud</h2>
-  <p class="muted">Simpan, tonton, dan download file dengan mudah.</p>
-  <input id="search" placeholder="🔍 Cari nama file..." oninput="renderFiles()">
+ <section class="hero">
+  <h1>Your files, your space.</h1>
+  <p>Tempat menyimpan, menonton, dan berbagi file dengan mudah.</p>
+ </section>
+
+ <div class="tabs">
+  <button id="videoTab" class="tab active" onclick="switchTab('video')">
+   <span class="tab-icon">▶</span>
+   <strong>VIDEO</strong>
+   <small>Koleksi dan tontonan video</small>
+  </button>
+  <button id="fileTab" class="tab" onclick="switchTab('file')">
+   <span class="tab-icon">▤</span>
+   <strong>FILE</strong>
+   <small>Foto, dokumen dan lainnya</small>
+  </button>
  </div>
 
- <div class="panel hidden" id="loginPanel">
+ <section id="loginPanel" class="panel hidden">
   <h2>Admin Login</h2>
-  <input id="email" type="email" placeholder="Email admin">
-  <input id="password" type="password" placeholder="Password admin">
-  <button id="loginAction" onclick="login()">Masuk</button>
-  <button onclick="hideLogin()" style="background:#35415a">Batal</button>
+  <p class="muted">Masuk untuk mengelola Zeze Cloud.</p>
+  <input class="field" id="email" type="email" placeholder="Email admin">
+  <input class="field" id="password" type="password" placeholder="Password">
+  <button class="primary" id="loginAction" onclick="login()">Masuk</button>
+  <button class="menu-item" onclick="closeLogin()" style="width:auto">Batal</button>
   <p id="loginStatus" class="muted"></p>
- </div>
+ </section>
 
- <div class="panel hidden" id="adminPanel">
-  <div class="top">
-   <h2>Admin Dashboard</h2>
-   <button onclick="logout()" class="danger">Logout</button>
-  </div>
-  <p class="muted">Upload file baru ke Zeze Cloud.</p>
-  <input type="file" id="fileInput" multiple>
-  <button id="uploadBtn" onclick="uploadFiles()">⬆ Upload File</button>
+ <section id="adminPanel" class="panel hidden">
+  <h2>☁ Admin Dashboard</h2>
+  <p class="muted">Upload file baru ke penyimpanan Zeze Cloud.</p>
+  <input class="field" id="fileInput" type="file" multiple>
+  <button class="primary" id="uploadBtn" onclick="uploadFiles()">⬆ Upload File</button>
   <p id="uploadStatus" class="muted"></p>
+  <p class="muted">Login sebagai admin aktif.</p>
+ </section>
+
+ <div class="toolbar">
+  <input class="search" id="search" placeholder="⌕ Cari video..." oninput="renderFiles()">
  </div>
 
  <div class="top">
-  <h2>📁 Semua File</h2>
-  <button onclick="loadFiles()" style="background:#35415a">↻ Refresh</button>
+  <h2 id="sectionTitle">▶ Video</h2>
+  <button class="menu-btn" onclick="loadFiles()" style="font-size:17px">↻</button>
  </div>
- <p class="muted" id="count">Memuat file...</p>
- <div id="files" class="grid"></div>
- <p id="status"></p>
+ <div class="count" id="count">Memuat file...</div>
+ <div class="grid" id="files"></div>
+ <p id="status" class="muted"></p>
 
 </main>
 
-<footer>© 2026 Zeze Cloud · Your personal cloud storage</footer>
+<footer>
+ <div style="font-size:18px;margin-bottom:8px;color:var(--accent)">☁ ZEZE CLOUD</div>
+ Your personal file sharing space<br>
+ © 2026 Zeze Cloud
+</footer>
 
 <script>
-// KONFIGURASI SUPABASE
-const SUPABASE_URL = "https://sgcrivgrlxeqkryreabc.supabase.co";
-const SUPABASE_KEY = "sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
-const BUCKET = "zeze-cloud";
+// SUPABASE CONFIGURATION
+const SUPABASE_URL="https://sgcrivgrlxeqkryreabc.supabase.co";
+const SUPABASE_KEY="sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
+const BUCKET="zeze-cloud";
 
-const db = supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let isAdmin = false;
-let allFiles = [];
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let isAdmin=false;
+let allFiles=[];
+let activeTab="video";
+let themeChoice="dark";
 
-function showLogin(){
- document.getElementById("loginPanel").classList.remove("hidden");
+function toggleMenu(){
+ document.getElementById("dropdown").classList.toggle("hidden");
 }
-function hideLogin(){
+function closeMenu(){
+ document.getElementById("dropdown").classList.add("hidden");
+}
+function openLogin(){
+ closeMenu();
+ document.getElementById("loginPanel").classList.remove("hidden");
+ document.getElementById("email").focus();
+}
+function closeLogin(){
  document.getElementById("loginPanel").classList.add("hidden");
+}
+
+function setTheme(theme){
+ themeChoice=theme;
+ localStorage.setItem("zeze-cloud-theme",theme);
+ applyTheme();
+}
+function applyTheme(){
+ const effective=themeChoice==="auto"
+  ?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")
+  :themeChoice;
+ document.body.classList.toggle("light",effective==="light");
+ document.getElementById("darkBtn").classList.toggle("active",themeChoice==="dark");
+ document.getElementById("lightBtn").classList.toggle("active",themeChoice==="light");
+ document.getElementById("autoBtn").classList.toggle("active",themeChoice==="auto");
+}
+themeChoice=localStorage.getItem("zeze-cloud-theme")||"dark";
+applyTheme();
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{
+ if(themeChoice==="auto")applyTheme();
+});
+
+function switchTab(tab){
+ activeTab=tab;
+ document.getElementById("videoTab").classList.toggle("active",tab==="video");
+ document.getElementById("fileTab").classList.toggle("active",tab==="file");
+ document.getElementById("sectionTitle").textContent=tab==="video"?"▶ Video":"▤ File";
+ document.getElementById("search").placeholder=tab==="video"?"⌕ Cari video...":"⌕ Cari file...";
+ document.getElementById("search").value="";
+ renderFiles();
 }
 
 function updateAdminUI(){
  document.getElementById("adminPanel").classList.toggle("hidden",!isAdmin);
- document.getElementById("loginBtn").classList.toggle("hidden",isAdmin);
+ document.getElementById("loginMenu").classList.toggle("hidden",isAdmin);
+ document.getElementById("logoutMenu").classList.toggle("hidden",!isAdmin);
 }
 
 async function login(){
@@ -124,21 +249,18 @@ async function login(){
   status.textContent="Masukkan email dan password.";
   return;
  }
-
  btn.disabled=true;
- status.textContent="Sedang masuk...";
-
+ status.textContent="Memproses login...";
  const {error}=await db.auth.signInWithPassword({email,password});
-
  btn.disabled=false;
 
  if(error){
   status.textContent="Login gagal: "+error.message;
   return;
  }
-
  document.getElementById("password").value="";
- hideLogin();
+ closeLogin();
+ closeMenu();
  await checkAdmin();
 }
 
@@ -147,6 +269,7 @@ async function logout(){
  if(error){alert(error.message);return;}
  isAdmin=false;
  updateAdminUI();
+ closeMenu();
  await loadFiles();
 }
 
@@ -161,12 +284,17 @@ async function checkAdmin(){
  await loadFiles();
 }
 
+function isVideoFile(name){
+ return /\.(mp4|webm|mov|m4v|ogv)$/i.test(name);
+}
+function isImageFile(name){
+ return /\.(jpg|jpeg|png|gif|webp|avif)$/i.test(name);
+}
+
 async function loadFiles(){
  const status=document.getElementById("status");
- const container=document.getElementById("files");
-
  status.textContent="Memuat file...";
- container.innerHTML="";
+ document.getElementById("files").innerHTML="";
 
  const {data,error}=await db.storage.from(BUCKET).list("",{
   limit:1000,
@@ -175,7 +303,7 @@ async function loadFiles(){
 
  if(error){
   status.textContent="Gagal memuat file: "+error.message;
-  document.getElementById("count").textContent="File tidak tersedia";
+  document.getElementById("count").textContent="Tidak dapat memuat file";
   return;
  }
 
@@ -185,34 +313,31 @@ async function loadFiles(){
 }
 
 function renderFiles(){
- const query=document.getElementById("search").value.toLowerCase();
  const container=document.getElementById("files");
-
+ const query=document.getElementById("search").value.toLowerCase();
  container.innerHTML="";
 
- const filtered=allFiles.filter(f=>f.name.toLowerCase().includes(query));
+ const filtered=allFiles.filter(f=>{
+  const video=isVideoFile(f.name);
+  const matchesType=activeTab==="video"?video:!video;
+  return matchesType&&f.name.toLowerCase().includes(query);
+ });
 
- document.getElementById("count").textContent=filtered.length+" file tersedia";
+ document.getElementById("count").textContent=filtered.length+
+  (activeTab==="video"?" video tersedia":" file tersedia");
 
  if(!filtered.length){
-  container.innerHTML='<p class="muted">Belum ada file ditemukan.</p>';
+  container.innerHTML='<div class="empty"><div style="font-size:35px;margin-bottom:12px">'+(activeTab==="video"?"▶":"▤")+'</div><b>Belum ada '+(activeTab==="video"?"video":"file")+'</b><p class="muted">File yang tersedia akan muncul di sini.</p></div>';
   return;
  }
 
  filtered.forEach(f=>{
   const path=f.name;
-  const ext=path.split(".").pop().toLowerCase();
-
-  const isImage=["jpg","jpeg","png","gif","webp","avif"].includes(ext);
-  const isVideo=["mp4","webm","mov","m4v"].includes(ext);
-
+  const video=isVideoFile(path);
+  const image=isImageFile(path);
   const {data}=db.storage.from(BUCKET).getPublicUrl(path);
   const url=data.publicUrl;
-
-  const {data:downloadData}=db.storage.from(BUCKET).getPublicUrl(path,{
-   download:true
-  });
-  const downloadUrl=downloadData.publicUrl;
+  const downloadUrl=db.storage.from(BUCKET).getPublicUrl(path,{download:true}).data.publicUrl;
 
   const card=document.createElement("div");
   card.className="file";
@@ -220,18 +345,18 @@ function renderFiles(){
   const preview=document.createElement("div");
   preview.className="preview";
 
-  if(isImage){
+  if(video){
+   const player=document.createElement("video");
+   player.src=url;
+   player.controls=true;
+   player.preload="metadata";
+   preview.appendChild(player);
+  }else if(image){
    const img=document.createElement("img");
    img.src=url;
-   img.loading="lazy";
    img.alt=path;
+   img.loading="lazy";
    preview.appendChild(img);
-  }else if(isVideo){
-   const video=document.createElement("video");
-   video.src=url;
-   video.controls=true;
-   video.preload="metadata";
-   preview.appendChild(video);
   }else{
    const icon=document.createElement("span");
    icon.textContent="📄";
@@ -242,9 +367,9 @@ function renderFiles(){
   const info=document.createElement("div");
   info.className="fileinfo";
 
-  const name=document.createElement("div");
-  name.className="filename";
-  name.textContent=path;
+  const filename=document.createElement("div");
+  filename.className="filename";
+  filename.textContent=path;
 
   const actions=document.createElement("div");
   actions.className="actions";
@@ -253,14 +378,15 @@ function renderFiles(){
   open.href=url;
   open.target="_blank";
   open.rel="noopener";
-  open.textContent=isVideo?"Tonton":isImage?"Lihat":"Buka";
+  open.className="open";
+  open.textContent=video?"Tonton":image?"Lihat":"Buka";
 
   const download=document.createElement("a");
   download.href=downloadUrl;
+  download.className="download";
   download.textContent="Download";
 
-  actions.appendChild(open);
-  actions.appendChild(download);
+  actions.append(open,download);
 
   if(isAdmin){
    const del=document.createElement("button");
@@ -270,10 +396,8 @@ function renderFiles(){
    actions.appendChild(del);
   }
 
-  info.appendChild(name);
-  info.appendChild(actions);
-  card.appendChild(preview);
-  card.appendChild(info);
+  info.append(filename,actions);
+  card.append(preview,info);
   container.appendChild(card);
  });
 }
@@ -285,12 +409,11 @@ async function uploadFiles(){
  const files=Array.from(input.files);
 
  if(!isAdmin){
-  status.textContent="Silakan login sebagai admin.";
+  status.textContent="Login admin diperlukan.";
   return;
  }
-
  if(!files.length){
-  status.textContent="Pilih file terlebih dahulu.";
+  status.textContent="Pilih file dahulu.";
   return;
  }
 
@@ -301,7 +424,7 @@ async function uploadFiles(){
   const safeName=file.name.replace(/[^\w.\-() ]/g,"_");
   const path=Date.now()+"-"+i+"-"+safeName;
 
-  status.textContent=`Mengupload ${i+1} dari ${files.length} file...`;
+  status.textContent="Mengupload "+(i+1)+" dari "+files.length+"...";
 
   const {error}=await db.storage.from(BUCKET).upload(path,file,{
    cacheControl:"3600",
@@ -317,23 +440,19 @@ async function uploadFiles(){
 
  input.value="";
  btn.disabled=false;
- status.textContent="Semua file berhasil diupload!";
+ status.textContent="Upload berhasil!";
  await loadFiles();
 }
 
 async function deleteFile(path){
  if(!isAdmin)return;
-
- const confirmDelete=confirm("Yakin ingin menghapus "+path+"?");
- if(!confirmDelete)return;
+ if(!confirm("Hapus file "+path+"?"))return;
 
  const {error}=await db.storage.from(BUCKET).remove([path]);
-
  if(error){
   alert("Gagal menghapus: "+error.message);
   return;
  }
-
  alert("File berhasil dihapus.");
  await loadFiles();
 }
@@ -348,6 +467,5 @@ db.auth.onAuthStateChange((event,session)=>{
 
 checkAdmin();
 </script>
-
 </body>
 </html>
