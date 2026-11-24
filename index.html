@@ -20,40 +20,26 @@
 --shadow:0 18px 55px #0008;
 }
 [data-theme="light"]{
---bg:#eef0fa;
---panel:rgba(255,255,255,.78);
---panel2:rgba(238,240,255,.75);
---text:#20243b;
---muted:#68708e;
---accent:#7655e9;
---cyan:#168ecb;
---border:rgba(100,100,160,.2);
+--bg:#eef0fa;--panel:rgba(255,255,255,.78);
+--panel2:rgba(238,240,255,.75);--text:#20243b;
+--muted:#68708e;--accent:#7655e9;
+--cyan:#168ecb;--border:rgba(100,100,160,.2);
 }
 [data-theme="dark"]{
---bg:#080b16;
---panel:rgba(17,23,41,.85);
---panel2:rgba(25,34,58,.8);
---text:#f4f6ff;
---muted:#929bb4;
---accent:#8b7cff;
---cyan:#42c8ff;
---border:rgba(255,255,255,.1);
+--bg:#080b16;--panel:rgba(17,23,41,.85);
+--panel2:rgba(25,34,58,.8);--text:#f4f6ff;
+--muted:#929bb4;--accent:#8b7cff;
+--cyan:#42c8ff;--border:rgba(255,255,255,.1);
 }
 [data-theme="amoled"]{
---bg:#000;
---panel:rgba(10,10,10,.9);
---panel2:rgba(22,22,22,.9);
---text:#fff;
---muted:#999;
---accent:#9a86ff;
---cyan:#45caff;
---border:rgba(255,255,255,.12);
+--bg:#000;--panel:rgba(10,10,10,.9);
+--panel2:rgba(22,22,22,.9);--text:#fff;
+--muted:#999;--accent:#9a86ff;
+--cyan:#45caff;--border:rgba(255,255,255,.12);
 }
 *{box-sizing:border-box}
 body{
-margin:0;
-min-height:100vh;
-color:var(--text);
+margin:0;min-height:100vh;color:var(--text);
 font-family:Inter,system-ui,Arial,sans-serif;
 background:
 radial-gradient(ellipse at 10% 0%,#8b4cff35,transparent 38%),
@@ -74,15 +60,12 @@ border:1px solid var(--border);
 box-shadow:var(--shadow);
 }
 header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:25px;
+display:flex;justify-content:space-between;
+align-items:center;margin-bottom:25px;
 }
 .brand{display:flex;align-items:center;gap:12px}
 .logo,.cloud-icon{
-width:49px;height:49px;
-border-radius:17px;
+width:49px;height:49px;border-radius:17px;
 display:grid;place-items:center;
 background:linear-gradient(135deg,var(--accent),var(--cyan));
 box-shadow:0 0 25px #8b62ff66;
@@ -91,14 +74,19 @@ color:white;font-size:25px;
 .brand h1{margin:0;font-size:21px}
 .brand small{color:var(--muted);font-size:11px}
 .menu-wrap{position:relative}
-.menu-btn,.refresh{
-width:45px;height:45px;
-border-radius:14px;color:var(--text);
-font-size:22px;
+.menu-btn{
+width:45px;height:45px;border-radius:14px;
+color:var(--text);font-size:25px;
+display:grid;place-items:center;
+background:var(--panel2);
+border:1px solid var(--border);
+box-shadow:0 8px 22px #0004;
+appearance:none;-webkit-appearance:none;
+line-height:1;padding:0;
 }
+.menu-btn:active{transform:scale(.96)}
 .menu{
-display:none;position:absolute;
-right:0;top:53px;
+display:none;position:absolute;right:0;top:53px;
 width:min(310px,calc(100vw - 30px));
 padding:15px;border-radius:20px;z-index:20;
 }
@@ -110,8 +98,7 @@ margin:5px 2px 13px;
 }
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .menu-card,.theme-choice{
-color:var(--text);
-background:var(--panel2);
+color:var(--text);background:var(--panel2);
 border:1px solid var(--border);
 border-radius:15px;padding:14px 8px;
 }
@@ -126,21 +113,83 @@ border-color:var(--cyan);
 box-shadow:0 0 14px #42d9ff35;
 }
 .hero{
-padding:30px 24px;border-radius:25px;
-margin-bottom:25px;
+padding:30px 24px;border-radius:25px;margin-bottom:22px;
 background:linear-gradient(125deg,rgba(120,75,220,.22),rgba(20,200,255,.07)),var(--panel);
 }
 .hero-tag{color:var(--cyan);font-size:10px;letter-spacing:1.5px}
 .hero h2{font-size:clamp(27px,5vw,38px);margin:15px 0 8px}
 .hero p{color:var(--muted);font-size:13px;line-height:1.7;margin:0}
+.music-panel{
+padding:18px;border-radius:23px;margin-bottom:22px;
+background:linear-gradient(145deg,rgba(125,76,220,.2),rgba(28,190,255,.08)),var(--panel);
+}
+.music-heading{
+display:flex;justify-content:space-between;
+align-items:center;margin-bottom:14px;
+}
+.music-heading strong{font-size:13px}
+.music-heading small{font-size:10px;color:var(--muted)}
+.music-top{display:flex;gap:14px;align-items:center}
+.album{
+width:82px;height:82px;flex-shrink:0;
+border-radius:19px;display:grid;place-items:center;
+font-size:37px;color:white;
+background:linear-gradient(135deg,#7a4dff,#21cfff);
+box-shadow:0 0 25px #8b62ff55;
+}
+.music-title{font-weight:850;font-size:14px;overflow-wrap:anywhere}
+.music-sub{color:var(--muted);font-size:10px;margin-top:5px}
+.eq{height:23px;display:flex;align-items:end;gap:3px;margin-top:8px}
+.eq i{
+width:4px;border-radius:5px;
+background:linear-gradient(var(--cyan),var(--accent));
+height:30%;animation:eq .7s ease-in-out infinite alternate;
+}
+.eq i:nth-child(2n){animation-delay:.2s}
+.eq i:nth-child(3n){animation-delay:.4s}
+.music-panel.playing .eq i{height:90%}
+@keyframes eq{to{height:100%}}
+.music-seek{width:100%;accent-color:var(--cyan);margin:15px 0 3px}
+.times{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
+.music-controls{
+display:flex;justify-content:center;align-items:center;
+gap:15px;margin:12px 0;
+}
+.music-controls button{
+border:1px solid var(--border);
+background:var(--panel2);color:var(--text);
+width:42px;height:42px;border-radius:50%;font-size:17px;
+}
+.music-controls .play{
+width:53px;height:53px;
+background:linear-gradient(135deg,var(--accent),#258dff);
+color:white;box-shadow:0 0 22px #8b62ff66;font-size:21px;
+}
+.volume-row{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px}
+.volume-row input{flex:1;accent-color:var(--accent)}
+.music-empty{font-size:11px;color:var(--muted);padding:9px 0}
+.song-list{margin-top:13px;display:grid;gap:8px}
+.song-row{
+display:flex;align-items:center;gap:10px;
+padding:10px;border:1px solid var(--border);
+border-radius:13px;background:var(--panel);
+}
+.song-row.active{border-color:var(--cyan);background:#42d9ff10}
+.song-play{
+border:0;border-radius:50%;width:34px;height:34px;
+background:linear-gradient(135deg,var(--accent),#258dff);
+color:white;flex-shrink:0;
+}
+.song-info{flex:1;min-width:0}
+.song-info strong{display:block;font-size:11px;overflow-wrap:anywhere}
+.song-info small{color:var(--muted);font-size:10px}
 .folders{
-display:grid;grid-template-columns:repeat(3,1fr);
+display:grid;grid-template-columns:repeat(2,1fr);
 gap:11px;margin-bottom:22px;
 }
 .folder{
 color:var(--text);text-align:left;
-padding:16px 12px;border-radius:19px;
-min-width:0;
+padding:16px 12px;border-radius:19px;min-width:0;
 }
 .folder.active{
 border-color:var(--cyan);
@@ -150,15 +199,13 @@ box-shadow:0 0 22px #42d9ff25,inset 0 0 25px #8b62ff15;
 .folder strong{display:block;font-size:13px}
 .folder small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
 .folder-count{float:right;color:var(--cyan);font-size:10px}
-.upload-panel{
-padding:18px;border-radius:21px;margin-bottom:22px;
-}
+.upload-panel{padding:18px;border-radius:21px;margin-bottom:22px}
 .panel-heading{display:flex;justify-content:space-between}
 .admin-pill{color:#43dfa5;font-size:10px}
 .dropzone{
-margin-top:14px;padding:23px 12px;
-text-align:center;border:1px dashed var(--accent);
-border-radius:17px;background:#8b62ff0b;
+margin-top:14px;padding:23px 12px;text-align:center;
+border:1px dashed var(--accent);border-radius:17px;
+background:#8b62ff0b;
 }
 .dropzone.drag{background:#8b62ff25}
 .dropzone h4{margin:9px 0}
@@ -170,23 +217,18 @@ background:linear-gradient(110deg,var(--accent),#4bafff);
 }
 .primary-btn:disabled{opacity:.5}
 #fileInput,#hdInput{display:none}
-.upload-status,.file-meta{
-font-size:11px;color:var(--muted);margin-top:9px;
-}
-.progress{
-height:5px;background:var(--panel2);
-border-radius:9px;margin-top:8px;display:none;
-}
-.progress-bar{
-height:100%;width:0;
-background:linear-gradient(90deg,var(--accent),var(--cyan));
-}
+.upload-status,.file-meta{font-size:11px;color:var(--muted);margin-top:9px}
+.progress{height:5px;background:var(--panel2);border-radius:9px;margin-top:8px;display:none}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan))}
 .toolbar{display:flex;gap:9px;margin:18px 0}
 .search{
-flex:1;min-width:0;padding:13px;
-border-radius:13px;color:var(--text);outline:none;
+flex:1;min-width:0;padding:13px;border-radius:13px;
+color:var(--text);outline:none;
 }
-.refresh{font-size:20px}
+.refresh{
+width:45px;height:45px;border-radius:14px;
+font-size:20px;color:var(--text);
+}
 .list-heading{
 display:flex;justify-content:space-between;
 align-items:center;margin:20px 2px 13px;
@@ -194,126 +236,51 @@ align-items:center;margin:20px 2px 13px;
 .list-heading h3{font-size:17px;margin:0}
 .list-heading span{font-size:11px;color:var(--muted)}
 .video-list{display:grid;gap:16px}
-.video-card,.file-card{
-border-radius:19px;overflow:hidden;min-width:0;
-}
-.video-player{
-display:block;width:100%;aspect-ratio:16/9;
-background:#000;object-fit:contain;
-}
+.video-card,.file-card{border-radius:19px;overflow:hidden;min-width:0}
+.video-player{display:block;width:100%;aspect-ratio:16/9;background:#000;object-fit:contain}
 .video-info{padding:13px}
-.file-grid{
-display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-gap:12px;
-}
+.file-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .file-card{padding:11px}
 .file-preview{
 height:120px;border-radius:13px;overflow:hidden;
-display:grid;place-items:center;
-background:var(--panel2);margin-bottom:10px;
+display:grid;place-items:center;background:var(--panel2);margin-bottom:10px;
 }
 .file-preview img{width:100%;height:100%;object-fit:cover}
 .file-symbol{font-size:42px}
-.file-name{
-font-size:12px;font-weight:750;
-overflow-wrap:anywhere;line-height:1.5;
-}
-.actions{
-display:flex;justify-content:space-between;
-gap:10px;margin-top:11px;
-}
+.file-name{font-size:12px;font-weight:750;overflow-wrap:anywhere;line-height:1.5}
+.actions{display:flex;justify-content:space-between;gap:10px;margin-top:11px}
 .action-btn{
-width:43px;height:41px;
-display:grid;place-items:center;
-border:1px solid var(--border);
-border-radius:12px;background:var(--panel2);
-color:var(--cyan);text-decoration:none;
+width:46px;height:44px;display:grid;place-items:center;
+border:1px solid rgba(66,217,255,.35);
+border-radius:14px;
+background:linear-gradient(145deg,rgba(40,150,255,.2),rgba(35,42,82,.65));
+color:#42d9ff;text-decoration:none;
+font-size:19px;
+box-shadow:0 4px 14px #0003;
 }
-.delete-btn{color:#ff7885}
-.music-panel{
-padding:18px;border-radius:23px;
-margin-bottom:16px;
-background:linear-gradient(145deg,rgba(125,76,220,.2),rgba(28,190,255,.08)),var(--panel);
+.download-btn{
+color:#42d9ff;
+border-color:rgba(66,217,255,.45);
+background:linear-gradient(145deg,rgba(28,165,255,.25),rgba(35,42,82,.65));
 }
-.music-top{display:flex;gap:14px;align-items:center}
-.album{
-width:100px;height:100px;flex-shrink:0;
-border-radius:19px;display:grid;place-items:center;
-font-size:42px;
-background:linear-gradient(135deg,#7a4dff,#21cfff);
-box-shadow:0 0 25px #8b62ff55;
+.delete-btn{
+color:#ff7885;
+border:1px solid rgba(255,90,110,.4);
+background:linear-gradient(145deg,rgba(255,70,90,.2),rgba(70,25,45,.55));
 }
-.music-title{font-weight:850;font-size:15px;overflow-wrap:anywhere}
-.music-sub{color:var(--muted);font-size:11px;margin-top:5px}
-.eq{
-height:27px;display:flex;align-items:end;
-gap:3px;margin-top:9px;
-}
-.eq i{
-width:4px;border-radius:5px;
-background:linear-gradient(var(--cyan),var(--accent));
-height:30%;animation:eq .7s ease-in-out infinite alternate;
-}
-.eq i:nth-child(2n){animation-delay:.2s}
-.eq i:nth-child(3n){animation-delay:.4s}
-.music-panel.playing .eq i{height:90%}
-@keyframes eq{to{height:100%}}
-.music-seek{width:100%;accent-color:var(--cyan);margin:16px 0 3px}
-.times{
-display:flex;justify-content:space-between;
-color:var(--muted);font-size:10px;
-}
-.music-controls{
-display:flex;justify-content:center;
-align-items:center;gap:15px;margin:13px 0;
-}
-.music-controls button{
-border:1px solid var(--border);
-background:var(--panel2);color:var(--text);
-width:42px;height:42px;border-radius:50%;font-size:17px;
-}
-.music-controls .play{
-width:55px;height:55px;
-background:linear-gradient(135deg,var(--accent),#258dff);
-box-shadow:0 0 22px #8b62ff66;font-size:22px;
-}
-.volume-row{
-display:flex;align-items:center;gap:9px;
-color:var(--muted);font-size:12px;
-}
-.volume-row input{flex:1;accent-color:var(--accent)}
-.song-row{
-display:flex;align-items:center;gap:10px;
-padding:12px;border:1px solid var(--border);
-border-radius:14px;background:var(--panel);margin-top:9px;
-}
-.song-row.active{border-color:var(--cyan);background:#42d9ff10}
-.song-play{
-border:0;border-radius:50%;width:35px;height:35px;
-background:linear-gradient(135deg,var(--accent),#258dff);
-color:white;
-}
-.song-info{flex:1;min-width:0}
-.song-info strong{display:block;font-size:12px;overflow-wrap:anywhere}
-.song-info small{color:var(--muted);font-size:10px}
-.empty{
-text-align:center;padding:40px 14px;
-border-radius:18px;color:var(--muted);font-size:12px;
-}
+.action-btn:active{transform:scale(.95)}
+.empty{text-align:center;padding:40px 14px;border-radius:18px;color:var(--muted);font-size:12px}
 .empty strong{display:block;color:var(--text);margin:8px}
-footer{
-text-align:center;color:var(--muted);
-font-size:10px;letter-spacing:1.2px;margin-top:35px;
-}
+footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1.2px;margin-top:35px}
 .modal-bg{
-display:none;position:fixed;inset:0;
-background:#000b;backdrop-filter:blur(8px);
-z-index:30;align-items:center;justify-content:center;padding:16px;
+display:none;position:fixed;inset:0;background:#000b;
+backdrop-filter:blur(8px);z-index:30;
+align-items:center;justify-content:center;padding:16px;
 }
 .modal-bg.show{display:flex}
 .modal{
-width:min(440px,100%);padding:22px;
-border-radius:22px;max-height:92vh;overflow:auto;
+width:min(440px,100%);padding:22px;border-radius:22px;
+max-height:92vh;overflow:auto;
 }
 .modal h3{margin:0 0 9px}
 .modal p{font-size:12px;color:var(--muted);line-height:1.6}
@@ -325,17 +292,15 @@ background:var(--panel2);color:var(--text);
 .modal-actions{display:flex;gap:9px;margin-top:10px}
 .modal-actions>*{flex:1}
 .secondary-btn{
-border:1px solid var(--border);
-background:var(--panel2);color:var(--text);
-border-radius:12px;padding:12px;
+border:1px solid var(--border);background:var(--panel2);
+color:var(--text);border-radius:12px;padding:12px;
 }
 .toast{
 position:fixed;bottom:18px;left:50%;
 transform:translate(-50%,20px);opacity:0;
 pointer-events:none;background:#17172def;
-border:1px solid var(--border);
-padding:12px 17px;border-radius:13px;
-z-index:50;font-size:12px;transition:.2s;
+border:1px solid var(--border);padding:12px 17px;
+border-radius:13px;z-index:50;font-size:12px;transition:.2s;
 }
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .hd-preview{display:none;gap:9px}
@@ -344,14 +309,8 @@ z-index:50;font-size:12px;transition:.2s;
 width:100%;aspect-ratio:1;object-fit:contain;
 background:#000;border-radius:12px;
 }
-.hd-preview span{
-display:block;text-align:center;
-font-size:10px;color:var(--muted);
-}
-.hd-options{
-padding:12px;background:var(--panel2);
-border-radius:12px;margin:10px 0;font-size:12px;
-}
+.hd-preview span{display:block;text-align:center;font-size:10px;color:var(--muted)}
+.hd-options{padding:12px;background:var(--panel2);border-radius:12px;margin:10px 0;font-size:12px}
 .hd-options input,.hd-options select{width:100%;margin-top:8px}
 .hd-status{font-size:11px;color:var(--muted);margin:10px 0}
 @media(min-width:700px){
@@ -364,7 +323,7 @@ border-radius:12px;margin:10px 0;font-size:12px;
 @media(max-width:380px){
 .folder{padding:13px 9px}
 .folder strong{font-size:11px}
-.album{width:82px;height:82px}
+.album{width:72px;height:72px}
 }
 </style>
 </head>
@@ -382,7 +341,7 @@ border-radius:12px;margin:10px 0;font-size:12px;
 </div>
 
 <div class="menu-wrap">
-<button class="menu-btn" id="menuButton">⋮</button>
+<button class="menu-btn" id="menuButton" aria-label="Menu">⋮</button>
 <div class="menu" id="menu">
 <div class="menu-title">ZEZE CLOUD MENU</div>
 <div class="menu-grid">
@@ -395,7 +354,6 @@ border-radius:12px;margin:10px 0;font-size:12px;
 <small>Perjelas foto</small>
 </button>
 </div>
-
 <div class="theme-box">
 <div class="menu-title">PILIH TEMA</div>
 <div class="theme-grid">
@@ -411,8 +369,19 @@ border-radius:12px;margin:10px 0;font-size:12px;
 
 <section class="hero">
 <div class="hero-tag">✦ NEON GLASS PERSONAL CLOUD</div>
-<h2>SELAMAT DATANG</h2>
-<p>Simpan, tonton, dan nikmati koleksi media kamu dalam satu ruang pribadi. Semua panel kini tampil dengan sentuhan kaca neon.</p>
+<h2>WELCOME</h2>
+<p>terima kasih<br>Karna sudah mampir di zeze cloud</p>
+</section>
+
+<!-- PEMUTAR MUSIK DI HALAMAN DEPAN -->
+<section class="music-panel" id="musicPanel">
+<div class="music-heading">
+<strong>♫ ZEZE MUSIC PLAYER</strong>
+<small id="musicTotal">0 lagu</small>
+</div>
+<div id="musicContent">
+<div class="music-empty">Belum ada musik. Upload MP3 melalui akun admin.</div>
+</div>
 </section>
 
 <div class="section-label">JELAJAHI PENYIMPANAN</div>
@@ -424,19 +393,11 @@ border-radius:12px;margin:10px 0;font-size:12px;
 <strong>VIDEO</strong>
 <small>Koleksi video</small>
 </button>
-
 <button class="folder" id="fileFolder">
 <span class="folder-count" id="fileCount">0</span>
 <span class="folder-icon">▤</span>
 <strong>FILE</strong>
-<small>Foto dan dokumen</small>
-</button>
-
-<button class="folder" id="musicFolder">
-<span class="folder-count" id="musicCount">0</span>
-<span class="folder-icon">♫</span>
-<strong>MUSIC</strong>
-<small>Koleksi MP3</small>
+<small>Foto, MP3 dan dokumen</small>
 </button>
 </section>
 
@@ -445,7 +406,6 @@ border-radius:12px;margin:10px 0;font-size:12px;
 <h3>☁ Upload File Baru</h3>
 <span class="admin-pill" id="adminPill">ADMIN AKTIF</span>
 </div>
-
 <div class="dropzone" id="dropzone">
 <div class="cloud-icon">⇧</div>
 <h4>Letakkan file kamu di sini</h4>
@@ -453,9 +413,7 @@ border-radius:12px;margin:10px 0;font-size:12px;
 <button class="primary-btn" id="chooseFile">＋ Pilih File</button>
 <input type="file" id="fileInput" multiple>
 <div class="upload-status" id="uploadStatus"></div>
-<div class="progress" id="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
+<div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
 </div>
 </section>
 
@@ -495,27 +453,18 @@ border-radius:12px;margin:10px 0;font-size:12px;
 <div class="modal">
 <h3>✨ Zeze HD Photo</h3>
 <p>Upscaling dan penajaman foto langsung di browser.</p>
-
 <input type="file" id="hdInput" accept="image/*">
 <button class="secondary-btn" onclick="document.getElementById('hdInput').click()">Pilih Foto</button>
 
 <div class="hd-preview" id="hdPreview">
-<div>
-<img id="hdOriginal">
-<span>ASLI</span>
-</div>
-<div>
-<img id="hdResult">
-<span>HASIL HD</span>
-</div>
+<div><img id="hdOriginal"><span>ASLI</span></div>
+<div><img id="hdResult"><span>HASIL HD</span></div>
 </div>
 
 <div class="hd-options">
-Kekuatan penajaman:
-<b id="strengthValue">65%</b>
+Kekuatan penajaman: <b id="strengthValue">65%</b>
 <input type="range" id="hdStrength" min="0" max="100" value="65">
 </div>
-
 <div class="hd-options">
 Ukuran hasil
 <select id="hdScale">
@@ -524,7 +473,6 @@ Ukuran hasil
 <option value="3">3x Ultra</option>
 </select>
 </div>
-
 <div class="hd-status" id="hdStatus">Pilih foto untuk memulai.</div>
 <button class="primary-btn" id="processHD" disabled>✨ Proses Foto HD</button>
 <button class="primary-btn" id="saveHD" style="display:none">⬇ Simpan Hasil</button>
@@ -539,10 +487,7 @@ const SUPABASE_URL="https://sgcrivgrlxeqkryreabc.supabase.co";
 const SUPABASE_KEY="sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
 const BUCKET="zeze-cloud";
 
-const db=window.supabase.createClient(
-SUPABASE_URL,SUPABASE_KEY
-);
-
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 
 let currentUser=null;
@@ -550,7 +495,7 @@ let allFiles=[];
 let currentTab="video";
 let isUploading=false;
 let playlist=[];
-let songIndex=-1;
+let songIndex=0;
 let hdFile=null;
 let hdOriginalURL=null;
 let hdResultURL=null;
@@ -562,58 +507,43 @@ const imageExt=/\.(jpg|jpeg|png|gif|webp|avif|bmp|svg)$/i;
 
 function esc(s){
 return String(s).replace(/[&<>"']/g,c=>({
-'&':'&amp;',
-'<':'&lt;',
-'>':'&gt;',
-'"':'&quot;',
-"'":'&#39;'
+'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
 }
-
 function size(n){
 if(!n)return'0 B';
 let u=['B','KB','MB','GB'];
 let i=Math.min(Math.floor(Math.log(n)/Math.log(1024)),3);
 return(n/1024**i).toFixed(i?1:0)+' '+u[i];
 }
-
 function toast(s){
 $('toast').textContent=s;
 $('toast').classList.add('show');
 setTimeout(()=>$('toast').classList.remove('show'),2600);
 }
-
 function url(n,dl=false){
 return db.storage.from(BUCKET).getPublicUrl(n,{download:dl}).data.publicUrl;
 }
 
-/* THEME */
+/* TEMA */
 function setTheme(t){
 document.documentElement.dataset.theme=t==='neon'?'neon':t;
-
 document.body.style.background=t==='neon'
 ?'radial-gradient(ellipse at 10% 0%,#8b4cff35,transparent 38%),radial-gradient(ellipse at 95% 30%,#19caff20,transparent 35%),linear-gradient(145deg,#080918,#10152c 55%,#080918)'
 :'';
-
 localStorage.setItem('zeze-theme',t);
-
 document.querySelectorAll('[data-theme-choice]').forEach(b=>{
 b.classList.toggle('active',b.dataset.themeChoice===t);
 });
 }
-
 setTheme(localStorage.getItem('zeze-theme')||'neon');
 
 $('menuButton').onclick=()=>{
 $('menu').classList.toggle('show');
 };
-
 document.addEventListener('click',e=>{
-if(!e.target.closest('.menu-wrap')){
-$('menu').classList.remove('show');
-}
+if(!e.target.closest('.menu-wrap'))$('menu').classList.remove('show');
 });
-
 document.querySelectorAll('[data-theme-choice]').forEach(b=>{
 b.onclick=()=>{
 setTheme(b.dataset.themeChoice);
@@ -621,43 +551,27 @@ toast('Tema diubah');
 };
 });
 
-/* HD MENU */
+/* MENU HD */
 $('openHD').onclick=()=>{
 $('menu').classList.remove('show');
 $('hdModal').classList.add('show');
 };
-
-$('closeHD').onclick=()=>{
-$('hdModal').classList.remove('show');
-};
-
+$('closeHD').onclick=()=>$('hdModal').classList.remove('show');
 $('hdModal').addEventListener('click',e=>{
-if(e.target===$('hdModal')){
-$('hdModal').classList.remove('show');
-}
+if(e.target===$('hdModal'))$('hdModal').classList.remove('show');
 });
 
 /* TAB */
 $('videoFolder').onclick=()=>switchTab('video');
 $('fileFolder').onclick=()=>switchTab('file');
-$('musicFolder').onclick=()=>switchTab('music');
-
 $('refreshButton').onclick=loadFiles;
 $('searchInput').oninput=renderFiles;
 
 function switchTab(t){
 currentTab=t;
-
-['video','file','music'].forEach(x=>{
-$(x+'Folder').classList.toggle('active',x===t);
-});
-
-$('listTitle').textContent={
-video:'▶ Video',
-file:'▤ File',
-music:'♫ Music'
-}[t];
-
+$('videoFolder').classList.toggle('active',t==='video');
+$('fileFolder').classList.toggle('active',t==='file');
+$('listTitle').textContent=t==='video'?'▶ Video':'▤ File';
 $('searchInput').value='';
 renderFiles();
 }
@@ -666,64 +580,42 @@ renderFiles();
 function updateAdmin(){
 $('uploadPanel').style.display=currentUser?'block':'none';
 $('adminPill').style.display=currentUser?'inline':'none';
-
-$('loginCardTitle').textContent=currentUser
-?'↪ Logout Admin':'🔐 Login Admin';
-
-$('loginCardSub').textContent=currentUser
-?'Keluar dari akun admin':'Kelola penyimpanan';
+$('loginCardTitle').textContent=currentUser?'↪ Logout Admin':'🔐 Login Admin';
+$('loginCardSub').textContent=currentUser?'Keluar dari akun admin':'Kelola penyimpanan';
 }
 
 $('loginMenu').onclick=async()=>{
 $('menu').classList.remove('show');
-
 if(currentUser){
 let{error}=await db.auth.signOut();
-
 if(error)return toast(error.message);
-
 currentUser=null;
 updateAdmin();
 loadFiles();
 return toast('Logout berhasil');
 }
-
 $('loginModal').classList.add('show');
 };
 
-$('cancelLogin').onclick=()=>{
-$('loginModal').classList.remove('show');
-};
-
+$('cancelLogin').onclick=()=>$('loginModal').classList.remove('show');
 $('loginModal').addEventListener('click',e=>{
-if(e.target===$('loginModal')){
-$('loginModal').classList.remove('show');
-}
+if(e.target===$('loginModal'))$('loginModal').classList.remove('show');
 });
 
 $('submitLogin').onclick=async()=>{
 let email=$('emailInput').value.trim();
 let password=$('passwordInput').value;
-
 if(!email||!password)return toast('Isi email dan password');
-
 $('submitLogin').disabled=true;
-
 try{
-let{data,error}=await db.auth.signInWithPassword({
-email,password
-});
-
+let{data,error}=await db.auth.signInWithPassword({email,password});
 if(error)throw error;
-
 currentUser=data.user;
 $('loginModal').classList.remove('show');
 $('passwordInput').value='';
-
 updateAdmin();
 toast('Login berhasil');
 loadFiles();
-
 }catch(e){
 toast('Login gagal: '+e.message);
 }finally{
@@ -736,90 +628,57 @@ currentUser=s?.user||null;
 updateAdmin();
 });
 
-/* FILE TYPE */
+/* JENIS FILE */
 function isVideo(f){return videoExt.test(f.name)}
 function isAudio(f){return audioExt.test(f.name)}
 function isImage(f){return imageExt.test(f.name)}
 
-/* LOAD FILES */
+/* LOAD */
 async function loadFiles(){
-$('content').innerHTML=
-'<div class="empty">☁<strong>Memuat file...</strong></div>';
-
+$('content').innerHTML='<div class="empty">☁<strong>Memuat file...</strong></div>';
 let{data,error}=await db.storage.from(BUCKET).list('',{
-limit:1000,
-sortBy:{column:'created_at',order:'desc'}
+limit:1000,sortBy:{column:'created_at',order:'desc'}
 });
-
 if(error){
-$('content').innerHTML=
-'<div class="empty"><strong>Gagal memuat file</strong>'+esc(error.message)+'</div>';
+$('content').innerHTML='<div class="empty"><strong>Gagal memuat file</strong>'+esc(error.message)+'</div>';
 return;
 }
-
-allFiles=(data||[]).filter(f=>
-f.name&&f.name!=='.'&&f.name!=='..'
-);
-
+allFiles=(data||[]).filter(f=>f.name&&f.name!=='.'&&f.name!=='..');
+renderMusic();
 renderFiles();
 }
 
-/* DOWNLOAD */
+/* TOMBOL DOWNLOAD DAN HAPUS */
 function dlButton(u,n){
-return `<a class="action-btn"
-href="${esc(u)}"
-download="${esc(n)}"
-title="Download">⬇</a>`;
+return `<a class="action-btn download-btn" href="${esc(u)}" download="${esc(n)}" title="Download">⬇</a>`;
 }
-
-/* DELETE */
 function delButton(n){
 return currentUser
 ?`<button class="action-btn delete-btn" data-delete="${esc(n)}" title="Hapus">⌫</button>`
 :'';
 }
-
 async function deleteFile(n){
 if(!currentUser)return toast('Login admin terlebih dahulu');
-
 if(!confirm('Hapus file ini?\n'+n))return;
-
 let{error}=await db.storage.from(BUCKET).remove([n]);
-
 if(error)return toast('Gagal menghapus: '+error.message);
-
 toast('File dihapus');
 loadFiles();
 }
 
-/* RENDER FILES */
+/* RENDER FILE VIDEO DAN FILE */
 function renderFiles(){
 let q=$('searchInput').value.toLowerCase().trim();
-
 let videos=allFiles.filter(isVideo);
-let audios=allFiles.filter(isAudio);
-let others=allFiles.filter(f=>!isVideo(f)&&!isAudio(f));
+let others=allFiles.filter(f=>!isVideo(f));
 
 $('videoCount').textContent=videos.length;
 $('fileCount').textContent=others.length;
-$('musicCount').textContent=audios.length;
 
-let list=(
-currentTab==='video'?videos:
-currentTab==='music'?audios:
-others
-).filter(f=>f.name.toLowerCase().includes(q));
+let list=(currentTab==='video'?videos:others)
+.filter(f=>f.name.toLowerCase().includes(q));
 
 $('itemCount').textContent=list.length+' item';
-
-if(currentTab==='music'){
-playlist=list;
-
-if(songIndex>=playlist.length)songIndex=-1;
-
-renderMusic(list);
-return;
-}
 
 if(!list.length){
 $('content').innerHTML=`
@@ -832,8 +691,7 @@ return;
 }
 
 if(currentTab==='video'){
-$('content').innerHTML=
-'<div class="video-list">'+list.map(f=>`
+$('content').innerHTML='<div class="video-list">'+list.map(f=>`
 <article class="video-card">
 <video class="video-player" controls playsinline preload="metadata">
 <source src="${esc(url(f.name))}">
@@ -848,18 +706,17 @@ ${delButton(f.name)}
 </div>
 </article>
 `).join('')+'</div>';
-
 }else{
-$('content').innerHTML=
-'<div class="file-grid">'+list.map(f=>`
+$('content').innerHTML='<div class="file-grid">'+list.map(f=>`
 <article class="file-card">
 <div class="file-preview">
 ${isImage(f)
 ?`<img src="${esc(url(f.name))}" loading="lazy">`
-:'<div class="file-symbol">📄</div>'}
+:isAudio(f)?'<div class="file-symbol">♫</div>':'<div class="file-symbol">📄</div>'}
 </div>
 <div class="file-name">${esc(f.name)}</div>
-<div class="file-meta">${size(f.metadata?.size)}</div>
+<div class="file-meta">${size(f.metadata?.size)} · ${isAudio(f)?'Audio':isImage(f)?'Foto':'File'}</div>
+${isAudio(f)?`<audio controls preload="none" style="width:100%;margin-top:9px" src="${esc(url(f.name))}"></audio>`:''}
 <div class="actions">
 ${dlButton(url(f.name,true),f.name)}
 ${delButton(f.name)}
@@ -873,25 +730,21 @@ b.onclick=()=>deleteFile(b.dataset.delete);
 });
 }
 
-/* NEON MUSIC PLAYER */
-function renderMusic(list){
-if(!list.length){
-$('content').innerHTML=`
-<div class="empty">
-♫
-<strong>Belum ada musik</strong>
-Upload MP3 melalui akun admin untuk mulai mendengarkan.
-</div>`;
+/* PEMUTAR MUSIK DI HALAMAN DEPAN */
+function renderMusic(){
+playlist=allFiles.filter(isAudio);
+$('musicTotal').textContent=playlist.length+' lagu';
+
+if(!playlist.length){
+songIndex=0;
+$('musicContent').innerHTML='<div class="music-empty">♫ Belum ada musik. Upload MP3 melalui akun admin, lalu musik akan muncul di sini.</div>';
 return;
 }
 
-if(songIndex<0||!playlist[songIndex])songIndex=0;
-
+if(songIndex>=playlist.length)songIndex=0;
 let f=playlist[songIndex];
 
-$('content').innerHTML=`
-<section class="music-panel" id="musicPanel">
-
+$('musicContent').innerHTML=`
 <div class="music-top">
 <div class="album">♫</div>
 <div style="min-width:0">
@@ -902,127 +755,89 @@ $('content').innerHTML=`
 </div>
 
 <audio id="audioPlayer" preload="metadata" src="${esc(url(f.name))}"></audio>
-
 <input class="music-seek" id="seek" type="range" min="0" max="100" value="0">
-
 <div class="times">
 <span id="elapsed">0:00</span>
 <span id="duration">0:00</span>
 </div>
-
 <div class="music-controls">
 <button id="prevSong">|◀</button>
 <button class="play" id="togglePlay">▶</button>
 <button id="nextSong">▶|</button>
 </div>
-
 <div class="volume-row">
-🔊
-<input id="volume" type="range" min="0" max="1" step=".01" value=".8">
+🔊 <input id="volume" type="range" min="0" max="1" step=".01" value=".8">
 </div>
-</section>
-
-<div class="list-heading">
-<h3>Daftar Lagu</h3>
-<span>${list.length} lagu</span>
-</div>
-
-<div>
-${list.map((x,i)=>`
+<div class="song-list">
+${playlist.map((x,i)=>`
 <div class="song-row ${i===songIndex?'active':''}">
-<button class="song-play" data-song="${i}">
-${i===songIndex?'♫':'▶'}
-</button>
+<button class="song-play" data-song="${i}">${i===songIndex?'♫':'▶'}</button>
 <div class="song-info">
 <strong>${esc(x.name)}</strong>
 <small>${size(x.metadata?.size)} · Audio</small>
 </div>
-${delButton(x.name)}
 </div>
 `).join('')}
 </div>
 `;
 
 let a=$('audioPlayer');
-
 let fmt=n=>{
 if(!isFinite(n))return'0:00';
-return Math.floor(n/60)+':'+
-String(Math.floor(n%60)).padStart(2,'0');
+return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');
 };
 
 $('togglePlay').onclick=()=>{
-if(a.paused){
-a.play().catch(()=>toast('Gagal memutar audio'));
-}else{
-a.pause();
-}
+if(a.paused)a.play().catch(()=>toast('Gagal memutar audio'));
+else a.pause();
 };
-
 a.onplay=()=>{
 $('togglePlay').textContent='Ⅱ';
 $('musicPanel').classList.add('playing');
 };
-
 a.onpause=()=>{
 $('togglePlay').textContent='▶';
 $('musicPanel').classList.remove('playing');
 };
-
 a.ontimeupdate=()=>{
 if(a.duration){
 $('seek').value=a.currentTime/a.duration*100;
 $('elapsed').textContent=fmt(a.currentTime);
 }
 };
-
 a.onloadedmetadata=()=>{
 $('duration').textContent=fmt(a.duration);
 };
-
 $('seek').oninput=()=>{
-if(a.duration){
-a.currentTime=$('seek').value/100*a.duration;
-}
+if(a.duration)a.currentTime=$('seek').value/100*a.duration;
 };
+$('volume').oninput=()=>a.volume=$('volume').value;
 
-$('volume').oninput=()=>{
-a.volume=$('volume').value;
-};
-
-a.onended=()=>changeSong(1);
-
-function changeSong(step){
+function changeSong(step,autoplay=true){
 songIndex=(songIndex+step+playlist.length)%playlist.length;
-renderMusic(playlist);
-
+renderMusic();
+if(autoplay){
 let next=$('audioPlayer');
-next.play().catch(()=>{});
+if(next)next.play().catch(()=>{});
 }
-
+}
 $('prevSong').onclick=()=>changeSong(-1);
 $('nextSong').onclick=()=>changeSong(1);
+a.onended=()=>changeSong(1);
 
 document.querySelectorAll('[data-song]').forEach(b=>{
 b.onclick=()=>{
 songIndex=Number(b.dataset.song);
-renderMusic(playlist);
-$('audioPlayer').play().catch(()=>{});
+renderMusic();
+$('audioPlayer').play().catch(()=>toast('Gagal memutar audio'));
 };
-});
-
-document.querySelectorAll('[data-delete]').forEach(b=>{
-b.onclick=()=>deleteFile(b.dataset.delete);
 });
 }
 
 /* UPLOAD */
 $('chooseFile').onclick=()=>$('fileInput').click();
-
 $('fileInput').onchange=()=>{
-if($('fileInput').files.length){
-uploadFiles([...$('fileInput').files]);
-}
+if($('fileInput').files.length)uploadFiles([...$('fileInput').files]);
 $('fileInput').value='';
 };
 
@@ -1032,14 +847,12 @@ e.preventDefault();
 $('dropzone').classList.add('drag');
 });
 });
-
 ['dragleave','drop'].forEach(ev=>{
 $('dropzone').addEventListener(ev,e=>{
 e.preventDefault();
 $('dropzone').classList.remove('drag');
 });
 });
-
 $('dropzone').addEventListener('drop',e=>{
 let f=[...e.dataTransfer.files];
 if(f.length)uploadFiles(f);
@@ -1052,41 +865,27 @@ if(isUploading)return toast('Upload masih berjalan');
 isUploading=true;
 $('chooseFile').disabled=true;
 $('progress').style.display='block';
-
 let ok=0,bad=0;
 
 for(let f of files){
 $('uploadStatus').textContent='Mengunggah: '+f.name;
-
-let{error}=await db.storage.from(BUCKET).upload(
-f.name,f,{
-cacheControl:'3600',
-upsert:false,
-contentType:f.type||undefined
+let{error}=await db.storage.from(BUCKET).upload(f.name,f,{
+cacheControl:'3600',upsert:false,contentType:f.type||undefined
 });
-
 if(error){
 bad++;
 toast(f.name+': '+error.message);
-}else{
-ok++;
+}else ok++;
+$('progressBar').style.width=((ok+bad)/files.length*100)+'%';
 }
 
-$('progressBar').style.width=
-((ok+bad)/files.length*100)+'%';
-}
-
-$('uploadStatus').textContent=
-`Selesai: ${ok} berhasil, ${bad} gagal.`;
-
+$('uploadStatus').textContent=`Selesai: ${ok} berhasil, ${bad} gagal.`;
 $('chooseFile').disabled=false;
 isUploading=false;
-
 setTimeout(()=>{
 $('progress').style.display='none';
 $('progressBar').style.width='0';
 },1500);
-
 loadFiles();
 }
 
@@ -1094,21 +893,11 @@ loadFiles();
 $('hdInput').onchange=()=>{
 let f=$('hdInput').files[0];
 if(!f)return;
-
-if(!f.type.startsWith('image/')){
-return toast('Pilih gambar valid');
-}
-
-if(f.size>20*1024*1024){
-return toast('Maksimal 20 MB');
-}
-
+if(!f.type.startsWith('image/'))return toast('Pilih gambar valid');
+if(f.size>20*1024*1024)return toast('Maksimal 20 MB');
 hdFile=f;
-
 if(hdOriginalURL)URL.revokeObjectURL(hdOriginalURL);
-
 hdOriginalURL=URL.createObjectURL(f);
-
 $('hdOriginal').src=hdOriginalURL;
 $('hdPreview').style.display='flex';
 $('processHD').disabled=false;
@@ -1130,7 +919,6 @@ i.src=src;
 
 $('processHD').onclick=async()=>{
 if(!hdFile)return;
-
 let b=$('processHD');
 b.disabled=true;
 b.textContent='Memproses...';
@@ -1140,17 +928,11 @@ let im=await loadImg(hdOriginalURL);
 let scale=+$('hdScale').value;
 let w=Math.round(im.naturalWidth*scale);
 let h=Math.round(im.naturalHeight*scale);
-
-if(w*h>40000000){
-throw Error('Resolusi terlalu besar, coba 2x');
-}
+if(w*h>40000000)throw Error('Resolusi terlalu besar, coba 2x');
 
 let c=document.createElement('canvas');
-c.width=w;
-c.height=h;
-
+c.width=w;c.height=h;
 let x=c.getContext('2d',{willReadFrequently:true});
-
 x.imageSmoothingEnabled=true;
 x.imageSmoothingQuality='high';
 x.filter='contrast(1.08) saturate(1.08)';
@@ -1165,14 +947,12 @@ let amt=+$('hdStrength').value/100;
 for(let y=1;y<h-1;y++){
 for(let z=1;z<w-1;z++){
 let k=(y*w+z)*4;
-
 for(let ch=0;ch<3;ch++){
 let v=src[k+ch]*5
 -src[((y-1)*w+z)*4+ch]
 -src[((y+1)*w+z)*4+ch]
 -src[(y*w+z-1)*4+ch]
 -src[(y*w+z+1)*4+ch];
-
 out[k+ch]=Math.max(0,Math.min(255,
 src[k+ch]+(v-src[k+ch])*amt*.35
 ));
@@ -1181,19 +961,14 @@ src[k+ch]+(v-src[k+ch])*amt*.35
 }
 
 x.putImageData(new ImageData(out,w,h),0,0);
-
 hdBlob=await new Promise(r=>c.toBlob(r,'image/jpeg',.94));
-
 if(!hdBlob)throw Error('Gagal membuat foto');
 
 if(hdResultURL)URL.revokeObjectURL(hdResultURL);
-
 hdResultURL=URL.createObjectURL(hdBlob);
 $('hdResult').src=hdResultURL;
 $('saveHD').style.display='block';
-
-$('hdStatus').textContent=
-`Berhasil ${w} × ${h} px · ${size(hdBlob.size)}`;
+$('hdStatus').textContent=`Berhasil ${w} × ${h} px · ${size(hdBlob.size)}`;
 
 }catch(e){
 $('hdStatus').textContent=e.message;
@@ -1205,7 +980,6 @@ b.textContent='✨ Proses Foto HD';
 
 $('saveHD').onclick=()=>{
 if(!hdBlob)return;
-
 let a=document.createElement('a');
 a.href=hdResultURL;
 a.download='Zeze-HD-'+Date.now()+'.jpg';
@@ -1217,11 +991,9 @@ async function start(){
 let{data}=await db.auth.getSession();
 currentUser=data?.session?.user||null;
 updateAdmin();
-loadFiles();
+await loadFiles();
 }
-
 start();
-
 </script>
 </body>
 </html>
