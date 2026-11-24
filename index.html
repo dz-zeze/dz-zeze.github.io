@@ -3,462 +3,1221 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZEZE CLOUD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEZE</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--bg:#080b16;--panel:#111729;--panel2:#19223a;--text:#f4f6ff;--muted:#929bb4;--accent:#8b7cff;--accent2:#42c8ff;--border:rgba(255,255,255,.09);--shadow:0 18px 50px #0004}
-[data-theme=light]{--bg:#f1f3fa;--panel:#fff;--panel2:#edf0f8;--text:#20263a;--muted:#737d96;--accent:#6656e8;--accent2:#168ecb;--border:#19234120;--shadow:0 12px 35px #232d5014}
-[data-theme=amoled]{--bg:#000;--panel:#090909;--panel2:#151515;--text:#f7f7f7;--muted:#999;--accent:#9a86ff;--accent2:#45caff;--border:#ffffff1c;--shadow:0 18px 55px #0008}
+:root{
+--bg:#080b16;--panel:#111729;--panel2:#19223a;
+--text:#f4f6ff;--muted:#929bb4;--accent:#8b7cff;
+--accent2:#42c8ff;--border:rgba(255,255,255,.09);
+--shadow:0 18px 50px rgba(0,0,0,.25)
+}
+[data-theme="light"]{
+--bg:#f1f3fa;--panel:#fff;--panel2:#edf0f8;
+--text:#20263a;--muted:#737d96;--accent:#6656e8;
+--accent2:#168ecb;--border:rgba(25,35,65,.12);
+--shadow:0 12px 35px rgba(35,45,80,.08)
+}
+[data-theme="amoled"]{
+--bg:#000;--panel:#090909;--panel2:#151515;
+--text:#f7f7f7;--muted:#999;--accent:#9a86ff;
+--accent2:#45caff;--border:rgba(255,255,255,.11);
+--shadow:0 18px 55px rgba(0,0,0,.5)
+}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 15% 0%,#6956df12,transparent 38%),var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}
-button,input,select{font:inherit}
+body{
+margin:0;
+background:radial-gradient(ellipse at 15% 0%,#6956df12,transparent 38%),var(--bg);
+color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;
+min-height:100vh;transition:.2s
+}
+button,input{font:inherit}
 button{cursor:pointer}
 .wrap{width:min(1080px,100%);margin:auto;padding:22px 18px 55px}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:28px}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{width:49px;height:49px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#8b7cff,#42c8ff);color:white;font-size:26px}
-.brand h1{font-size:21px;margin:0;font-weight:850}
+.logo{
+width:49px;height:49px;border-radius:17px;display:grid;place-items:center;
+background:linear-gradient(135deg,#8b7cff,#42c8ff);
+color:white;font-size:26px;box-shadow:0 8px 28px #6857df55
+}
+.brand h1{font-size:21px;margin:0;font-weight:850;letter-spacing:-.6px}
 .brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+
 .menu-wrap{position:relative}
-.menu-btn{width:44px;height:44px;border:1px solid var(--border);border-radius:15px;background:var(--panel);color:var(--text);font-size:23px}
-.menu{display:none;position:absolute;right:0;top:52px;width:min(310px,calc(100vw - 26px));padding:15px;background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);z-index:20}
+.menu-btn{
+width:44px;height:44px;border:1px solid var(--border);
+border-radius:15px;background:var(--panel);color:var(--text);font-size:23px
+}
+.menu{
+display:none;position:absolute;right:0;top:52px;
+width:min(310px,calc(100vw - 26px));padding:15px;
+background:var(--panel);border:1px solid var(--border);
+border-radius:20px;box-shadow:var(--shadow);z-index:20
+}
 .menu.show{display:block}
-.menu-title,.theme-heading{font-size:11px;color:var(--muted);padding:5px 3px 13px;letter-spacing:1px;font-weight:850}
+.menu-title{
+font-size:11px;color:var(--muted);padding:5px 3px 13px;
+letter-spacing:1px;font-weight:850
+}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.menu-card{min-height:120px;padding:15px 10px;border:1px solid var(--border);border-radius:17px;background:var(--panel2);color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px}
-.menu-icon{width:49px;height:49px;display:grid;place-items:center;border-radius:16px;background:#8b7cff30;color:var(--accent);font-size:25px}
+.menu-card{
+min-width:0;min-height:120px;padding:15px 10px;
+border:1px solid var(--border);border-radius:17px;
+background:var(--panel2);color:var(--text);
+display:flex;flex-direction:column;align-items:center;
+justify-content:center;gap:9px;text-align:center;
+transition:transform .2s,border-color .2s,box-shadow .2s
+}
+.menu-card:hover{
+border-color:var(--accent);
+transform:translateY(-2px);
+box-shadow:0 8px 22px #0002
+}
+.menu-card:active{transform:scale(.96)}
+.menu-card .menu-icon{
+width:49px;height:49px;display:grid;place-items:center;
+border-radius:16px;
+background:linear-gradient(145deg,#8b7cff30,#42c8ff20);
+border:1px solid #8b7cff40;color:var(--accent)
+}
+.menu-card .menu-icon svg{
+width:27px;height:27px;stroke:currentColor;fill:none;
+stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round
+}
 .menu-card strong{font-size:12px}
 .menu-card small{font-size:10px;color:var(--muted)}
-.theme-box{margin-top:13px;padding:13px;border:1px solid var(--border);border-radius:16px;background:var(--panel2)}
+.menu-card.hd-menu{
+background:linear-gradient(145deg,#8069f522,#42c8ff18);
+border-color:#8b7cff44
+}
+.menu-card.hd-menu .menu-icon{
+color:#42c8ff;
+background:linear-gradient(145deg,#42c8ff25,#8b7cff25);
+border-color:#42c8ff55
+}
+.theme-box{
+margin-top:13px;padding:13px;border:1px solid var(--border);
+border-radius:16px;background:var(--panel2)
+}
+.theme-heading{
+font-size:11px;color:var(--muted);font-weight:850;
+letter-spacing:1px;margin:0 0 10px
+}
 .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.theme-choice{padding:12px 5px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--text);font-size:11px}
+.theme-choice{
+padding:12px 5px;border:1px solid var(--border);
+border-radius:12px;background:var(--panel);color:var(--text);
+font-size:11px;text-align:center
+}
 .theme-choice.active{border-color:var(--accent);color:var(--accent)}
 .theme-choice span{display:block;font-size:19px;margin-bottom:6px}
-.hero{padding:32px 25px;border:1px solid var(--border);border-radius:26px;background:radial-gradient(ellipse at 95% 0%,#8b7cff35,transparent 45%),linear-gradient(135deg,var(--panel),var(--panel2));box-shadow:var(--shadow);margin-bottom:24px}
-.hero-tag{display:inline-flex;padding:7px 12px;border-radius:30px;background:#8b7cff20;color:var(--accent);font-size:10px;font-weight:850;letter-spacing:1.3px}
-.hero h2{font-size:clamp(26px,5vw,37px);margin:17px 0 9px}
+
+.hero{
+padding:32px 25px;border:1px solid var(--border);border-radius:26px;
+background:radial-gradient(ellipse at 95% 0%,#8b7cff35,transparent 45%),
+radial-gradient(ellipse at 0% 100%,#42c8ff12,transparent 45%),
+linear-gradient(135deg,var(--panel),var(--panel2));
+box-shadow:var(--shadow);margin-bottom:28px
+}
+.hero-tag{
+display:inline-flex;padding:7px 12px;border-radius:30px;
+background:#8b7cff20;color:var(--accent);
+font-size:10px;font-weight:850;letter-spacing:1.3px
+}
+.hero h2{font-size:clamp(26px,5vw,37px);margin:17px 0 9px;letter-spacing:-1px}
 .hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.8;max-width:520px}
-.section-label{font-size:11px;color:var(--muted);font-weight:850;letter-spacing:1.5px;margin:27px 2px 14px}
-
-/* DOWNLOADER */
-.downloader{border:1px solid var(--border);background:linear-gradient(145deg,var(--panel),var(--panel2));border-radius:24px;padding:20px;box-shadow:var(--shadow);margin-bottom:28px;overflow:hidden}
-.downloader-heading{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-.downloader-logo{width:49px;height:49px;border-radius:16px;display:grid;place-items:center;color:white;font-size:24px;background:linear-gradient(135deg,#8b5cf6,#42c8ff)}
-.downloader-heading h3{margin:0;font-size:17px}
-.downloader-heading small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
-.downloader-badge{margin-left:auto;font-size:9px;color:#43c8a0;background:#27b98220;padding:7px 10px;border-radius:20px;font-weight:800;white-space:nowrap}
-.downloader-description{font-size:12px;color:var(--muted);line-height:1.7;margin:0 0 15px}
-.url-input{width:100%;padding:15px;border:1px solid var(--border);border-radius:14px;background:var(--bg);color:var(--text);outline:none;font-size:13px}
-.url-input:focus{border-color:var(--accent)}
-.format-label{font-size:11px;color:var(--muted);font-weight:800;margin:18px 0 10px}
-.format-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.format-btn{padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--panel2);color:var(--muted);font-weight:800;font-size:12px}
-.format-btn span{display:block;font-size:23px;margin-bottom:6px}
-.format-btn.active{border-color:var(--accent);background:#8b7cff18;color:var(--accent)}
-.process-btn{width:100%;margin-top:15px;padding:14px;border:0;border-radius:14px;color:white;font-weight:850;background:linear-gradient(110deg,#8069f5,#4bafff)}
-.download-status{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px;min-height:18px;overflow-wrap:anywhere}
-.downloader-note{font-size:10px;color:var(--muted);line-height:1.6;margin:10px 1px 0}
-
+.section-label{
+font-size:11px;color:var(--muted);font-weight:850;
+letter-spacing:1.5px;margin:27px 2px 14px
+}
 .folders{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px}
-.folder{position:relative;text-align:left;padding:19px 17px;border-radius:21px;border:1px solid var(--border);background:linear-gradient(145deg,var(--panel),var(--panel2));color:var(--text);box-shadow:var(--shadow);min-width:0}
-.folder.active{border-color:var(--accent);background:radial-gradient(ellipse at 100% 0%,#8b7cff28,transparent 65%),var(--panel)}
-.folder-icon{width:55px;height:55px;border-radius:18px;display:grid;place-items:center;font-size:27px;margin-bottom:16px;color:white}
+.folder{
+position:relative;text-align:left;padding:19px 17px;border-radius:21px;
+border:1px solid var(--border);
+background:linear-gradient(145deg,var(--panel),var(--panel2));
+color:var(--text);box-shadow:var(--shadow);transition:.2s;min-width:0
+}
+.folder.active{
+border:1px solid var(--accent);
+background:radial-gradient(ellipse at 100% 0%,#8b7cff28,transparent 65%),var(--panel)
+}
+.folder-icon{
+width:55px;height:55px;border-radius:18px;display:grid;
+place-items:center;font-size:27px;margin-bottom:16px;color:white
+}
 .video-icon{background:linear-gradient(135deg,#795fff,#ae74ff)}
 .file-icon{background:linear-gradient(135deg,#169ed2,#54d5e5)}
-.folder strong{display:block;font-size:16px}
+.folder strong{display:block;font-size:16px;letter-spacing:.7px}
 .folder small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
-.folder-count{position:absolute;right:13px;top:15px;color:var(--muted);font-size:10px;background:var(--panel2);padding:6px 9px;border-radius:20px}
-.upload-panel{border:1px solid var(--border);background:linear-gradient(145deg,var(--panel),var(--panel2));padding:20px;border-radius:23px;box-shadow:var(--shadow);margin-bottom:26px}
+.folder-count{
+position:absolute;right:13px;top:15px;color:var(--muted);
+font-size:10px;background:var(--panel2);padding:6px 9px;border-radius:20px
+}
+
+.upload-panel{
+border:1px solid var(--border);
+background:linear-gradient(145deg,var(--panel),var(--panel2));
+padding:20px;border-radius:23px;box-shadow:var(--shadow);margin-bottom:26px
+}
 .panel-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .panel-heading h3{margin:0;font-size:16px}
-.admin-pill{display:none;background:#27b98220;color:#28c58a;padding:7px 11px;border-radius:30px;font-size:10px;font-weight:850}
-.dropzone{margin-top:17px;border:2px dashed #8b7cff66;border-radius:20px;padding:29px 15px;text-align:center;background:#8b7cff09}
+.admin-pill{
+display:none;background:#27b98220;color:#28c58a;
+padding:7px 11px;border-radius:30px;font-size:10px;font-weight:850
+}
+.dropzone{
+margin-top:17px;border:2px dashed #8b7cff66;border-radius:20px;
+padding:29px 15px;text-align:center;background:#8b7cff09
+}
 .dropzone.drag{background:#8b7cff22;border-color:var(--accent)}
-.cloud-icon{width:65px;height:65px;border-radius:21px;margin:0 auto 14px;display:grid;place-items:center;font-size:30px;color:white;background:linear-gradient(135deg,#8b7cff,#42c8ff)}
+.cloud-icon{
+width:65px;height:65px;border-radius:21px;margin:0 auto 14px;
+display:grid;place-items:center;font-size:30px;color:white;
+background:linear-gradient(135deg,#8b7cff,#42c8ff)
+}
 .dropzone h4{margin:0 0 7px;font-size:16px}
 .dropzone p{margin:0 0 18px;color:var(--muted);font-size:12px}
-.primary-btn{border:0;border-radius:13px;padding:12px 20px;color:white;font-weight:800;font-size:13px;background:linear-gradient(110deg,#8069f5,#4bafff)}
+.primary-btn{
+border:0;border-radius:13px;padding:12px 20px;color:white;
+font-weight:800;font-size:13px;background:linear-gradient(110deg,#8069f5,#4bafff)
+}
 .primary-btn:disabled{opacity:.5;cursor:not-allowed}
 #fileInput{display:none}
 .upload-status{font-size:12px;color:var(--muted);margin-top:13px;min-height:17px}
-.progress{height:5px;background:var(--panel2);border-radius:10px;overflow:hidden;margin-top:9px;display:none}
-.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#8b7cff,#42c8ff);transition:width .2s}
-.list-heading{display:flex;align-items:center;justify-content:space-between;margin:23px 2px 15px}
+.progress{
+height:5px;background:var(--panel2);border-radius:10px;
+overflow:hidden;margin-top:9px;display:none
+}
+.progress-bar{
+height:100%;width:0;background:linear-gradient(90deg,#8b7cff,#42c8ff);
+transition:width .2s
+}
+.toolbar{display:flex;gap:10px;margin:20px 0}
+.search{
+flex:1;min-width:0;padding:14px 16px;border:1px solid var(--border);
+background:var(--panel);color:var(--text);border-radius:14px;
+outline:none;font-size:13px
+}
+.refresh{
+width:47px;border:1px solid var(--border);
+background:var(--panel);color:var(--text);border-radius:14px;font-size:20px
+}
+.list-heading{
+display:flex;align-items:center;justify-content:space-between;margin:23px 2px 15px
+}
 .list-heading h3{font-size:17px;margin:0}
 .list-heading span{font-size:11px;color:var(--muted)}
-.refresh{width:39px;height:36px;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:12px;font-size:19px}
 .video-list{display:flex;flex-direction:column;gap:19px}
-.video-card,.file-card{background:linear-gradient(145deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}
-.video-player{width:100%;aspect-ratio:16/9;background:#000;display:block;object-fit:contain}
+.video-card,.file-card{
+background:linear-gradient(145deg,var(--panel),var(--panel2));
+border:1px solid var(--border);border-radius:20px;
+overflow:hidden;box-shadow:var(--shadow);min-width:0
+}
+.video-player{
+width:100%;aspect-ratio:16/9;background:#000;
+display:block;object-fit:contain
+}
 .video-info{padding:12px 14px}
-.file-name{font-size:13px;font-weight:750;overflow-wrap:anywhere;flex:1;min-width:0}
+.file-name{
+font-size:13px;font-weight:750;overflow-wrap:anywhere;flex:1;min-width:0
+}
 .file-meta{font-size:11px;color:var(--muted);margin-top:5px}
-.actions{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px;margin-top:12px}
-.action-btn{width:46px;height:44px;display:grid;place-items:center;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:14px;text-decoration:none;flex-shrink:0}
-.action-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.download-btn{color:#54c8ff;background:#168ecb20;border-color:#42c8ff45}
-.delete-btn{color:#ff737d;background:#ff596b20;border-color:#ff737d45}
+.actions{
+display:flex;align-items:center;justify-content:space-between;
+width:100%;gap:12px;margin-top:12px
+}
+
+/* PREMIUM ACTION BUTTONS */
+.action-btn{
+width:46px;height:44px;display:grid;place-items:center;
+border:1px solid var(--border);background:var(--panel2);
+color:var(--text);border-radius:14px;text-decoration:none;
+flex-shrink:0;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s
+}
+.action-btn svg{
+width:20px;height:20px;fill:none;stroke:currentColor;
+stroke-width:2;stroke-linecap:round;stroke-linejoin:round
+}
+.action-btn:active{transform:scale(.91)}
+.download-btn{
+color:#54c8ff;
+background:linear-gradient(145deg,#168ecb20,#42c8ff12);
+border-color:#42c8ff45;
+box-shadow:0 5px 15px #168ecb15
+}
+.download-btn:hover{
+background:linear-gradient(145deg,#168ecb35,#42c8ff25);
+border-color:#42c8ff;
+box-shadow:0 6px 18px #168ecb30;
+transform:translateY(-2px)
+}
+.delete-btn{
+color:#ff737d;
+background:linear-gradient(145deg,#ff596b20,#ff596b0c);
+border-color:#ff737d45
+}
+.delete-btn:hover{
+background:#ff596b25;border-color:#ff737d;
+box-shadow:0 6px 18px #ff596b25;
+transform:translateY(-2px)
+}
+
 .file-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .file-card{padding:12px}
-.file-preview{height:130px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;overflow:hidden;margin-bottom:12px;border:1px solid var(--border)}
+.file-preview{
+height:130px;border-radius:14px;background:var(--panel2);
+display:grid;place-items:center;overflow:hidden;
+margin-bottom:12px;border:1px solid var(--border)
+}
 .file-preview img{width:100%;height:100%;object-fit:cover}
 .file-symbol{font-size:45px}
-.file-card .file-name{display:block;min-height:34px;line-height:1.5;font-size:12px}
+.file-card .file-name{
+display:block;min-height:34px;line-height:1.5;font-size:12px
+}
 .file-card .file-meta{margin:5px 0 8px}
-.file-card .actions{border-top:1px solid var(--border);padding-top:11px;margin-top:11px}
-.empty{text-align:center;padding:43px 15px;border:1px dashed var(--border);border-radius:20px;color:var(--muted);background:var(--panel);font-size:12px}
+.file-card .actions{
+border-top:1px solid var(--border);padding-top:11px;margin-top:11px
+}
+.empty{
+text-align:center;padding:43px 15px;border:1px dashed var(--border);
+border-radius:20px;color:var(--muted);background:var(--panel);font-size:12px
+}
 .empty-icon{font-size:37px;margin-bottom:12px}
 .empty strong{display:block;color:var(--text);margin-bottom:7px;font-size:14px}
-footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1.3px;margin-top:38px}
-.modal-bg{display:none;position:fixed;inset:0;background:#000b;backdrop-filter:blur(5px);z-index:30;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
+footer{
+text-align:center;color:var(--muted);font-size:10px;
+letter-spacing:1.3px;margin-top:38px
+}
+
+.modal-bg{
+display:none;position:fixed;inset:0;background:#000b;
+backdrop-filter:blur(5px);z-index:30;align-items:center;
+justify-content:center;padding:18px;overflow-y:auto
+}
 .modal-bg.show{display:flex}
-.modal{width:min(390px,100%);background:var(--panel);border:1px solid var(--border);border-radius:23px;padding:24px;box-shadow:var(--shadow);max-height:92vh;overflow-y:auto}
+.modal{
+width:min(390px,100%);background:var(--panel);
+border:1px solid var(--border);border-radius:23px;
+padding:24px;box-shadow:var(--shadow);max-height:92vh;overflow-y:auto
+}
 .modal h3{margin:0 0 8px;font-size:20px}
 .modal p{color:var(--muted);font-size:12px;margin:0 0 18px;line-height:1.6}
-.modal input{width:100%;padding:13px;margin-bottom:10px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);outline:none}
+.modal input{
+width:100%;padding:13px;margin-bottom:10px;
+border:1px solid var(--border);border-radius:12px;
+background:var(--panel2);color:var(--text);outline:none
+}
+.modal input:focus{border-color:var(--accent)}
 .modal-actions{display:flex;gap:9px;margin-top:8px}
 .modal-actions button{flex:1}
-.secondary-btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:12px 17px;border-radius:14px;box-shadow:var(--shadow);font-size:12px;z-index:50;transition:.25s;max-width:90%;text-align:center}
+.secondary-btn{
+border:1px solid var(--border);background:var(--panel2);
+color:var(--text);border-radius:12px;padding:12px
+}
+.toast{
+position:fixed;bottom:20px;left:50%;
+transform:translate(-50%,20px);opacity:0;pointer-events:none;
+background:var(--panel2);color:var(--text);
+border:1px solid var(--border);padding:12px 17px;
+border-radius:14px;box-shadow:var(--shadow);font-size:12px;
+z-index:50;transition:.25s;max-width:90%;text-align:center
+}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* HD PHOTO */
 .hd-modal{width:min(510px,100%)}
 .hd-brand{display:flex;align-items:center;gap:12px;margin-bottom:15px}
-.hd-logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#8069f5,#42c8ff);display:grid;place-items:center;color:white;font-size:24px}
+.hd-logo{
+width:48px;height:48px;border-radius:15px;
+background:linear-gradient(135deg,#8069f5,#42c8ff);
+display:grid;place-items:center;color:white
+}
+.hd-logo svg{width:27px;height:27px;fill:none;stroke:white;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .hd-brand h3{margin:0}
 .hd-brand small{color:var(--muted);font-size:11px}
-.hd-upload{border:2px dashed #8b7cff66;border-radius:17px;padding:23px;text-align:center;background:#8b7cff09;margin:14px 0}
+.hd-upload{
+border:2px dashed #8b7cff66;border-radius:17px;
+padding:23px;text-align:center;background:#8b7cff09;margin:14px 0
+}
 .hd-upload label{display:block;cursor:pointer}
 .hd-upload strong{display:block;margin:9px 0 5px;font-size:14px}
 .hd-upload small{font-size:11px;color:var(--muted)}
 #hdInput{display:none}
 .hd-preview{display:none;gap:10px;margin:14px 0}
 .hd-preview>div{flex:1;min-width:0}
-.hd-preview img{width:100%;aspect-ratio:1;object-fit:contain;background:#050505;border-radius:12px;border:1px solid var(--border)}
-.hd-preview span{display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:6px}
+.hd-preview img{
+width:100%;aspect-ratio:1;object-fit:contain;
+background:#050505;border-radius:12px;border:1px solid var(--border)
+}
+.hd-preview span{
+display:block;text-align:center;font-size:11px;
+color:var(--muted);margin-top:6px
+}
 .hd-options{background:var(--panel2);border-radius:14px;padding:13px;margin:12px 0}
 .hd-options label{font-size:12px;display:block;margin-bottom:9px}
 .hd-options input{width:100%;margin:0;accent-color:var(--accent)}
 .hd-note{font-size:11px!important;line-height:1.6}
 .hd-status{font-size:12px;color:var(--muted);margin:10px 0;min-height:18px}
 .hd-close{width:100%;margin-top:10px}
-@media(min-width:700px){.wrap{padding-top:30px}.file-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{padding:40px}.folder{padding:23px}.file-preview{height:155px}}
-@media(max-width:600px){.downloader{padding:15px}}
-@media(max-width:420px){.wrap{padding:17px 13px 40px}.hero{padding:25px 20px}.video-info{padding:11px}.file-preview{height:115px}.action-btn{width:43px;height:42px}}
+
+@media(min-width:700px){
+.wrap{padding-top:30px}
+.file-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.hero{padding:40px}
+.folder{padding:23px}
+.file-preview{height:155px}
+}
+@media(max-width:420px){
+.wrap{padding:17px 13px 40px}
+.hero{padding:25px 20px}
+.video-info{padding:11px}
+.file-preview{height:115px}
+.action-btn{width:43px;height:42px;border-radius:13px}
+}
 </style>
 </head>
+
 <body>
 <div class="wrap">
+
 <header>
-<div class="brand"><div class="logo">☁</div><div><h1>ZEZE</h1><small>Your personal media space</small></div></div>
+<div class="brand">
+<div class="logo">☁</div>
+<div>
+<h1>ZEZE</h1>
+<small>Your personal media space</small>
+</div>
+</div>
+
 <div class="menu-wrap">
-<button class="menu-btn" id="menuButton">⋮</button>
+<button class="menu-btn" id="menuButton" aria-label="Buka menu">⋮</button>
+
 <div class="menu" id="menu">
 <div class="menu-title">ZEZE CLOUD MENU</div>
+
 <div class="menu-grid">
-<button class="menu-card" id="loginMenu"><span class="menu-icon">♙</span><strong id="loginCardTitle">Login Admin</strong><small id="loginCardSub">Kelola penyimpanan</small></button>
-<button class="menu-card" id="openHD"><span class="menu-icon">▧</span><strong>HD Foto</strong><small>Perjelas foto</small></button>
+<button class="menu-card" id="loginMenu">
+<span class="menu-icon" id="loginMenuIcon">
+<svg viewBox="0 0 24 24">
+<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+<path d="M9 12l2 2 4-4"/>
+</svg>
+</span>
+<strong id="loginCardTitle">Login Admin</strong>
+<small id="loginCardSub">Kelola penyimpanan</small>
+</button>
+
+<button class="menu-card hd-menu" id="openHD">
+<span class="menu-icon">
+<svg viewBox="0 0 24 24">
+<rect x="3" y="3" width="18" height="18" rx="4"/>
+<circle cx="8.5" cy="8.5" r="1.5"/>
+<path d="M21 15l-5-5L5 21"/>
+<path d="M17 3v4M15 5h4"/>
+</svg>
+</span>
+<strong>HD Foto</strong>
+<small>Perjelas foto</small>
+</button>
 </div>
-<div class="theme-box"><div class="theme-heading">PILIH TEMA</div><div class="theme-grid">
-<button class="theme-choice" data-theme-choice="dark"><span>🌙</span>Dark</button>
-<button class="theme-choice" data-theme-choice="light"><span>☀️</span>Light</button>
-<button class="theme-choice" data-theme-choice="amoled"><span>⚫</span>AMOLED</button>
-</div></div>
+
+<div class="theme-box">
+<div class="theme-heading">PILIH TEMA</div>
+<div class="theme-grid">
+<button class="theme-choice" data-theme-choice="dark">
+<span>🌙</span>Dark
+</button>
+<button class="theme-choice" data-theme-choice="light">
+<span>☀️</span>Light
+</button>
+<button class="theme-choice" data-theme-choice="amoled">
+<span>⚫</span>AMOLED
+</button>
+</div>
+</div>
 </div>
 </div>
 </header>
 
 <section class="hero">
 <div class="hero-tag">✦ PERSONAL CLOUD STORAGE</div>
-<h2>WELCOME</h2>
-<p>terima kasih sudah mampir ke sini</p>
-</section>
-
-<section class="downloader">
-<div class="downloader-heading">
-<div class="downloader-logo">⇩</div>
-<div><h3>ZEZE DOWNLOADER</h3><small>Video & Audio Link Tool</small></div>
-<span class="downloader-badge">● ONLINE</span>
-</div>
-<p class="downloader-description">Tempel tautan YouTube, TikTok, atau Instagram di bawah ini. Pilih format yang kamu inginkan.</p>
-<input class="url-input" id="downloadUrl" type="url" placeholder="Tempel link YouTube / TikTok / Instagram..." autocomplete="url">
-<div class="format-label">PILIH FORMAT</div>
-<div class="format-options">
-<button class="format-btn active" data-format="MP4"><span>🎬</span>MP4 VIDEO</button>
-<button class="format-btn" data-format="MP3"><span>🎵</span>MP3 AUDIO</button>
-</div>
-<button class="process-btn" id="processDownload">⇩ LANJUTKAN</button>
-<div class="download-status" id="downloadStatus">Masukkan tautan untuk memulai.</div>
-<p class="downloader-note">Gunakan hanya untuk konten milik sendiri atau yang kamu punya izin untuk mengunduhnya. Fitur ini saat ini membuka sumber tautan, belum melakukan konversi atau unduhan langsung.</p>
+<h2>SELAMAT DATANG</h2>
+<p>Ini adalah layanan Zeze Cloud. Tonton video langsung yang sudah saya sediakan. Download juga apa pun yang kalian suka di sini !!!</p>
 </section>
 
 <div class="section-label">JELAJAHI PENYIMPANAN</div>
+
 <section class="folders">
-<button class="folder active" id="videoFolder"><span class="folder-count" id="videoCount">0 item</span><span class="folder-icon video-icon">▶</span><strong>VIDEO</strong><small>Koleksi video kamu</small></button>
-<button class="folder" id="fileFolder"><span class="folder-count" id="fileCount">0 item</span><span class="folder-icon file-icon">▤</span><strong>FILE</strong><small>Foto dan dokumen lainnya</small></button>
+<button class="folder active" id="videoFolder">
+<span class="folder-count" id="videoCount">0 item</span>
+<span class="folder-icon video-icon">▶</span>
+<strong>VIDEO</strong>
+<small>Koleksi video kamu</small>
+</button>
+
+<button class="folder" id="fileFolder">
+<span class="folder-count" id="fileCount">0 item</span>
+<span class="folder-icon file-icon">▤</span>
+<strong>FILE</strong>
+<small>Foto dan dokumen lainnya</small>
+</button>
 </section>
 
 <section class="upload-panel" id="uploadPanel" style="display:none">
-<div class="panel-heading"><h3>☁ Upload File Baru</h3><span class="admin-pill" id="adminPill">ADMIN AKTIF</span></div>
+<div class="panel-heading">
+<h3>☁ Upload File Baru</h3>
+<span class="admin-pill" id="adminPill">ADMIN AKTIF</span>
+</div>
+
 <div class="dropzone" id="dropzone">
-<div class="cloud-icon">⇧</div><h4>Letakkan file kamu di sini</h4><p>Atau pilih file dari perangkat kamu</p>
+<div class="cloud-icon">⇧</div>
+<h4>Letakkan file kamu di sini</h4>
+<p>Atau pilih file dari perangkat kamu</p>
 <button class="primary-btn" id="chooseFile">＋ Pilih File</button>
 <input type="file" id="fileInput" multiple>
 <div class="upload-status" id="uploadStatus"></div>
-<div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="progress" id="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
 </div>
 </section>
 
-<div class="list-heading"><h3 id="listTitle">▶ Video</h3><div style="display:flex;align-items:center;gap:12px"><span id="itemCount">Memuat...</span><button class="refresh" id="refreshButton">↻</button></div></div>
-<main id="content"><div class="empty"><div class="empty-icon">☁</div><strong>Memuat penyimpanan...</strong>Mohon tunggu sebentar.</div></main>
+<div class="toolbar">
+<input class="search" id="searchInput" placeholder="⌕ Cari nama file..." autocomplete="off">
+<button class="refresh" id="refreshButton">↻</button>
+</div>
+
+<div class="list-heading">
+<h3 id="listTitle">▶ Video</h3>
+<span id="itemCount">Memuat...</span>
+</div>
+
+<main id="content">
+<div class="empty">
+<div class="empty-icon">☁</div>
+<strong>Memuat penyimpanan...</strong>
+Mohon tunggu sebentar.
+</div>
+</main>
+
 <footer>ZEZE CLOUD · YOUR FILES, YOUR SPACE</footer>
 </div>
 
-<div class="modal-bg" id="loginModal"><div class="modal">
-<h3>🔐 Login Admin</h3><p>Masuk untuk mengelola file Zeze Cloud.</p>
+<!-- LOGIN -->
+<div class="modal-bg" id="loginModal">
+<div class="modal">
+<h3>🔐 Login Admin</h3>
+<p>Masuk untuk mengelola file Zeze Cloud.</p>
 <input id="emailInput" type="email" placeholder="Email admin" autocomplete="username">
 <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
-<div class="modal-actions"><button class="secondary-btn" id="cancelLogin">Batal</button><button class="primary-btn" id="submitLogin">Login</button></div>
-</div></div>
+<div class="modal-actions">
+<button class="secondary-btn" id="cancelLogin">Batal</button>
+<button class="primary-btn" id="submitLogin">Login</button>
+</div>
+</div>
+</div>
 
-<div class="modal-bg" id="hdModal"><div class="modal hd-modal">
-<div class="hd-brand"><div class="hd-logo">▧</div><div><h3>Zeze HD Photo</h3><small>Photo Enhancement Studio</small></div></div>
+<!-- HD PHOTO -->
+<div class="modal-bg" id="hdModal">
+<div class="modal hd-modal">
+<div class="hd-brand">
+<div class="hd-logo">
+<svg viewBox="0 0 24 24">
+<rect x="3" y="3" width="18" height="18" rx="4"/>
+<circle cx="8.5" cy="8.5" r="1.5"/>
+<path d="M21 15l-5-5L5 21"/>
+<path d="M17 3v4M15 5h4"/>
+</svg>
+</div>
+<div>
+<h3>Zeze HD Photo</h3>
+<small>Photo Enhancement Studio</small>
+</div>
+</div>
+
 <p>Tingkatkan ketajaman, warna, dan ukuran foto langsung dari perangkatmu.</p>
-<div class="hd-upload"><label for="hdInput"><div style="font-size:35px">🖼️</div><strong>Pilih Foto dari Galeri</strong><small>JPG, PNG, WEBP · Maksimal 20 MB</small></label><input type="file" id="hdInput" accept="image/jpeg,image/png,image/webp,image/bmp"></div>
-<div class="hd-preview" id="hdPreview"><div><img id="hdOriginal" alt="Foto asli"><span>FOTO ASLI</span></div><div><img id="hdResult" alt="Hasil HD"><span>HASIL HD</span></div></div>
-<div class="hd-options"><label for="hdStrength">Kekuatan penajaman: <b id="strengthValue">65%</b></label><input type="range" id="hdStrength" min="0" max="100" value="65"></div>
-<div class="hd-options"><label for="hdScale">Ukuran hasil foto</label><select id="hdScale" style="width:100%;padding:11px;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:10px"><option value="1">Ukuran asli</option><option value="2" selected>2x - HD</option><option value="3">3x - Ultra Size</option></select></div>
-<p class="hd-note">Pemrosesan menggunakan upscaling dan penajaman berbasis browser, bukan AI rekonstruksi wajah.</p>
+
+<div class="hd-upload" id="hdUpload">
+<label for="hdInput">
+<div style="font-size:35px">🖼️</div>
+<strong>Pilih Foto dari Galeri</strong>
+<small>JPG, PNG, WEBP · Maksimal 20 MB</small>
+</label>
+<input type="file" id="hdInput" accept="image/jpeg,image/png,image/webp,image/bmp">
+</div>
+
+<div class="hd-preview" id="hdPreview">
+<div>
+<img id="hdOriginal" alt="Foto asli">
+<span>FOTO ASLI</span>
+</div>
+<div>
+<img id="hdResult" alt="Hasil HD">
+<span>HASIL HD</span>
+</div>
+</div>
+
+<div class="hd-options">
+<label for="hdStrength">Kekuatan penajaman: <b id="strengthValue">65%</b></label>
+<input type="range" id="hdStrength" min="0" max="100" value="65">
+</div>
+
+<div class="hd-options">
+<label for="hdScale">Ukuran hasil foto</label>
+<select id="hdScale" style="width:100%;padding:11px;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:10px">
+<option value="1">Ukuran asli</option>
+<option value="2" selected>2x - HD</option>
+<option value="3">3x - Ultra Size</option>
+</select>
+</div>
+
+<p class="hd-note">
+Pemrosesan ini menggunakan upscaling dan penajaman berbasis browser, bukan AI rekonstruksi wajah. Memperbesar resolusi tidak selalu berarti menambah detail asli yang hilang.
+</p>
+
 <div class="hd-status" id="hdStatus">Pilih foto untuk memulai.</div>
 <button class="primary-btn" id="processHD" style="width:100%" disabled>✨ Proses Foto HD</button>
 <button class="primary-btn" id="saveHD" style="width:100%;margin-top:9px;display:none">⬇ Simpan Hasil HD</button>
 <button class="secondary-btn hd-close" id="closeHD">Tutup</button>
-</div></div>
+</div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL="https://sgcrivgrlxeqkryreabc.supabase.co";
-const SUPABASE_KEY="sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
-const BUCKET="zeze-cloud";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const SUPABASE_URL = "https://sgcrivgrlxeqkryreabc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
+const BUCKET = "zeze-cloud";
+
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let currentUser=null;
+let allFiles=[];
+let currentTab="video";
+let isUploading=false;
+
 const $=id=>document.getElementById(id);
 
-let currentUser=null,allFiles=[],currentTab="video",isUploading=false;
 const videoExt=/\.(mp4|webm|mov|m4v|ogv)$/i;
 const imageExt=/\.(jpg|jpeg|png|gif|webp|avif|bmp|svg)$/i;
 
-function escapeHTML(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function formatSize(bytes){if(!bytes)return"0 B";const u=["B","KB","MB","GB","TB"],i=Math.min(Math.floor(Math.log(bytes)/Math.log(1024)),4);return(bytes/Math.pow(1024,i)).toFixed(i===0?0:1)+" "+u[i];}
-function toast(message){$("toast").textContent=message;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2800);}
-function publicUrl(path,download=false){return db.storage.from(BUCKET).getPublicUrl(path,{download}).data.publicUrl;}
+function escapeHTML(value){
+return String(value).replace(/[&<>"']/g,char=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[char]));
+}
 
-/* TEMA */
+function formatSize(bytes){
+if(!bytes)return "0 B";
+const units=["B","KB","MB","GB","TB"];
+const i=Math.min(Math.floor(Math.log(bytes)/Math.log(1024)),4);
+return (bytes/Math.pow(1024,i)).toFixed(i===0?0:1)+" "+units[i];
+}
+
+function toast(message){
+$("toast").textContent=message;
+$("toast").classList.add("show");
+setTimeout(()=>$("toast").classList.remove("show"),2800);
+}
+
+function publicUrl(path,download=false){
+return db.storage.from(BUCKET).getPublicUrl(path,{download}).data.publicUrl;
+}
+
+/* THEME */
 function setTheme(theme){
 document.documentElement.dataset.theme=theme;
 localStorage.setItem("zeze-theme",theme);
-document.querySelectorAll("[data-theme-choice]").forEach(b=>b.classList.toggle("active",b.dataset.themeChoice===theme));
-}
-setTheme(localStorage.getItem("zeze-theme")||"dark");
-$("menuButton").onclick=()=>$("menu").classList.toggle("show");
-document.addEventListener("click",e=>{if(!e.target.closest(".menu-wrap"))$("menu").classList.remove("show");});
-document.querySelectorAll("[data-theme-choice]").forEach(b=>b.onclick=()=>{setTheme(b.dataset.themeChoice);toast("Tema berhasil diubah");});
 
-/* DOWNLOADER */
-let selectedFormat="MP4";
-document.querySelectorAll("[data-format]").forEach(button=>{
+document.querySelectorAll("[data-theme-choice]").forEach(button=>{
+button.classList.toggle("active",button.dataset.themeChoice===theme);
+});
+}
+
+setTheme(localStorage.getItem("zeze-theme")||"dark");
+
+$("menuButton").onclick=()=>{
+$("menu").classList.toggle("show");
+};
+
+document.addEventListener("click",e=>{
+if(!e.target.closest(".menu-wrap")){
+$("menu").classList.remove("show");
+}
+});
+
+document.querySelectorAll("[data-theme-choice]").forEach(button=>{
 button.onclick=()=>{
-selectedFormat=button.dataset.format;
-document.querySelectorAll("[data-format]").forEach(b=>b.classList.toggle("active",b===button));
-$("downloadStatus").textContent="Format dipilih: "+selectedFormat;
+setTheme(button.dataset.themeChoice);
+toast("Tema berhasil diubah");
 };
 });
-$("processDownload").onclick=()=>{
-const raw=$("downloadUrl").value.trim();
-if(!raw){toast("Tempel link terlebih dahulu");$("downloadUrl").focus();return;}
-let url;
-try{url=new URL(raw);}catch(e){toast("Link tidak valid");return;}
-if(!["http:","https:"].includes(url.protocol)){toast("Format link tidak didukung");return;}
-const host=url.hostname.toLowerCase().replace(/^www\./,"");
-let platform="";
-if(host==="youtube.com"||host==="m.youtube.com"||host==="youtu.be"||host==="music.youtube.com")platform="YouTube";
-else if(host==="tiktok.com"||host==="vm.tiktok.com"||host==="vt.tiktok.com")platform="TikTok";
-else if(host==="instagram.com"||host==="instagr.am")platform="Instagram";
-else{toast("Link bukan dari YouTube, TikTok, atau Instagram");return;}
-$("downloadStatus").textContent=platform+" terdeteksi. Membuka sumber resmi. Format pilihan: "+selectedFormat+".";
-window.open(url.href,"_blank","noopener,noreferrer");
-toast("Sumber "+platform+" dibuka");
-};
 
-/* MODAL */
-$("openHD").onclick=()=>{$("menu").classList.remove("show");$("hdModal").classList.add("show");};
-$("closeHD").onclick=()=>$("hdModal").classList.remove("show");
-$("hdModal").onclick=e=>{if(e.target===$("hdModal"))$("hdModal").classList.remove("show");};
-$("cancelLogin").onclick=()=>$("loginModal").classList.remove("show");
-$("loginModal").onclick=e=>{if(e.target===$("loginModal"))$("loginModal").classList.remove("show");};
-
-/* ADMIN */
-function updateAdminUI(){
-$("uploadPanel").style.display=currentUser?"block":"none";
-$("adminPill").style.display=currentUser?"inline-block":"none";
-$("loginCardTitle").textContent=currentUser?"Logout Admin":"Login Admin";
-$("loginCardSub").textContent=currentUser?"Keluar dari akun admin":"Kelola penyimpanan";
-}
-$("loginMenu").onclick=async()=>{
+/* HD MENU */
+$("openHD").onclick=()=>{
 $("menu").classList.remove("show");
-if(currentUser){
-const {error}=await db.auth.signOut();
-if(error){toast("Logout gagal: "+error.message);return;}
-currentUser=null;updateAdminUI();toast("Kamu sudah logout");await loadFiles();return;
-}
-$("loginModal").classList.add("show");
+$("hdModal").classList.add("show");
 };
-$("submitLogin").onclick=async()=>{
-const email=$("emailInput").value.trim(),password=$("passwordInput").value;
-if(!email||!password){toast("Isi email dan password dulu");return;}
-$("submitLogin").disabled=true;$("submitLogin").textContent="Memproses...";
-try{
-const {data,error}=await db.auth.signInWithPassword({email,password});
-if(error)throw error;
-currentUser=data.user;$("passwordInput").value="";$("loginModal").classList.remove("show");updateAdminUI();toast("Login admin berhasil");await loadFiles();
-}catch(e){toast("Login gagal: "+e.message);}
-finally{$("submitLogin").disabled=false;$("submitLogin").textContent="Login";}
-};
-async function checkSession(){
-const {data,error}=await db.auth.getSession();
-if(error)toast("Gagal memeriksa sesi login");
-currentUser=data?.session?.user||null;updateAdminUI();await loadFiles();
-}
-db.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;updateAdminUI();});
 
-/* FOLDER */
+$("closeHD").onclick=()=>{
+$("hdModal").classList.remove("show");
+};
+
+$("hdModal").addEventListener("click",e=>{
+if(e.target===$("hdModal")){
+$("hdModal").classList.remove("show");
+}
+});
+
+/* TAB */
 $("videoFolder").onclick=()=>switchTab("video");
 $("fileFolder").onclick=()=>switchTab("file");
+
 function switchTab(tab){
 currentTab=tab;
 $("videoFolder").classList.toggle("active",tab==="video");
 $("fileFolder").classList.toggle("active",tab==="file");
 $("listTitle").textContent=tab==="video"?"▶ Video":"▤ File";
+$("searchInput").value="";
 renderFiles();
 }
+
 $("refreshButton").onclick=loadFiles;
+$("searchInput").addEventListener("input",renderFiles);
 
-/* FILES */
-function isVideo(f){return videoExt.test(f.name);}
-function isImage(f){return imageExt.test(f.name);}
-function downloadButton(url,name){return `<a class="action-btn download-btn" href="${escapeHTML(url)}" download="${escapeHTML(name)}" aria-label="Download" title="Download"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></a>`;}
-function deleteButton(name){if(!currentUser)return"";return `<button class="action-btn delete-btn" data-delete="${escapeHTML(name)}" title="Hapus"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5"/></svg></button>`;}
+/* ADMIN */
+function updateAdminUI(){
+$("uploadPanel").style.display=currentUser?"block":"none";
+$("adminPill").style.display=currentUser?"inline-block":"none";
 
-function renderFiles(){
-const filtered=allFiles.filter(f=>currentTab==="video"?isVideo(f):!isVideo(f));
-$("videoCount").textContent=allFiles.filter(isVideo).length+" item";
-$("fileCount").textContent=allFiles.filter(f=>!isVideo(f)).length+" item";
-$("itemCount").textContent=filtered.length+" item";
-if(!filtered.length){
-$("content").innerHTML=`<div class="empty"><div class="empty-icon">${currentTab==="video"?"🎬":"📁"}</div><strong>Belum ada file di sini</strong>File yang diunggah akan muncul di sini.</div>`;
+$("loginCardTitle").textContent=currentUser?"Logout Admin":"Login Admin";
+$("loginCardSub").textContent=currentUser?"Keluar dari akun admin":"Kelola penyimpanan";
+
+$("loginMenuIcon").innerHTML=currentUser
+? `<svg viewBox="0 0 24 24">
+     <path d="M10 17l5-5-5-5"/>
+     <path d="M15 12H3"/>
+     <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>
+   </svg>`
+: `<svg viewBox="0 0 24 24">
+     <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/>
+     <path d="M9 12l2 2 4-4"/>
+   </svg>`;
+}
+
+$("loginMenu").onclick=async()=>{
+$("menu").classList.remove("show");
+
+if(currentUser){
+const {error}=await db.auth.signOut();
+
+if(error){
+toast("Logout gagal: "+error.message);
 return;
 }
-if(currentTab==="video"){
-$("content").innerHTML=`<div class="video-list">${filtered.map(f=>{
-const url=publicUrl(f.name),dl=publicUrl(f.name,true);
-return `<article class="video-card"><video class="video-player" controls playsinline preload="metadata"><source src="${escapeHTML(url)}">Browser kamu tidak mendukung pemutar video.</video><div class="video-info"><div class="file-name">${escapeHTML(f.name)}</div><div class="file-meta">${formatSize(f.metadata?.size)} · Video</div><div class="actions">${downloadButton(dl,f.name)}${deleteButton(f.name)}</div></div></article>`;
-}).join("")}</div>`;
-}else{
-$("content").innerHTML=`<div class="file-grid">${filtered.map(f=>{
-const url=publicUrl(f.name),dl=publicUrl(f.name,true);
-const preview=isImage(f)?`<img src="${escapeHTML(url)}" alt="${escapeHTML(f.name)}" loading="lazy">`:`<div class="file-symbol">${f.name.toLowerCase().endsWith(".pdf")?"📕":"📄"}</div>`;
-return `<article class="file-card"><div class="file-preview">${preview}</div><div class="file-name">${escapeHTML(f.name)}</div><div class="file-meta">${formatSize(f.metadata?.size)}</div><div class="actions">${downloadButton(dl,f.name)}${deleteButton(f.name)}</div></article>`;
-}).join("")}</div>`;
-}
-document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteFile(b.dataset.delete));
-}
-async function loadFiles(){
-$("content").innerHTML=`<div class="empty"><div class="empty-icon">☁</div><strong>Memuat file...</strong>Tunggu sebentar.</div>`;
-const {data,error}=await db.storage.from(BUCKET).list("",{limit:1000,sortBy:{column:"created_at",order:"desc"}});
-if(error){$("content").innerHTML=`<div class="empty"><strong>Gagal memuat file</strong>${escapeHTML(error.message)}</div>`;$("itemCount").textContent="Gagal";return;}
-allFiles=(data||[]).filter(f=>f.name&&f.name!=="."&&f.name!=="..");renderFiles();
-}
-async function deleteFile(name){
-if(!currentUser){toast("Login admin terlebih dahulu");return;}
-if(!confirm("Yakin ingin menghapus file ini?\n"+name))return;
-const {error}=await db.storage.from(BUCKET).remove([name]);
-if(error){toast("Gagal menghapus: "+error.message);return;}
-toast("File berhasil dihapus");await loadFiles();
+
+currentUser=null;
+updateAdminUI();
+toast("Kamu sudah logout");
+await loadFiles();
+return;
 }
 
-/* UPLOAD */
-const dropzone=$("dropzone"),fileInput=$("fileInput");
-$("chooseFile").onclick=()=>fileInput.click();
-fileInput.onchange=()=>{if(fileInput.files.length)uploadFiles([...fileInput.files]);fileInput.value="";};
-["dragenter","dragover"].forEach(ev=>dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.add("drag");}));
-["dragleave","drop"].forEach(ev=>dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.remove("drag");}));
-dropzone.addEventListener("drop",e=>{const files=[...e.dataTransfer.files];if(files.length)uploadFiles(files);});
-async function uploadFiles(files){
-if(!currentUser){toast("Login admin terlebih dahulu");return;}
-if(isUploading){toast("Upload sebelumnya masih berjalan");return;}
-isUploading=true;$("chooseFile").disabled=true;$("progress").style.display="block";
-let completed=0,failed=0;$("uploadStatus").textContent="Menyiapkan upload...";
-for(const file of files){
-$("uploadStatus").textContent="Mengunggah: "+file.name;
-try{
-const {error}=await db.storage.from(BUCKET).upload(file.name,file,{cacheControl:"3600",upsert:false,contentType:file.type||undefined});
-if(error)throw error;completed++;
-}catch(e){failed++;toast("Gagal upload "+file.name+": "+e.message);}
-$("progressBar").style.width=Math.round((completed+failed)/files.length*100)+"%";
+$("loginModal").classList.add("show");
+};
+
+$("cancelLogin").onclick=()=>{
+$("loginModal").classList.remove("show");
+};
+
+$("loginModal").addEventListener("click",e=>{
+if(e.target===$("loginModal")){
+$("loginModal").classList.remove("show");
 }
-$("uploadStatus").textContent=`Selesai: ${completed} berhasil, ${failed} gagal dari ${files.length} file.`;
-$("chooseFile").disabled=false;isUploading=false;
-setTimeout(()=>{$("progress").style.display="none";$("progressBar").style.width="0%";},1800);
+});
+
+$("submitLogin").onclick=async()=>{
+const email=$("emailInput").value.trim();
+const password=$("passwordInput").value;
+
+if(!email||!password){
+toast("Isi email dan password dulu");
+return;
+}
+
+$("submitLogin").disabled=true;
+$("submitLogin").textContent="Memproses...";
+
+try{
+const {data,error}=await db.auth.signInWithPassword({email,password});
+if(error)throw error;
+
+currentUser=data.user;
+$("passwordInput").value="";
+$("loginModal").classList.remove("show");
+
+updateAdminUI();
+toast("Login admin berhasil");
+await loadFiles();
+
+}catch(error){
+toast("Login gagal: "+error.message);
+}finally{
+$("submitLogin").disabled=false;
+$("submitLogin").textContent="Login";
+}
+};
+
+async function checkSession(){
+const {data,error}=await db.auth.getSession();
+
+if(error){
+toast("Gagal memeriksa sesi login");
+}
+
+currentUser=data?.session?.user||null;
+updateAdminUI();
 await loadFiles();
 }
 
-/* HD PHOTO */
-let hdOriginalFile=null,hdOriginalURL=null,hdResultBlob=null,hdResultURL=null;
+db.auth.onAuthStateChange((_event,session)=>{
+currentUser=session?.user||null;
+updateAdminUI();
+});
+
+/* FILE TYPE */
+function isVideo(file){
+return videoExt.test(file.name);
+}
+
+function isImage(file){
+return imageExt.test(file.name);
+}
+
+/* PREMIUM DOWNLOAD & DELETE BUTTONS */
+function downloadButton(url,name){
+return `<a class="action-btn download-btn"
+href="${escapeHTML(url)}"
+download="${escapeHTML(name)}"
+aria-label="Download"
+title="Download">
+<svg viewBox="0 0 24 24">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+<path d="M7 10l5 5 5-5"/>
+<path d="M12 15V3"/>
+</svg>
+</a>`;
+}
+
+function deleteButton(name){
+if(!currentUser)return "";
+
+return `<button class="action-btn delete-btn"
+data-delete="${escapeHTML(name)}"
+title="Hapus"
+aria-label="Hapus file">
+<svg viewBox="0 0 24 24">
+<path d="M3 6h18"/>
+<path d="M8 6V4h8v2"/>
+<path d="M19 6l-1 14H6L5 6"/>
+<path d="M10 11v5M14 11v5"/>
+</svg>
+</button>`;
+}
+
+/* RENDER */
+function renderFiles(){
+const query=$("searchInput").value.trim().toLowerCase();
+
+const filtered=allFiles.filter(file=>{
+const matchesTab=currentTab==="video"?isVideo(file):!isVideo(file);
+return matchesTab&&file.name.toLowerCase().includes(query);
+});
+
+$("videoCount").textContent=allFiles.filter(isVideo).length+" item";
+$("fileCount").textContent=allFiles.filter(f=>!isVideo(f)).length+" item";
+$("itemCount").textContent=filtered.length+" item";
+
+if(!filtered.length){
+$("content").innerHTML=`
+<div class="empty">
+<div class="empty-icon">${currentTab==="video"?"🎬":"📁"}</div>
+<strong>${query?"File tidak ditemukan":"Belum ada file di sini"}</strong>
+${query?"Coba kata pencarian lain.":"File yang diunggah akan muncul di sini."}
+</div>`;
+return;
+}
+
+if(currentTab==="video"){
+$("content").innerHTML=`
+<div class="video-list">
+${filtered.map(file=>{
+const url=publicUrl(file.name);
+const download=publicUrl(file.name,true);
+
+return `
+<article class="video-card">
+<video class="video-player" controls playsinline preload="metadata">
+<source src="${escapeHTML(url)}">
+Browser kamu tidak mendukung pemutar video.
+</video>
+<div class="video-info">
+<div class="file-name">${escapeHTML(file.name)}</div>
+<div class="file-meta">${formatSize(file.metadata?.size)} · Video</div>
+<div class="actions">
+${downloadButton(download,file.name)}
+${deleteButton(file.name)}
+</div>
+</div>
+</article>`;
+}).join("")}
+</div>`;
+}else{
+$("content").innerHTML=`
+<div class="file-grid">
+${filtered.map(file=>{
+const url=publicUrl(file.name);
+const download=publicUrl(file.name,true);
+
+const preview=isImage(file)
+?`<img src="${escapeHTML(url)}" alt="${escapeHTML(file.name)}" loading="lazy">`
+:`<div class="file-symbol">${file.name.toLowerCase().endsWith(".pdf")?"📕":"📄"}</div>`;
+
+return `
+<article class="file-card">
+<div class="file-preview">${preview}</div>
+<div class="file-name">${escapeHTML(file.name)}</div>
+<div class="file-meta">${formatSize(file.metadata?.size)}</div>
+<div class="actions">
+${downloadButton(download,file.name)}
+${deleteButton(file.name)}
+</div>
+</article>`;
+}).join("")}
+</div>`;
+}
+
+document.querySelectorAll("[data-delete]").forEach(button=>{
+button.onclick=()=>deleteFile(button.dataset.delete);
+});
+}
+
+/* LOAD FILES */
+async function loadFiles(){
+$("content").innerHTML=`
+<div class="empty">
+<div class="empty-icon">☁</div>
+<strong>Memuat file...</strong>
+Tunggu sebentar.
+</div>`;
+
+const {data,error}=await db.storage.from(BUCKET).list("",{
+limit:1000,
+sortBy:{column:"created_at",order:"desc"}
+});
+
+if(error){
+$("content").innerHTML=`
+<div class="empty">
+<strong>Gagal memuat file</strong>
+${escapeHTML(error.message)}
+</div>`;
+$("itemCount").textContent="Gagal";
+return;
+}
+
+allFiles=(data||[]).filter(item=>
+item.name&&item.name!=="."&&item.name!==".."
+);
+
+renderFiles();
+}
+
+/* DELETE */
+async function deleteFile(name){
+if(!currentUser){
+toast("Login admin terlebih dahulu");
+return;
+}
+
+if(!confirm("Yakin ingin menghapus file ini?\n"+name)){
+return;
+}
+
+const {error}=await db.storage.from(BUCKET).remove([name]);
+
+if(error){
+toast("Gagal menghapus: "+error.message);
+return;
+}
+
+toast("File berhasil dihapus");
+await loadFiles();
+}
+
+/* UPLOAD - NAMA ASLI */
+const dropzone=$("dropzone");
+const fileInput=$("fileInput");
+
+$("chooseFile").onclick=()=>fileInput.click();
+
+fileInput.onchange=()=>{
+if(fileInput.files.length){
+uploadFiles([...fileInput.files]);
+}
+fileInput.value="";
+};
+
+["dragenter","dragover"].forEach(event=>{
+dropzone.addEventListener(event,e=>{
+e.preventDefault();
+dropzone.classList.add("drag");
+});
+});
+
+["dragleave","drop"].forEach(event=>{
+dropzone.addEventListener(event,e=>{
+e.preventDefault();
+dropzone.classList.remove("drag");
+});
+});
+
+dropzone.addEventListener("drop",e=>{
+const files=[...e.dataTransfer.files];
+if(files.length)uploadFiles(files);
+});
+
+async function uploadFiles(files){
+if(!currentUser){
+toast("Login admin terlebih dahulu");
+return;
+}
+
+if(isUploading){
+toast("Upload sebelumnya masih berjalan");
+return;
+}
+
+isUploading=true;
+$("chooseFile").disabled=true;
+$("progress").style.display="block";
+
+let completed=0;
+let failed=0;
+
+$("uploadStatus").textContent="Menyiapkan upload...";
+
+for(const file of files){
+const path=file.name;
+
+$("uploadStatus").textContent="Mengunggah: "+file.name;
+
+try{
+const {error}=await db.storage.from(BUCKET).upload(path,file,{
+cacheControl:"3600",
+upsert:false,
+contentType:file.type||undefined
+});
+
+if(error)throw error;
+completed++;
+
+}catch(error){
+failed++;
+toast("Gagal upload "+file.name+": "+error.message);
+}
+
+const finished=completed+failed;
+$("progressBar").style.width=Math.round(finished/files.length*100)+"%";
+}
+
+$("uploadStatus").textContent=
+`Selesai: ${completed} berhasil, ${failed} gagal dari ${files.length} file.`;
+
+$("chooseFile").disabled=false;
+isUploading=false;
+
+setTimeout(()=>{
+$("progress").style.display="none";
+$("progressBar").style.width="0%";
+},1800);
+
+await loadFiles();
+}
+
+/* ZEZE HD PHOTO PROCESSOR */
+let hdOriginalFile=null;
+let hdOriginalURL=null;
+let hdResultBlob=null;
+let hdResultURL=null;
+
 $("hdInput").onchange=()=>{
-const file=$("hdInput").files[0];if(!file)return;
-if(!file.type.startsWith("image/")){toast("Pilih file gambar yang valid");return;}
-if(file.size>20*1024*1024){toast("Ukuran foto maksimal 20 MB");$("hdInput").value="";return;}
+const file=$("hdInput").files[0];
+if(!file)return;
+
+if(!file.type.startsWith("image/")){
+toast("Pilih file gambar yang valid");
+return;
+}
+
+if(file.size>20*1024*1024){
+toast("Ukuran foto maksimal 20 MB");
+$("hdInput").value="";
+return;
+}
+
 if(hdOriginalURL)URL.revokeObjectURL(hdOriginalURL);
 if(hdResultURL)URL.revokeObjectURL(hdResultURL);
-hdOriginalFile=file;hdOriginalURL=URL.createObjectURL(file);hdResultBlob=null;hdResultURL=null;
-$("hdOriginal").src=hdOriginalURL;$("hdResult").src="";$("hdPreview").style.display="none";$("saveHD").style.display="none";$("processHD").disabled=false;$("hdStatus").textContent="Foto siap diproses.";
+
+hdOriginalFile=file;
+hdOriginalURL=URL.createObjectURL(file);
+hdResultBlob=null;
+hdResultURL=null;
+
+$("hdOriginal").src=hdOriginalURL;
+$("hdResult").src="";
+$("hdPreview").style.display="none";
+$("saveHD").style.display="none";
+$("processHD").disabled=false;
+$("hdStatus").textContent="Foto siap diproses.";
 };
-$("hdStrength").oninput=()=>$("strengthValue").textContent=$("hdStrength").value+"%";
-function loadImage(url){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error("Gagal membaca gambar"));img.src=url;});}
-function sharpenImage(imageData,width,height,amount){
-const src=imageData.data,out=new Uint8ClampedArray(src),strength=amount/100;
-for(let y=1;y<height-1;y++)for(let x=1;x<width-1;x++){
-const i=(y*width+x)*4;
-for(let c=0;c<3;c++){
-const center=src[i+c]*5,top=src[((y-1)*width+x)*4+c],bottom=src[((y+1)*width+x)*4+c],left=src[(y*width+x-1)*4+c],right=src[(y*width+x+1)*4+c];
-const sharp=center-top-bottom-left-right;
-out[i+c]=Math.max(0,Math.min(255,src[i+c]+(sharp-src[i+c])*strength*.35));
-}}
-return new ImageData(out,width,height);
+
+$("hdStrength").oninput=()=>{
+$("strengthValue").textContent=$("hdStrength").value+"%";
+};
+
+function loadImage(url){
+return new Promise((resolve,reject)=>{
+const img=new Image();
+img.onload=()=>resolve(img);
+img.onerror=()=>reject(new Error("Gagal membaca gambar"));
+img.src=url;
+});
 }
+
+function sharpenImage(imageData,width,height,amount){
+const src=imageData.data;
+const output=new Uint8ClampedArray(src);
+const strength=amount/100;
+
+for(let y=1;y<height-1;y++){
+for(let x=1;x<width-1;x++){
+const i=(y*width+x)*4;
+
+for(let c=0;c<3;c++){
+const center=src[i+c]*5;
+const top=src[((y-1)*width+x)*4+c];
+const bottom=src[((y+1)*width+x)*4+c];
+const left=src[(y*width+x-1)*4+c];
+const right=src[(y*width+x+1)*4+c];
+
+const sharp=center-top-bottom-left-right;
+
+output[i+c]=Math.max(0,Math.min(255,
+src[i+c]+(sharp-src[i+c])*strength*.35
+));
+}
+}
+}
+
+return new ImageData(output,width,height);
+}
+
 $("processHD").onclick=async()=>{
 if(!hdOriginalFile)return;
-const button=$("processHD");button.disabled=true;button.textContent="Memproses...";$("saveHD").style.display="none";$("hdStatus").textContent="Sedang meningkatkan kualitas foto...";
+
+const button=$("processHD");
+button.disabled=true;
+button.textContent="Memproses...";
+$("saveHD").style.display="none";
+$("hdStatus").textContent="Sedang meningkatkan kualitas foto...";
+
 try{
-const img=await loadImage(hdOriginalURL),scale=Number($("hdScale").value),strength=Number($("hdStrength").value);
-const width=Math.round(img.naturalWidth*scale),height=Math.round(img.naturalHeight*scale);
-if(width*height>40000000)throw new Error("Resolusi terlalu besar. Coba ukuran 2x atau 1x.");
-const canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;
-const ctx=canvas.getContext("2d",{willReadFrequently:true});ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.filter="contrast(1.08) saturate(1.08)";ctx.drawImage(img,0,0,width,height);ctx.filter="none";
-if(strength>0)ctx.putImageData(sharpenImage(ctx.getImageData(0,0,width,height),width,height,strength),0,0);
-const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",.94));
-if(!blob)throw new Error("Gagal membuat foto hasil.");
-hdResultBlob=blob;if(hdResultURL)URL.revokeObjectURL(hdResultURL);hdResultURL=URL.createObjectURL(blob);
-$("hdResult").src=hdResultURL;$("hdPreview").style.display="flex";$("saveHD").style.display="block";$("hdStatus").textContent="Berhasil! "+width+" × "+height+" px · "+formatSize(blob.size);toast("Foto berhasil diproses");
-}catch(e){$("hdStatus").textContent=e.message;toast("Proses gagal: "+e.message);}
-finally{button.disabled=false;button.textContent="✨ Proses Foto HD";}
+const img=await loadImage(hdOriginalURL);
+const scale=Number($("hdScale").value);
+const strength=Number($("hdStrength").value);
+
+const width=Math.round(img.naturalWidth*scale);
+const height=Math.round(img.naturalHeight*scale);
+
+if(width*height>40000000){
+throw new Error("Resolusi terlalu besar untuk perangkat ini. Coba ukuran 2x atau 1x.");
+}
+
+const canvas=document.createElement("canvas");
+canvas.width=width;
+canvas.height=height;
+
+const ctx=canvas.getContext("2d",{willReadFrequently:true});
+
+ctx.imageSmoothingEnabled=true;
+ctx.imageSmoothingQuality="high";
+ctx.filter="contrast(1.08) saturate(1.08)";
+ctx.drawImage(img,0,0,width,height);
+ctx.filter="none";
+
+if(strength>0){
+const pixels=ctx.getImageData(0,0,width,height);
+const sharpened=sharpenImage(pixels,width,height,strength);
+ctx.putImageData(sharpened,0,0);
+}
+
+const blob=await new Promise(resolve=>{
+canvas.toBlob(resolve,"image/jpeg",.94);
+});
+
+if(!blob){
+throw new Error("Gagal membuat foto hasil.");
+}
+
+hdResultBlob=blob;
+
+if(hdResultURL)URL.revokeObjectURL(hdResultURL);
+hdResultURL=URL.createObjectURL(blob);
+
+$("hdResult").src=hdResultURL;
+$("hdPreview").style.display="flex";
+$("saveHD").style.display="block";
+
+$("hdStatus").textContent=
+"Berhasil! "+width+" × "+height+" px · "+formatSize(blob.size);
+
+toast("Foto berhasil diproses");
+
+}catch(error){
+$("hdStatus").textContent=error.message;
+toast("Proses gagal: "+error.message);
+
+}finally{
+button.disabled=false;
+button.textContent="✨ Proses Foto HD";
+}
 };
+
 $("saveHD").onclick=()=>{
 if(!hdResultBlob||!hdResultURL)return;
-const link=document.createElement("a");link.href=hdResultURL;link.download="Zeze-HD-"+Date.now()+".jpg";document.body.appendChild(link);link.click();link.remove();toast("Foto HD siap disimpan");
+
+const link=document.createElement("a");
+link.href=hdResultURL;
+link.download="Zeze-HD-"+Date.now()+".jpg";
+
+document.body.appendChild(link);
+link.click();
+link.remove();
+
+toast("Foto HD siap disimpan");
 };
 
 /* START */
 checkSession();
+
 </script>
 </body>
 </html>
