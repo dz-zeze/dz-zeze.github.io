@@ -9,85 +9,93 @@
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0b1020;color:#f4f6ff;font-family:Arial,sans-serif}
-header{padding:25px 20px;background:#121a30;border-bottom:1px solid #28334e}
+header{padding:22px 18px;background:#121a30;border-bottom:1px solid #293550}
 .wrap{max-width:1050px;margin:auto;padding:20px}
-.logo{font-size:27px;font-weight:bold;color:#8b9cff}
-.sub{color:#9ba8c5;font-size:13px;margin-top:6px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-button,.btn{background:#647cff;color:white;border:0;border-radius:9px;padding:11px 16px;cursor:pointer;font-weight:bold}
-button:hover,.btn:hover{opacity:.85}
-input{background:#151f36;color:white;border:1px solid #34415e;border-radius:9px;padding:12px;width:100%;margin:7px 0}
+.logo{font-size:27px;font-weight:bold;color:#8b9cff}
+.sub,.muted{color:#9ba8c5;font-size:13px}
+button{background:#647cff;color:white;border:0;border-radius:9px;padding:11px 15px;cursor:pointer;font-weight:bold}
+button:disabled{opacity:.5;cursor:wait}
+input{width:100%;padding:12px;margin:8px 0;background:#151f36;border:1px solid #34415e;border-radius:9px;color:white}
 .panel{background:#121a30;border:1px solid #293550;padding:18px;border-radius:15px;margin:20px 0}
 h2{font-size:18px}
-.muted{color:#9ba8c5;font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:15px;margin-top:18px}
-.file{background:#151f36;border:1px solid #293550;border-radius:13px;overflow:hidden}
+.file{background:#151f36;border:1px solid #293550;border-radius:13px;overflow:hidden;min-width:0}
 .preview{height:145px;background:#0b1020;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .preview img,.preview video{width:100%;height:100%;object-fit:cover}
 .fileinfo{padding:12px}
 .filename{font-size:14px;word-break:break-word;margin-bottom:10px}
 .actions{display:flex;gap:7px;flex-wrap:wrap}
-.actions a,.actions button{font-size:12px;text-decoration:none;padding:9px}
-.actions a{background:#26385f;color:white;border-radius:8px}
+.actions a,.actions button{font-size:12px;text-decoration:none;padding:9px;border:0;border-radius:8px}
+.actions a{background:#26385f;color:white}
 .danger{background:#a63b50}
 .hidden{display:none!important}
-#status{font-size:13px;color:#aab8d7;margin-top:10px}
+#status{font-size:13px;color:#aab8d7;margin-top:12px}
 footer{text-align:center;padding:30px;color:#7886a5;font-size:12px}
+@media(max-width:480px){
+ .logo{font-size:22px}
+ .wrap{padding:14px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .preview{height:120px}
+}
 </style>
 </head>
 <body>
 
 <header>
-<div class="wrap top">
-<div>
-<div class="logo">☁ ZEZE CLOUD</div>
-<div class="sub">Your personal file sharing space</div>
-</div>
-<button id="loginBtn" onclick="showLogin()">Admin Login</button>
-</div>
+ <div class="wrap top">
+  <div>
+   <div class="logo">☁ ZEZE CLOUD</div>
+   <div class="sub">Your personal file sharing space</div>
+  </div>
+  <button id="loginBtn" onclick="showLogin()">Admin Login</button>
+ </div>
 </header>
 
 <main class="wrap">
 
-<div class="panel">
-<h2>Selamat datang di Zeze Cloud</h2>
-<p class="muted">Simpan, tonton, dan download berbagai file dengan mudah.</p>
-<input id="search" placeholder="Cari nama file..." oninput="renderFiles()">
-</div>
+ <div class="panel">
+  <h2>Selamat datang di Zeze Cloud</h2>
+  <p class="muted">Simpan, tonton, dan download file dengan mudah.</p>
+  <input id="search" placeholder="🔍 Cari nama file..." oninput="renderFiles()">
+ </div>
 
-<div class="panel hidden" id="loginPanel">
-<h2>Admin Login</h2>
-<input id="email" type="email" placeholder="Email admin">
-<input id="password" type="password" placeholder="Password">
-<button onclick="login()">Masuk</button>
-<button onclick="hideLogin()" style="background:#35415a">Batal</button>
-<p id="loginStatus" class="muted"></p>
-</div>
+ <div class="panel hidden" id="loginPanel">
+  <h2>Admin Login</h2>
+  <input id="email" type="email" placeholder="Email admin">
+  <input id="password" type="password" placeholder="Password admin">
+  <button id="loginAction" onclick="login()">Masuk</button>
+  <button onclick="hideLogin()" style="background:#35415a">Batal</button>
+  <p id="loginStatus" class="muted"></p>
+ </div>
 
-<div class="panel hidden" id="adminPanel">
-<div class="top">
-<h2>Admin Dashboard</h2>
-<button onclick="logout()" class="danger">Logout</button>
-</div>
-<p class="muted">Upload file ke Zeze Cloud</p>
-<input type="file" id="fileInput" multiple>
-<button onclick="uploadFiles()">⬆ Upload File</button>
-<p id="uploadStatus" class="muted"></p>
-</div>
+ <div class="panel hidden" id="adminPanel">
+  <div class="top">
+   <h2>Admin Dashboard</h2>
+   <button onclick="logout()" class="danger">Logout</button>
+  </div>
+  <p class="muted">Upload file baru ke Zeze Cloud.</p>
+  <input type="file" id="fileInput" multiple>
+  <button id="uploadBtn" onclick="uploadFiles()">⬆ Upload File</button>
+  <p id="uploadStatus" class="muted"></p>
+ </div>
 
-<h2>📁 Semua File</h2>
-<p class="muted" id="count">Memuat file...</p>
-<div id="files" class="grid"></div>
-<p id="status"></p>
+ <div class="top">
+  <h2>📁 Semua File</h2>
+  <button onclick="loadFiles()" style="background:#35415a">↻ Refresh</button>
+ </div>
+ <p class="muted" id="count">Memuat file...</p>
+ <div id="files" class="grid"></div>
+ <p id="status"></p>
 
 </main>
 
-<footer>© 2026 Zeze Cloud · Made with care</footer>
+<footer>© 2026 Zeze Cloud · Your personal cloud storage</footer>
 
 <script>
-// ISI DENGAN DATA SUPABASE MILIKMU
-const SUPABASE_URL = "ISI_URL_SUPABASE";
-const SUPABASE_KEY = "ISI_PUBLISHABLE_KEY";
+// KONFIGURASI SUPABASE
+const SUPABASE_URL = "https://sgcrivgrlxeqkryreabc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
 const BUCKET = "zeze-cloud";
 
 const db = supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
@@ -101,51 +109,90 @@ function hideLogin(){
  document.getElementById("loginPanel").classList.add("hidden");
 }
 
+function updateAdminUI(){
+ document.getElementById("adminPanel").classList.toggle("hidden",!isAdmin);
+ document.getElementById("loginBtn").classList.toggle("hidden",isAdmin);
+}
+
 async function login(){
- const email=document.getElementById("email").value;
+ const email=document.getElementById("email").value.trim();
  const password=document.getElementById("password").value;
  const status=document.getElementById("loginStatus");
- status.textContent="Memproses...";
+ const btn=document.getElementById("loginAction");
+
+ if(!email||!password){
+  status.textContent="Masukkan email dan password.";
+  return;
+ }
+
+ btn.disabled=true;
+ status.textContent="Sedang masuk...";
+
  const {error}=await db.auth.signInWithPassword({email,password});
- if(error){status.textContent=error.message;return;}
+
+ btn.disabled=false;
+
+ if(error){
+  status.textContent="Login gagal: "+error.message;
+  return;
+ }
+
+ document.getElementById("password").value="";
  hideLogin();
  await checkAdmin();
 }
 
 async function logout(){
- await db.auth.signOut();
+ const {error}=await db.auth.signOut();
+ if(error){alert(error.message);return;}
  isAdmin=false;
- await checkAdmin();
+ updateAdminUI();
+ await loadFiles();
 }
 
 async function checkAdmin(){
- const {data}=await db.auth.getSession();
+ const {data,error}=await db.auth.getSession();
+ if(error){
+  document.getElementById("status").textContent=error.message;
+  return;
+ }
  isAdmin=!!data.session;
- document.getElementById("adminPanel").classList.toggle("hidden",!isAdmin);
- document.getElementById("loginBtn").classList.toggle("hidden",isAdmin);
- loadFiles();
+ updateAdminUI();
+ await loadFiles();
 }
 
 async function loadFiles(){
- document.getElementById("status").textContent="Memuat...";
+ const status=document.getElementById("status");
+ const container=document.getElementById("files");
+
+ status.textContent="Memuat file...";
+ container.innerHTML="";
+
  const {data,error}=await db.storage.from(BUCKET).list("",{
-  limit:1000,sortBy:{column:"created_at",order:"desc"}
+  limit:1000,
+  sortBy:{column:"created_at",order:"desc"}
  });
+
  if(error){
-  document.getElementById("status").textContent="Gagal memuat file: "+error.message;
+  status.textContent="Gagal memuat file: "+error.message;
+  document.getElementById("count").textContent="File tidak tersedia";
   return;
  }
+
  allFiles=(data||[]).filter(f=>f.name&&!f.name.startsWith("."));
- document.getElementById("status").textContent="";
+ status.textContent="";
  renderFiles();
 }
 
 function renderFiles(){
  const query=document.getElementById("search").value.toLowerCase();
  const container=document.getElementById("files");
- const filtered=allFiles.filter(f=>f.name.toLowerCase().includes(query));
- document.getElementById("count").textContent=filtered.length+" file tersedia";
+
  container.innerHTML="";
+
+ const filtered=allFiles.filter(f=>f.name.toLowerCase().includes(query));
+
+ document.getElementById("count").textContent=filtered.length+" file tersedia";
 
  if(!filtered.length){
   container.innerHTML='<p class="muted">Belum ada file ditemukan.</p>';
@@ -154,31 +201,79 @@ function renderFiles(){
 
  filtered.forEach(f=>{
   const path=f.name;
-  const url=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
   const ext=path.split(".").pop().toLowerCase();
+
   const isImage=["jpg","jpeg","png","gif","webp","avif"].includes(ext);
   const isVideo=["mp4","webm","mov","m4v"].includes(ext);
-  let preview='<div class="preview"><span style="font-size:45px">📄</span></div>';
 
-  if(isImage) preview=`<div class="preview"><img src="${url}" loading="lazy" alt="Preview"></div>`;
-  if(isVideo) preview=`<div class="preview"><video src="${url}" controls preload="metadata"></video></div>`;
+  const {data}=db.storage.from(BUCKET).getPublicUrl(path);
+  const url=data.publicUrl;
+
+  const {data:downloadData}=db.storage.from(BUCKET).getPublicUrl(path,{
+   download:true
+  });
+  const downloadUrl=downloadData.publicUrl;
 
   const card=document.createElement("div");
   card.className="file";
-  card.innerHTML=`
-   ${preview}
-   <div class="fileinfo">
-    <div class="filename"></div>
-    <div class="actions">
-     <a target="_blank" rel="noopener" href="${url}">Buka</a>
-     <a href="${url}" download>Download</a>
-     ${isAdmin?'<button class="danger deleteBtn">Hapus</button>':''}
-    </div>
-   </div>`;
-  card.querySelector(".filename").textContent=path;
-  if(isAdmin){
-   card.querySelector(".deleteBtn").onclick=()=>deleteFile(path);
+
+  const preview=document.createElement("div");
+  preview.className="preview";
+
+  if(isImage){
+   const img=document.createElement("img");
+   img.src=url;
+   img.loading="lazy";
+   img.alt=path;
+   preview.appendChild(img);
+  }else if(isVideo){
+   const video=document.createElement("video");
+   video.src=url;
+   video.controls=true;
+   video.preload="metadata";
+   preview.appendChild(video);
+  }else{
+   const icon=document.createElement("span");
+   icon.textContent="📄";
+   icon.style.fontSize="45px";
+   preview.appendChild(icon);
   }
+
+  const info=document.createElement("div");
+  info.className="fileinfo";
+
+  const name=document.createElement("div");
+  name.className="filename";
+  name.textContent=path;
+
+  const actions=document.createElement("div");
+  actions.className="actions";
+
+  const open=document.createElement("a");
+  open.href=url;
+  open.target="_blank";
+  open.rel="noopener";
+  open.textContent=isVideo?"Tonton":isImage?"Lihat":"Buka";
+
+  const download=document.createElement("a");
+  download.href=downloadUrl;
+  download.textContent="Download";
+
+  actions.appendChild(open);
+  actions.appendChild(download);
+
+  if(isAdmin){
+   const del=document.createElement("button");
+   del.className="danger";
+   del.textContent="Hapus";
+   del.onclick=()=>deleteFile(path);
+   actions.appendChild(del);
+  }
+
+  info.appendChild(name);
+  info.appendChild(actions);
+  card.appendChild(preview);
+  card.appendChild(info);
   container.appendChild(card);
  });
 }
@@ -186,42 +281,73 @@ function renderFiles(){
 async function uploadFiles(){
  const input=document.getElementById("fileInput");
  const status=document.getElementById("uploadStatus");
+ const btn=document.getElementById("uploadBtn");
  const files=Array.from(input.files);
- if(!files.length){status.textContent="Pilih file dahulu.";return;}
- if(!isAdmin){status.textContent="Login admin diperlukan.";return;}
+
+ if(!isAdmin){
+  status.textContent="Silakan login sebagai admin.";
+  return;
+ }
+
+ if(!files.length){
+  status.textContent="Pilih file terlebih dahulu.";
+  return;
+ }
+
+ btn.disabled=true;
 
  for(let i=0;i<files.length;i++){
   const file=files[i];
   const safeName=file.name.replace(/[^\w.\-() ]/g,"_");
   const path=Date.now()+"-"+i+"-"+safeName;
-  status.textContent=`Mengupload ${i+1}/${files.length}...`;
+
+  status.textContent=`Mengupload ${i+1} dari ${files.length} file...`;
+
   const {error}=await db.storage.from(BUCKET).upload(path,file,{
-   cacheControl:"3600",upsert:false
+   cacheControl:"3600",
+   upsert:false
   });
+
   if(error){
-   status.textContent="Gagal: "+error.message;
+   status.textContent="Upload gagal: "+error.message;
+   btn.disabled=false;
    return;
   }
  }
+
  input.value="";
- status.textContent="Upload berhasil!";
- loadFiles();
+ btn.disabled=false;
+ status.textContent="Semua file berhasil diupload!";
+ await loadFiles();
 }
 
 async function deleteFile(path){
- if(!confirm("Yakin ingin menghapus file ini?"))return;
+ if(!isAdmin)return;
+
+ const confirmDelete=confirm("Yakin ingin menghapus "+path+"?");
+ if(!confirmDelete)return;
+
  const {error}=await db.storage.from(BUCKET).remove([path]);
- if(error){alert(error.message);return;}
+
+ if(error){
+  alert("Gagal menghapus: "+error.message);
+  return;
+ }
+
  alert("File berhasil dihapus.");
- loadFiles();
+ await loadFiles();
 }
 
 db.auth.onAuthStateChange((event,session)=>{
  isAdmin=!!session;
- document.getElementById("adminPanel").classList.toggle("hidden",!isAdmin);
- document.getElementById("loginBtn").classList.toggle("hidden",isAdmin);
+ updateAdminUI();
+ if(event==="SIGNED_IN"||event==="SIGNED_OUT"){
+  setTimeout(()=>loadFiles(),0);
+ }
 });
+
 checkAdmin();
 </script>
+
 </body>
 </html>
