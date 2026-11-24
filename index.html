@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zeze Cloud</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b1020;color:#f4f6ff;font-family:Arial,sans-serif}
+header{padding:25px 20px;background:#121a30;border-bottom:1px solid #28334e}
+.wrap{max-width:1050px;margin:auto;padding:20px}
+.logo{font-size:27px;font-weight:bold;color:#8b9cff}
+.sub{color:#9ba8c5;font-size:13px;margin-top:6px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+button,.btn{background:#647cff;color:white;border:0;border-radius:9px;padding:11px 16px;cursor:pointer;font-weight:bold}
+button:hover,.btn:hover{opacity:.85}
+input{background:#151f36;color:white;border:1px solid #34415e;border-radius:9px;padding:12px;width:100%;margin:7px 0}
+.panel{background:#121a30;border:1px solid #293550;padding:18px;border-radius:15px;margin:20px 0}
+h2{font-size:18px}
+.muted{color:#9ba8c5;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:15px;margin-top:18px}
+.file{background:#151f36;border:1px solid #293550;border-radius:13px;overflow:hidden}
+.preview{height:145px;background:#0b1020;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.preview img,.preview video{width:100%;height:100%;object-fit:cover}
+.fileinfo{padding:12px}
+.filename{font-size:14px;word-break:break-word;margin-bottom:10px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.actions a,.actions button{font-size:12px;text-decoration:none;padding:9px}
+.actions a{background:#26385f;color:white;border-radius:8px}
+.danger{background:#a63b50}
+.hidden{display:none!important}
+#status{font-size:13px;color:#aab8d7;margin-top:10px}
+footer{text-align:center;padding:30px;color:#7886a5;font-size:12px}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap top">
+<div>
+<div class="logo">☁ ZEZE CLOUD</div>
+<div class="sub">Your personal file sharing space</div>
+</div>
+<button id="loginBtn" onclick="showLogin()">Admin Login</button>
+</div>
+</header>
+
+<main class="wrap">
+
+<div class="panel">
+<h2>Selamat datang di Zeze Cloud</h2>
+<p class="muted">Simpan, tonton, dan download berbagai file dengan mudah.</p>
+<input id="search" placeholder="Cari nama file..." oninput="renderFiles()">
+</div>
+
+<div class="panel hidden" id="loginPanel">
+<h2>Admin Login</h2>
+<input id="email" type="email" placeholder="Email admin">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Masuk</button>
+<button onclick="hideLogin()" style="background:#35415a">Batal</button>
+<p id="loginStatus" class="muted"></p>
+</div>
+
+<div class="panel hidden" id="adminPanel">
+<div class="top">
+<h2>Admin Dashboard</h2>
+<button onclick="logout()" class="danger">Logout</button>
+</div>
+<p class="muted">Upload file ke Zeze Cloud</p>
+<input type="file" id="fileInput" multiple>
+<button onclick="uploadFiles()">⬆ Upload File</button>
+<p id="uploadStatus" class="muted"></p>
+</div>
+
+<h2>📁 Semua File</h2>
+<p class="muted" id="count">Memuat file...</p>
+<div id="files" class="grid"></div>
+<p id="status"></p>
+
+</main>
+
+<footer>© 2026 Zeze Cloud · Made with care</footer>
+
+<script>
+// ISI DENGAN DATA SUPABASE MILIKMU
+const SUPABASE_URL = "ISI_URL_SUPABASE";
+const SUPABASE_KEY = "ISI_PUBLISHABLE_KEY";
+const BUCKET = "zeze-cloud";
+
+const db = supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let isAdmin = false;
+let allFiles = [];
+
+function showLogin(){
+ document.getElementById("loginPanel").classList.remove("hidden");
+}
+function hideLogin(){
+ document.getElementById("loginPanel").classList.add("hidden");
+}
+
+async function login(){
+ const email=document.getElementById("email").value;
+ const password=document.getElementById("password").value;
+ const status=document.getElementById("loginStatus");
+ status.textContent="Memproses...";
+ const {error}=await db.auth.signInWithPassword({email,password});
+ if(error){status.textContent=error.message;return;}
+ hideLogin();
+ await checkAdmin();
+}
+
+async function logout(){
+ await db.auth.signOut();
+ isAdmin=false;
+ await checkAdmin();
+}
+
+async function checkAdmin(){
+ const {data}=await db.auth.getSession();
+ isAdmin=!!data.session;
+ document.getElementById("adminPanel").classList.toggle("hidden",!isAdmin);
+ document.getElementById("loginBtn").classList.toggle("hidden",isAdmin);
+ loadFiles();
+}
+
+async function loadFiles(){
+ document.getElementById("status").textContent="Memuat...";
+ const {data,error}=await db.storage.from(BUCKET).list("",{
+  limit:1000,sortBy:{column:"created_at",order:"desc"}
+ });
+ if(error){
+  document.getElementById("status").textContent="Gagal memuat file: "+error.message;
+  return;
+ }
+ allFiles=(data||[]).filter(f=>f.name&&!f.name.startsWith("."));
+ document.getElementById("status").textContent="";
+ renderFiles();
+}
+
+function renderFiles(){
+ const query=document.getElementById("search").value.toLowerCase();
+ const container=document.getElementById("files");
+ const filtered=allFiles.filter(f=>f.name.toLowerCase().includes(query));
+ document.getElementById("count").textContent=filtered.length+" file tersedia";
+ container.innerHTML="";
+
+ if(!filtered.length){
+  container.innerHTML='<p class="muted">Belum ada file ditemukan.</p>';
+  return;
+ }
+
+ filtered.forEach(f=>{
+  const path=f.name;
+  const url=db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  const ext=path.split(".").pop().toLowerCase();
+  const isImage=["jpg","jpeg","png","gif","webp","avif"].includes(ext);
+  const isVideo=["mp4","webm","mov","m4v"].includes(ext);
+  let preview='<div class="preview"><span style="font-size:45px">📄</span></div>';
+
+  if(isImage) preview=`<div class="preview"><img src="${url}" loading="lazy" alt="Preview"></div>`;
+  if(isVideo) preview=`<div class="preview"><video src="${url}" controls preload="metadata"></video></div>`;
+
+  const card=document.createElement("div");
+  card.className="file";
+  card.innerHTML=`
+   ${preview}
+   <div class="fileinfo">
+    <div class="filename"></div>
+    <div class="actions">
+     <a target="_blank" rel="noopener" href="${url}">Buka</a>
+     <a href="${url}" download>Download</a>
+     ${isAdmin?'<button class="danger deleteBtn">Hapus</button>':''}
+    </div>
+   </div>`;
+  card.querySelector(".filename").textContent=path;
+  if(isAdmin){
+   card.querySelector(".deleteBtn").onclick=()=>deleteFile(path);
+  }
+  container.appendChild(card);
+ });
+}
+
+async function uploadFiles(){
+ const input=document.getElementById("fileInput");
+ const status=document.getElementById("uploadStatus");
+ const files=Array.from(input.files);
+ if(!files.length){status.textContent="Pilih file dahulu.";return;}
+ if(!isAdmin){status.textContent="Login admin diperlukan.";return;}
+
+ for(let i=0;i<files.length;i++){
+  const file=files[i];
+  const safeName=file.name.replace(/[^\w.\-() ]/g,"_");
+  const path=Date.now()+"-"+i+"-"+safeName;
+  status.textContent=`Mengupload ${i+1}/${files.length}...`;
+  const {error}=await db.storage.from(BUCKET).upload(path,file,{
+   cacheControl:"3600",upsert:false
+  });
+  if(error){
+   status.textContent="Gagal: "+error.message;
+   return;
+  }
+ }
+ input.value="";
+ status.textContent="Upload berhasil!";
+ loadFiles();
+}
+
+async function deleteFile(path){
+ if(!confirm("Yakin ingin menghapus file ini?"))return;
+ const {error}=await db.storage.from(BUCKET).remove([path]);
+ if(error){alert(error.message);return;}
+ alert("File berhasil dihapus.");
+ loadFiles();
+}
+
+db.auth.onAuthStateChange((event,session)=>{
+ isAdmin=!!session;
+ document.getElementById("adminPanel").classList.toggle("hidden",!isAdmin);
+ document.getElementById("loginBtn").classList.toggle("hidden",isAdmin);
+});
+checkAdmin();
+</script>
+</body>
+</html>
