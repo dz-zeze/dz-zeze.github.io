@@ -3,568 +3,481 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Zeze Cloud</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --bg:#080b16; --panel:#111729; --panel2:#171f34;
-  --text:#f4f6ff; --muted:#929bb4; --accent:#8b7cff;
-  --accent2:#42c8ff; --border:rgba(255,255,255,.09);
-  --shadow:0 18px 55px rgba(0,0,0,.25);
+:root{
+ --bg:#080b16;--panel:#111729;--panel2:#192139;--text:#f4f6ff;
+ --muted:#929bb4;--accent:#8b7cff;--blue:#42c8ff;
+ --border:rgba(255,255,255,.09);--shadow:0 18px 50px #0003;
 }
-[data-theme="light"] {
-  --bg:#f3f5fb; --panel:#fff; --panel2:#edf0f8;
-  --text:#20263a; --muted:#737d96; --accent:#6656e8;
-  --accent2:#168ecb; --border:rgba(25,35,65,.12);
-  --shadow:0 15px 40px rgba(35,45,80,.09);
+[data-theme="light"]{
+ --bg:#f3f5fb;--panel:#fff;--panel2:#edf0f8;--text:#20263a;
+ --muted:#737d96;--accent:#6656e8;--blue:#168ecb;
+ --border:rgba(25,35,65,.12);--shadow:0 15px 40px #23335512;
 }
-[data-theme="amoled"] {
-  --bg:#000; --panel:#090909; --panel2:#121212;
-  --text:#f7f7f7; --muted:#999; --accent:#9a86ff;
-  --accent2:#45caff; --border:rgba(255,255,255,.11);
-  --shadow:0 18px 55px rgba(0,0,0,.5);
+[data-theme="amoled"]{
+ --bg:#000;--panel:#090909;--panel2:#151515;--text:#f7f7f7;
+ --muted:#999;--accent:#9a86ff;--blue:#45caff;
+ --border:rgba(255,255,255,.11);--shadow:0 18px 50px #0008;
 }
-* {box-sizing:border-box}
-body {
-  margin:0; background:var(--bg); color:var(--text);
-  font-family:Inter,system-ui,-apple-system,Arial,sans-serif;
-  min-height:100vh; transition:background .2s,color .2s;
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer}
+.wrap{width:min(1080px,100%);margin:auto;padding:22px 17px 50px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:27px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#8b7cff,#42c8ff);color:white;font-size:25px;box-shadow:0 8px 25px #6857df55}
+.brand h1{font-size:21px;margin:0;font-weight:850;letter-spacing:-.5px}
+.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.menu-wrap{position:relative}
+.menu-btn{width:43px;height:43px;border:1px solid var(--border);border-radius:14px;background:var(--panel);color:var(--text);font-size:23px}
+.menu{display:none;position:absolute;right:0;top:51px;width:220px;padding:13px;background:var(--panel);border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow);z-index:10}
+.menu.show{display:block}
+.menu-title{font-size:11px;color:var(--muted);padding:5px 8px 10px}
+.menu button{display:block;width:100%;text-align:left;padding:11px 10px;border:0;border-radius:10px;background:transparent;color:var(--text)}
+.menu button:hover{background:var(--panel2)}
+.hero{padding:30px 24px;border:1px solid var(--border);border-radius:25px;background:radial-gradient(ellipse at 90% 0%,#6956df38,transparent 48%),linear-gradient(135deg,var(--panel),var(--panel2));box-shadow:var(--shadow);margin-bottom:24px}
+.hero-tag{display:inline-flex;padding:7px 11px;border-radius:30px;background:#8b7cff20;color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1px}
+.hero h2{font-size:clamp(25px,5vw,36px);margin:16px 0 8px;letter-spacing:-1px}
+.hero p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
+.section-label{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:1.5px;margin:26px 2px 13px}
+.folders{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:25px}
+.folder{position:relative;text-align:left;padding:19px 17px;border-radius:20px;border:1px solid var(--border);background:var(--panel);color:var(--text);box-shadow:var(--shadow);transition:.2s;min-width:0}
+.folder:hover{transform:translateY(-3px);border-color:var(--accent)}
+.folder.active{border-color:var(--accent);background:linear-gradient(145deg,var(--panel),#7765df20)}
+.folder-icon{width:53px;height:53px;border-radius:17px;display:grid;place-items:center;font-size:26px;margin-bottom:15px;color:white}
+.video-icon{background:linear-gradient(135deg,#795fff,#ae74ff)}
+.file-icon{background:linear-gradient(135deg,#169ed2,#54d5e5)}
+.folder strong{display:block;font-size:16px}
+.folder small{display:block;color:var(--muted);margin-top:5px;font-size:12px}
+.folder-count{position:absolute;right:14px;top:16px;color:var(--muted);font-size:11px}
+.upload-panel{border:1px solid var(--border);background:var(--panel);padding:20px;border-radius:22px;box-shadow:var(--shadow);margin-bottom:25px}
+.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel-heading h3{margin:0;font-size:16px}
+.admin-pill{display:none;background:#27b98220;color:#28c58a;padding:6px 10px;border-radius:30px;font-size:11px;font-weight:800}
+.dropzone{margin-top:16px;border:2px dashed #8b7cff66;border-radius:19px;padding:28px 15px;text-align:center;background:#8b7cff09;transition:.2s}
+.dropzone.drag{background:#8b7cff22;border-color:var(--accent)}
+.cloud-icon{width:62px;height:62px;border-radius:20px;margin:0 auto 13px;display:grid;place-items:center;font-size:30px;color:white;background:linear-gradient(135deg,#8b7cff,#42c8ff)}
+.dropzone h4{margin:0 0 7px;font-size:16px}
+.dropzone p{margin:0 0 17px;color:var(--muted);font-size:12px}
+.primary-btn{border:0;border-radius:12px;padding:12px 19px;color:white;font-weight:800;background:linear-gradient(110deg,#8069f5,#4bafff);box-shadow:0 8px 22px #6558df35}
+.primary-btn:disabled{opacity:.5;cursor:not-allowed}
+#fileInput{display:none}
+.upload-status{font-size:12px;color:var(--muted);margin-top:13px;min-height:17px}
+.progress{height:5px;background:var(--panel2);border-radius:10px;overflow:hidden;margin-top:8px;display:none}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,#8b7cff,#42c8ff)}
+.toolbar{display:flex;gap:10px;margin:18px 0}
+.search{flex:1;min-width:0;padding:13px 15px;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:13px;outline:none}
+.search:focus{border-color:var(--accent)}
+.refresh{border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:13px;padding:0 15px;font-size:18px}
+.list-heading{display:flex;align-items:center;justify-content:space-between;margin:20px 2px 13px}
+.list-heading h3{font-size:17px;margin:0}
+.list-heading span{font-size:11px;color:var(--muted)}
+.video-list{display:flex;flex-direction:column;gap:18px}
+.video-card{background:var(--panel);border:1px solid var(--border);border-radius:19px;overflow:hidden;box-shadow:var(--shadow)}
+.video-player{width:100%;aspect-ratio:16/9;background:#000;display:block;object-fit:contain}
+.video-info{padding:14px 15px;display:flex;align-items:center;gap:12px}
+.file-name{font-size:13px;font-weight:750;overflow-wrap:anywhere;flex:1;min-width:0}
+.file-meta{font-size:11px;color:var(--muted);margin-top:5px}
+.actions{display:flex;gap:7px;flex-shrink:0}
+.action-btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:9px 11px;border-radius:10px;font-size:12px;text-decoration:none}
+.delete-btn{color:#ff7777}
+
+/* FILE MANAGER PREMIUM */
+.file-manager{background:var(--panel);border:1px solid var(--border);border-radius:21px;overflow:hidden;box-shadow:var(--shadow)}
+.fm-top{padding:17px 16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.fm-heading{display:flex;align-items:center;gap:11px}
+.fm-heading-icon{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#168ecb,#5a75f2);display:grid;place-items:center;color:white;font-size:21px}
+.fm-heading strong{font-size:14px;display:block}
+.fm-heading small{font-size:11px;color:var(--muted);display:block;margin-top:4px}
+.fm-total{font-size:11px;color:var(--muted);white-space:nowrap}
+.fm-labels{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:11px 16px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
+.fm-list{display:flex;flex-direction:column}
+.fm-row{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--border);min-width:0;transition:background .18s}
+.fm-row:last-child{border-bottom:0}
+.fm-row:hover{background:var(--panel2)}
+.fm-icon{width:46px;height:49px;border-radius:13px;display:grid;place-items:center;flex-shrink:0;font-size:23px;position:relative;overflow:hidden}
+.fm-icon::after{content:"";position:absolute;inset:0;border:1px solid #ffffff1c;border-radius:13px}
+.fm-icon.pdf{background:linear-gradient(145deg,#e64d64,#a72b50)}
+.fm-icon.word{background:linear-gradient(145deg,#3889ef,#2453b8)}
+.fm-icon.excel{background:linear-gradient(145deg,#28b982,#16734e)}
+.fm-icon.archive{background:linear-gradient(145deg,#e4a43d,#a96a1d)}
+.fm-icon.image{background:linear-gradient(145deg,#a16be8,#6442ad)}
+.fm-icon.audio{background:linear-gradient(145deg,#e56aa9,#a23f81)}
+.fm-icon.generic{background:linear-gradient(145deg,#71809d,#414e6b)}
+.fm-icon.textfile{background:linear-gradient(145deg,#38aebd,#26758e)}
+.fm-icon img{width:100%;height:100%;object-fit:cover}
+.fm-details{flex:1;min-width:0}
+.fm-name{font-size:13px;font-weight:750;overflow-wrap:anywhere;line-height:1.4}
+.fm-sub{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:10px;margin-top:5px}
+.fm-type{padding:3px 7px;border-radius:5px;background:var(--panel2);font-weight:800;letter-spacing:.4px}
+.fm-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.fm-download,.fm-delete{width:35px;height:35px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--border);background:var(--panel2);color:var(--text);text-decoration:none;font-size:16px}
+.fm-download:hover{border-color:var(--accent);color:var(--accent)}
+.fm-delete{color:#ff7777}
+.fm-empty{padding:36px 15px;text-align:center;color:var(--muted);font-size:12px}
+.fm-empty-icon{font-size:33px;margin-bottom:10px}
+.fm-empty strong{display:block;color:var(--text);font-size:14px;margin-bottom:6px}
+.empty{padding:40px 15px;text-align:center;border:1px dashed var(--border);border-radius:18px;color:var(--muted);background:var(--panel)}
+.empty-icon{font-size:35px;margin-bottom:10px}
+.empty strong{display:block;color:var(--text);margin-bottom:6px}
+footer{text-align:center;color:var(--muted);font-size:11px;margin-top:35px}
+.modal-bg{display:none;position:fixed;inset:0;background:#000a;z-index:30;align-items:center;justify-content:center;padding:18px}
+.modal-bg.show{display:flex}
+.modal{width:min(390px,100%);background:var(--panel);border:1px solid var(--border);border-radius:22px;padding:23px;box-shadow:var(--shadow)}
+.modal h3{margin:0 0 7px;font-size:20px}
+.modal p{color:var(--muted);font-size:12px;margin:0 0 18px}
+.modal input{width:100%;padding:13px;margin-bottom:10px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);outline:none}
+.modal-actions{display:flex;gap:9px;margin-top:8px}
+.modal-actions button{flex:1}
+.secondary-btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:12px 17px;border-radius:13px;box-shadow:var(--shadow);font-size:13px;z-index:50;transition:.25s;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:700px){
+ .wrap{padding-top:30px}.hero{padding:38px}
+ .fm-row{padding:15px 19px}.fm-icon{width:50px;height:52px}
 }
-button,input {font:inherit}
-button {cursor:pointer}
-.wrap {width:min(1080px,100%);margin:auto;padding:22px 18px 55px}
-header {
-  display:flex;align-items:center;justify-content:space-between;
-  gap:15px;margin-bottom:28px;
-}
-.brand {display:flex;align-items:center;gap:12px}
-.logo {
-  width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
-  background:linear-gradient(135deg,#8b7cff,#42c8ff);
-  color:white;font-size:24px;box-shadow:0 8px 25px #6857df55;
-}
-.brand h1 {font-size:21px;margin:0;font-weight:800;letter-spacing:-.5px}
-.brand small {display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.menu-wrap {position:relative}
-.menu-btn {
-  width:43px;height:43px;border:1px solid var(--border);
-  border-radius:14px;background:var(--panel);color:var(--text);
-  font-size:23px;
-}
-.menu {
-  display:none;position:absolute;right:0;top:51px;width:220px;
-  padding:13px;background:var(--panel);border:1px solid var(--border);
-  border-radius:17px;box-shadow:var(--shadow);z-index:10;
-}
-.menu.show {display:block}
-.menu-title {font-size:12px;color:var(--muted);padding:5px 8px 10px}
-.menu button {
-  display:block;width:100%;text-align:left;padding:11px 10px;
-  border:0;border-radius:10px;background:transparent;color:var(--text);
-}
-.menu button:hover {background:var(--panel2)}
-.hero {
-  padding:30px 25px;border:1px solid var(--border);border-radius:25px;
-  background:radial-gradient(ellipse at 90% 0%,#6956df38,transparent 48%),
-             linear-gradient(135deg,var(--panel),var(--panel2));
-  box-shadow:var(--shadow);margin-bottom:24px;overflow:hidden;
-}
-.hero-tag {
-  display:inline-flex;align-items:center;gap:7px;padding:7px 11px;
-  border-radius:30px;background:#8b7cff20;color:var(--accent);
-  font-size:11px;font-weight:800;letter-spacing:1px;
-}
-.hero h2 {font-size:clamp(25px,5vw,36px);margin:16px 0 8px;letter-spacing:-1px}
-.hero p {margin:0;color:var(--muted);font-size:14px;line-height:1.7}
-.section-label {
-  font-size:12px;color:var(--muted);font-weight:800;
-  letter-spacing:1.5px;margin:26px 2px 13px;
-}
-.folders {display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:25px}
-.folder {
-  position:relative;text-align:left;padding:19px 17px;border-radius:20px;
-  border:1px solid var(--border);background:var(--panel);color:var(--text);
-  box-shadow:var(--shadow);transition:.2s;min-width:0;
-}
-.folder:hover {transform:translateY(-3px);border-color:var(--accent)}
-.folder.active {border:1px solid var(--accent);background:linear-gradient(145deg,var(--panel),#7765df20)}
-.folder-icon {
-  width:53px;height:53px;border-radius:17px;display:grid;place-items:center;
-  font-size:26px;margin-bottom:15px;
-}
-.video-icon {background:linear-gradient(135deg,#795fff,#ae74ff);color:white}
-.file-icon {background:linear-gradient(135deg,#169ed2,#54d5e5);color:white}
-.folder strong {display:block;font-size:16px}
-.folder small {display:block;color:var(--muted);margin-top:5px;font-size:12px}
-.folder-count {
-  position:absolute;right:14px;top:16px;color:var(--muted);font-size:11px;
-}
-.upload-panel {
-  border:1px solid var(--border);background:var(--panel);
-  padding:20px;border-radius:22px;box-shadow:var(--shadow);margin-bottom:25px;
-}
-.panel-heading {display:flex;justify-content:space-between;align-items:center;gap:10px}
-.panel-heading h3 {margin:0;font-size:16px}
-.admin-pill {
-  display:none;background:#27b98220;color:#28c58a;
-  padding:6px 10px;border-radius:30px;font-size:11px;font-weight:800;
-}
-.dropzone {
-  margin-top:16px;border:2px dashed #8b7cff66;border-radius:19px;
-  padding:28px 15px;text-align:center;background:#8b7cff09;
-  transition:.2s;
-}
-.dropzone.drag {background:#8b7cff22;border-color:var(--accent)}
-.cloud-icon {
-  width:62px;height:62px;border-radius:20px;margin:0 auto 13px;
-  display:grid;place-items:center;font-size:30px;
-  color:white;background:linear-gradient(135deg,#8b7cff,#42c8ff);
-}
-.dropzone h4 {margin:0 0 7px;font-size:16px}
-.dropzone p {margin:0 0 17px;color:var(--muted);font-size:12px}
-.primary-btn {
-  border:0;border-radius:12px;padding:12px 19px;color:white;font-weight:800;
-  background:linear-gradient(110deg,#8069f5,#4bafff);
-  box-shadow:0 8px 22px #6558df35;
-}
-.primary-btn:disabled {opacity:.5;cursor:not-allowed}
-#fileInput {display:none}
-.upload-status {font-size:12px;color:var(--muted);margin-top:13px;min-height:17px}
-.progress {height:5px;background:var(--panel2);border-radius:10px;overflow:hidden;margin-top:8px;display:none}
-.progress-bar {height:100%;width:0;background:linear-gradient(90deg,#8b7cff,#42c8ff)}
-.toolbar {display:flex;gap:10px;margin:18px 0}
-.search {
-  flex:1;min-width:0;padding:13px 15px;border:1px solid var(--border);
-  background:var(--panel);color:var(--text);border-radius:13px;outline:none;
-}
-.search:focus {border-color:var(--accent)}
-.refresh {
-  border:1px solid var(--border);background:var(--panel);
-  color:var(--text);border-radius:13px;padding:0 15px;font-size:18px;
-}
-.list-heading {display:flex;align-items:center;justify-content:space-between;margin:20px 2px 13px}
-.list-heading h3 {font-size:17px;margin:0}
-.list-heading span {font-size:11px;color:var(--muted)}
-.video-list {display:flex;flex-direction:column;gap:18px}
-.video-card,.file-card {
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:19px;overflow:hidden;box-shadow:var(--shadow);
-}
-.video-player {
-  width:100%;aspect-ratio:16/9;background:#000;display:block;object-fit:contain;
-}
-.video-info {padding:14px 15px;display:flex;align-items:center;gap:12px}
-.file-name {font-size:13px;font-weight:750;overflow-wrap:anywhere;flex:1;min-width:0}
-.file-meta {font-size:11px;color:var(--muted);margin-top:5px}
-.actions {display:flex;gap:7px;flex-shrink:0}
-.action-btn {
-  border:1px solid var(--border);background:var(--panel2);color:var(--text);
-  padding:9px 11px;border-radius:10px;font-size:12px;text-decoration:none;
-}
-.delete-btn {color:#ff7777}
-.file-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.file-card {padding:12px;min-width:0}
-.file-preview {
-  height:125px;border-radius:12px;background:var(--panel2);
-  display:grid;place-items:center;overflow:hidden;margin-bottom:11px;
-}
-.file-preview img {width:100%;height:100%;object-fit:cover}
-.file-symbol {font-size:42px}
-.file-card .file-name {display:block;min-height:32px}
-.file-card .file-meta {margin:5px 0 10px}
-.file-card .actions {flex-wrap:wrap}
-.empty {
-  text-align:center;padding:40px 15px;border:1px dashed var(--border);
-  border-radius:18px;color:var(--muted);background:var(--panel);
-}
-.empty-icon {font-size:35px;margin-bottom:10px}
-.empty strong {display:block;color:var(--text);margin-bottom:6px}
-footer {text-align:center;color:var(--muted);font-size:11px;margin-top:35px}
-.modal-bg {
-  display:none;position:fixed;inset:0;background:#000a;z-index:30;
-  align-items:center;justify-content:center;padding:18px;
-}
-.modal-bg.show {display:flex}
-.modal {
-  width:min(390px,100%);background:var(--panel);border:1px solid var(--border);
-  border-radius:22px;padding:23px;box-shadow:var(--shadow);
-}
-.modal h3 {margin:0 0 7px;font-size:20px}
-.modal p {color:var(--muted);font-size:12px;margin:0 0 18px}
-.modal input {
-  width:100%;padding:13px;margin-bottom:10px;border:1px solid var(--border);
-  border-radius:12px;background:var(--panel2);color:var(--text);outline:none;
-}
-.modal-actions {display:flex;gap:9px;margin-top:8px}
-.modal-actions button {flex:1}
-.secondary-btn {
-  border:1px solid var(--border);background:var(--panel2);
-  color:var(--text);border-radius:12px;padding:12px;
-}
-.toast {
-  position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);
-  opacity:0;pointer-events:none;background:var(--panel2);color:var(--text);
-  border:1px solid var(--border);padding:12px 17px;border-radius:13px;
-  box-shadow:var(--shadow);font-size:13px;z-index:50;transition:.25s;
-  max-width:90%;text-align:center;
-}
-.toast.show {opacity:1;transform:translate(-50%,0)}
-@media(min-width:700px) {
-  .wrap {padding-top:30px}
-  .file-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
-  .hero {padding:38px}
-  .folder {padding:23px}
-}
-@media(max-width:420px) {
-  .wrap {padding:17px 13px 40px}
-  .video-info {align-items:flex-start;flex-wrap:wrap}
-  .video-info .actions {width:100%}
-  .video-info .actions a,.video-info .actions button {flex:1;text-align:center}
+@media(max-width:430px){
+ .wrap{padding:17px 12px 40px}
+ .video-info{align-items:flex-start;flex-wrap:wrap}
+ .video-info .actions{width:100%}
+ .video-info .actions a,.video-info .actions button{flex:1;text-align:center}
+ .fm-row{gap:9px;padding:12px 10px}
+ .fm-icon{width:41px;height:44px;font-size:20px}
+ .fm-name{font-size:12px}
+ .fm-download,.fm-delete{width:32px;height:33px}
+ .fm-sub{gap:5px}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="brand">
-      <div class="logo">☁</div>
-      <div>
-        <h1>Zeze Cloud</h1>
-        <small>Your personal media space</small>
-      </div>
-    </div>
-    <div class="menu-wrap">
-      <button class="menu-btn" id="menuButton" aria-label="Menu">⋮</button>
-      <div class="menu" id="menu">
-        <div class="menu-title">ZEZE CLOUD MENU</div>
-        <button id="loginMenu">🔐 Login Admin</button>
-        <button id="logoutMenu" style="display:none">↪ Logout Admin</button>
-        <button data-theme-choice="dark">🌙 Dark Midnight</button>
-        <button data-theme-choice="light">☀️ Light Luxury</button>
-        <button data-theme-choice="amoled">⚫ AMOLED Black</button>
-      </div>
-    </div>
-  </header>
-
-  <section class="hero">
-    <div class="hero-tag">✦ PERSONAL CLOUD STORAGE</div>
-    <h2>Simpan. Putar. Bagikan.</h2>
-    <p>Semua video dan file favoritmu tersimpan rapi dalam satu tempat. Buka dan unduh kapan saja.</p>
-  </section>
-
-  <div class="section-label">JELAJAHI PENYIMPANAN</div>
-  <section class="folders">
-    <button class="folder active" id="videoFolder">
-      <span class="folder-count" id="videoCount">0 item</span>
-      <span class="folder-icon video-icon">▶</span>
-      <strong>VIDEO</strong>
-      <small>Koleksi video kamu</small>
-    </button>
-    <button class="folder" id="fileFolder">
-      <span class="folder-count" id="fileCount">0 item</span>
-      <span class="folder-icon file-icon">▤</span>
-      <strong>FILE</strong>
-      <small>Foto dan dokumen lainnya</small>
-    </button>
-  </section>
-
-  <section class="upload-panel" id="uploadPanel" style="display:none">
-    <div class="panel-heading">
-      <h3>☁ Upload File Baru</h3>
-      <span class="admin-pill" id="adminPill">ADMIN AKTIF</span>
-    </div>
-    <div class="dropzone" id="dropzone">
-      <div class="cloud-icon">⇧</div>
-      <h4>Letakkan file kamu di sini</h4>
-      <p>Atau pilih file dari perangkat kamu</p>
-      <button class="primary-btn" id="chooseFile">＋ Pilih File</button>
-      <input type="file" id="fileInput" multiple>
-      <div class="upload-status" id="uploadStatus"></div>
-      <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
-    </div>
-  </section>
-
-  <div class="toolbar">
-    <input class="search" id="searchInput" placeholder="⌕  Cari nama file..." autocomplete="off">
-    <button class="refresh" id="refreshButton" title="Muat ulang">↻</button>
+<header>
+ <div class="brand">
+  <div class="logo">☁</div>
+  <div><h1>Zeze Cloud</h1><small>Your personal media space</small></div>
+ </div>
+ <div class="menu-wrap">
+  <button class="menu-btn" id="menuButton" aria-label="Menu">⋮</button>
+  <div class="menu" id="menu">
+   <div class="menu-title">ZEZE CLOUD MENU</div>
+   <button id="loginMenu">🔐 Login Admin</button>
+   <button id="logoutMenu" style="display:none">↪ Logout Admin</button>
+   <button data-theme-choice="dark">🌙 Dark Midnight</button>
+   <button data-theme-choice="light">☀️ Light Luxury</button>
+   <button data-theme-choice="amoled">⚫ AMOLED Black</button>
   </div>
+ </div>
+</header>
 
-  <div class="list-heading">
-    <h3 id="listTitle">▶ Video</h3>
-    <span id="itemCount">Memuat...</span>
-  </div>
-  <main id="content">
-    <div class="empty"><div class="empty-icon">☁</div><strong>Memuat penyimpanan...</strong>Mohon tunggu sebentar.</div>
-  </main>
-  <footer>ZEZE CLOUD · YOUR FILES, YOUR SPACE</footer>
+<section class="hero">
+ <div class="hero-tag">✦ PERSONAL CLOUD STORAGE</div>
+ <h2>Simpan. Putar. Bagikan.</h2>
+ <p>Semua video dan file favoritmu tersimpan rapi dalam satu tempat. Buka dan unduh kapan saja.</p>
+</section>
+
+<div class="section-label">JELAJAHI PENYIMPANAN</div>
+<section class="folders">
+ <button class="folder active" id="videoFolder">
+  <span class="folder-count" id="videoCount">0 item</span>
+  <span class="folder-icon video-icon">▶</span>
+  <strong>VIDEO</strong><small>Koleksi video kamu</small>
+ </button>
+ <button class="folder" id="fileFolder">
+  <span class="folder-count" id="fileCount">0 item</span>
+  <span class="folder-icon file-icon">▤</span>
+  <strong>FILE</strong><small>Foto dan dokumen lainnya</small>
+ </button>
+</section>
+
+<section class="upload-panel" id="uploadPanel" style="display:none">
+ <div class="panel-heading">
+  <h3>☁ Upload File Baru</h3><span class="admin-pill" id="adminPill">ADMIN AKTIF</span>
+ </div>
+ <div class="dropzone" id="dropzone">
+  <div class="cloud-icon">⇧</div>
+  <h4>Letakkan file kamu di sini</h4>
+  <p>Atau pilih file dari perangkat kamu</p>
+  <button class="primary-btn" id="chooseFile">＋ Pilih File</button>
+  <input type="file" id="fileInput" multiple>
+  <div class="upload-status" id="uploadStatus"></div>
+  <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
+ </div>
+</section>
+
+<div class="toolbar">
+ <input class="search" id="searchInput" placeholder="⌕  Cari nama file..." autocomplete="off">
+ <button class="refresh" id="refreshButton" title="Muat ulang">↻</button>
+</div>
+<div class="list-heading">
+ <h3 id="listTitle">▶ Video</h3><span id="itemCount">Memuat...</span>
+</div>
+<main id="content">
+ <div class="empty"><div class="empty-icon">☁</div><strong>Memuat penyimpanan...</strong>Mohon tunggu sebentar.</div>
+</main>
+<footer>ZEZE CLOUD · YOUR FILES, YOUR SPACE</footer>
 </div>
 
 <div class="modal-bg" id="loginModal">
-  <div class="modal">
-    <h3>🔐 Login Admin</h3>
-    <p>Masuk untuk mengelola file Zeze Cloud.</p>
-    <input id="emailInput" type="email" placeholder="Email admin" autocomplete="username">
-    <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
-    <div class="modal-actions">
-      <button class="secondary-btn" id="cancelLogin">Batal</button>
-      <button class="primary-btn" id="submitLogin">Login</button>
-    </div>
+ <div class="modal">
+  <h3>🔐 Login Admin</h3><p>Masuk untuk mengelola file Zeze Cloud.</p>
+  <input id="emailInput" type="email" placeholder="Email admin" autocomplete="username">
+  <input id="passwordInput" type="password" placeholder="Password" autocomplete="current-password">
+  <div class="modal-actions">
+   <button class="secondary-btn" id="cancelLogin">Batal</button>
+   <button class="primary-btn" id="submitLogin">Login</button>
   </div>
+ </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL = "https://sgcrivgrlxeqkryreabc.supabase.co";
-const SUPABASE_KEY = "sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
-const BUCKET = "zeze-cloud";
+const SUPABASE_URL="https://sgcrivgrlxeqkryreabc.supabase.co";
+const SUPABASE_KEY="sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
+const BUCKET="zeze-cloud";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let currentUser = null;
-let allFiles = [];
-let currentTab = "video";
+let currentUser=null,allFiles=[],currentTab="video";
+const $=id=>document.getElementById(id);
+const videoExt=/\.(mp4|webm|mov|m4v|ogv)$/i;
+const imageExt=/\.(jpg|jpeg|png|gif|webp|avif|bmp|svg)$/i;
 
-const $ = id => document.getElementById(id);
-const videoExt = /\.(mp4|webm|mov|m4v|ogv)$/i;
-const imageExt = /\.(jpg|jpeg|png|gif|webp|avif|bmp|svg)$/i;
+function esc(value){
+ return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function formatSize(bytes){
+ if(!bytes)return "0 B";
+ const units=["B","KB","MB","GB","TB"];
+ const i=Math.min(Math.floor(Math.log(bytes)/Math.log(1024)),4);
+ return (bytes/Math.pow(1024,i)).toFixed(i===0?0:1)+" "+units[i];
+}
+function toast(message){
+ $("toast").textContent=message;
+ $("toast").classList.add("show");
+ setTimeout(()=>$("toast").classList.remove("show"),2800);
+}
+function publicUrl(path,download=false){
+ return db.storage.from(BUCKET).getPublicUrl(path,{download}).data.publicUrl;
+}
+function setTheme(theme){
+ document.documentElement.dataset.theme=theme;
+ localStorage.setItem("zeze-theme",theme);
+}
+setTheme(localStorage.getItem("zeze-theme")||"dark");
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[char]));
-}
-function formatSize(bytes) {
-  if (!bytes) return "0 B";
-  const units = ["B","KB","MB","GB","TB"];
-  const i = Math.min(Math.floor(Math.log(bytes)/Math.log(1024)),4);
-  return (bytes/Math.pow(1024,i)).toFixed(i===0?0:1)+" "+units[i];
-}
-function toast(message) {
-  $("toast").textContent = message;
-  $("toast").classList.add("show");
-  setTimeout(()=>$("toast").classList.remove("show"),2800);
-}
-function publicUrl(path, download=false) {
-  return db.storage.from(BUCKET).getPublicUrl(path,{download}).data.publicUrl;
-}
-function setTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem("zeze-theme",theme);
-}
-setTheme(localStorage.getItem("zeze-theme") || "dark");
-
-$("menuButton").onclick = () => $("menu").classList.toggle("show");
+$("menuButton").onclick=()=>$("menu").classList.toggle("show");
 document.addEventListener("click",e=>{
-  if(!e.target.closest(".menu-wrap")) $("menu").classList.remove("show");
+ if(!e.target.closest(".menu-wrap"))$("menu").classList.remove("show");
 });
 document.querySelectorAll("[data-theme-choice]").forEach(button=>{
-  button.onclick=()=>{
-    setTheme(button.dataset.themeChoice);
-    $("menu").classList.remove("show");
-    toast("Tema berhasil diubah");
-  };
+ button.onclick=()=>{
+  setTheme(button.dataset.themeChoice);
+  $("menu").classList.remove("show");
+  toast("Tema berhasil diubah");
+ };
 });
 $("videoFolder").onclick=()=>switchTab("video");
 $("fileFolder").onclick=()=>switchTab("file");
-function switchTab(tab) {
-  currentTab=tab;
-  $("videoFolder").classList.toggle("active",tab==="video");
-  $("fileFolder").classList.toggle("active",tab==="file");
-  $("listTitle").textContent=tab==="video"?"▶ Video":"▤ File";
-  $("searchInput").value="";
-  renderFiles();
+function switchTab(tab){
+ currentTab=tab;
+ $("videoFolder").classList.toggle("active",tab==="video");
+ $("fileFolder").classList.toggle("active",tab==="file");
+ $("listTitle").textContent=tab==="video"?"▶ Video":"▤ File Manager";
+ $("searchInput").value="";
+ renderFiles();
 }
 $("refreshButton").onclick=loadFiles;
 $("searchInput").addEventListener("input",renderFiles);
 
-function updateAdminUI() {
-  $("uploadPanel").style.display=currentUser?"block":"none";
-  $("adminPill").style.display=currentUser?"inline-block":"none";
-  $("loginMenu").style.display=currentUser?"none":"block";
-  $("logoutMenu").style.display=currentUser?"block":"none";
+function updateAdminUI(){
+ $("uploadPanel").style.display=currentUser?"block":"none";
+ $("adminPill").style.display=currentUser?"inline-block":"none";
+ $("loginMenu").style.display=currentUser?"none":"block";
+ $("logoutMenu").style.display=currentUser?"block":"none";
 }
 $("loginMenu").onclick=()=>{
-  $("menu").classList.remove("show");
-  $("loginModal").classList.add("show");
+ $("menu").classList.remove("show");
+ $("loginModal").classList.add("show");
 };
-$("cancelLogin").onclick=()=> $("loginModal").classList.remove("show");
+$("cancelLogin").onclick=()=>$("loginModal").classList.remove("show");
 $("loginModal").addEventListener("click",e=>{
-  if(e.target===$("loginModal")) $("loginModal").classList.remove("show");
+ if(e.target===$("loginModal"))$("loginModal").classList.remove("show");
 });
 $("submitLogin").onclick=async()=>{
-  const email=$("emailInput").value.trim();
-  const password=$("passwordInput").value;
-  if(!email||!password){toast("Isi email dan password dulu");return;}
-  $("submitLogin").disabled=true;
-  $("submitLogin").textContent="Memproses...";
-  const {data,error}=await db.auth.signInWithPassword({email,password});
-  $("submitLogin").disabled=false;
-  $("submitLogin").textContent="Login";
-  if(error){toast("Login gagal: "+error.message);return;}
-  currentUser=data.user;
-  $("passwordInput").value="";
-  $("loginModal").classList.remove("show");
-  updateAdminUI();
-  toast("Login admin berhasil");
-  loadFiles();
+ const email=$("emailInput").value.trim();
+ const password=$("passwordInput").value;
+ if(!email||!password){toast("Isi email dan password dulu");return;}
+ $("submitLogin").disabled=true;
+ $("submitLogin").textContent="Memproses...";
+ const {data,error}=await db.auth.signInWithPassword({email,password});
+ $("submitLogin").disabled=false;
+ $("submitLogin").textContent="Login";
+ if(error){toast("Login gagal: "+error.message);return;}
+ currentUser=data.user;
+ $("passwordInput").value="";
+ $("loginModal").classList.remove("show");
+ updateAdminUI();
+ toast("Login admin berhasil");
+ loadFiles();
 };
 $("logoutMenu").onclick=async()=>{
-  await db.auth.signOut();
-  currentUser=null;
-  updateAdminUI();
-  $("menu").classList.remove("show");
-  toast("Kamu sudah logout");
-  loadFiles();
+ await db.auth.signOut();
+ currentUser=null;
+ updateAdminUI();
+ $("menu").classList.remove("show");
+ toast("Kamu sudah logout");
+ loadFiles();
 };
-
-async function checkSession() {
-  const {data}=await db.auth.getSession();
-  currentUser=data.session?.user || null;
-  updateAdminUI();
-  loadFiles();
-}
-db.auth.onAuthStateChange((_event,session)=>{
-  currentUser=session?.user || null;
-  updateAdminUI();
-});
 
 function isVideo(file){return videoExt.test(file.name);}
 function isImage(file){return imageExt.test(file.name);}
-function renderFiles() {
-  const query=$("searchInput").value.trim().toLowerCase();
-  const filtered=allFiles.filter(file=>{
-    const matchesTab=currentTab==="video"?isVideo(file):!isVideo(file);
-    return matchesTab && file.name.toLowerCase().includes(query);
-  });
-  $("videoCount").textContent=allFiles.filter(isVideo).length+" item";
-  $("fileCount").textContent=allFiles.filter(f=>!isVideo(f)).length+" item";
-  $("itemCount").textContent=filtered.length+" item";
 
-  if(!filtered.length) {
-    $("content").innerHTML=`<div class="empty">
-      <div class="empty-icon">${currentTab==="video"?"🎬":"📁"}</div>
-      <strong>${query?"File tidak ditemukan":"Belum ada file di sini"}</strong>
-      ${query?"Coba kata pencarian lain.":"File yang diunggah akan muncul di sini."}
-    </div>`;
-    return;
-  }
-  if(currentTab==="video") {
-    $("content").innerHTML=`<div class="video-list">${filtered.map(file=>{
-      const url=publicUrl(file.name);
-      const download=publicUrl(file.name,true);
-      return `<article class="video-card">
-        <video class="video-player" controls playsinline preload="metadata">
-          <source src="${escapeHTML(url)}">
-          Browser kamu tidak mendukung pemutar video.
-        </video>
-        <div class="video-info">
-          <div style="flex:1;min-width:0">
-            <div class="file-name">${escapeHTML(file.name)}</div>
-            <div class="file-meta">${formatSize(file.metadata?.size)} · Video</div>
-          </div>
-          <div class="actions">
-            <a class="action-btn" href="${escapeHTML(download)}">↓ Unduh</a>
-            ${currentUser?`<button class="action-btn delete-btn" data-delete="${escapeHTML(file.name)}">Hapus</button>`:""}
-          </div>
-        </div>
-      </article>`;
-    }).join("")}</div>`;
-  } else {
-    $("content").innerHTML=`<div class="file-grid">${filtered.map(file=>{
-      const url=publicUrl(file.name);
-      const download=publicUrl(file.name,true);
-      const preview=isImage(file)
-        ?`<img src="${escapeHTML(url)}" alt="${escapeHTML(file.name)}" loading="lazy">`
-        :`<div class="file-symbol">${file.name.toLowerCase().endsWith(".pdf")?"📕":"📄"}</div>`;
-      return `<article class="file-card">
-        <div class="file-preview">${preview}</div>
-        <div class="file-name">${escapeHTML(file.name)}</div>
-        <div class="file-meta">${formatSize(file.metadata?.size)}</div>
-        <div class="actions">
-          <a class="action-btn" href="${escapeHTML(download)}">↓ Unduh</a>
-          ${currentUser?`<button class="action-btn delete-btn" data-delete="${escapeHTML(file.name)}">Hapus</button>`:""}
-        </div>
-      </article>`;
-    }).join("")}</div>`;
-  }
-  document.querySelectorAll("[data-delete]").forEach(button=>{
-    button.onclick=()=>deleteFile(button.dataset.delete);
-  });
+function fileInfo(name){
+ const ext=(name.split(".").pop()||"").toLowerCase();
+ const types={
+  pdf:{label:"PDF",icon:"PDF",cls:"pdf"},
+  doc:{label:"WORD",icon:"W",cls:"word"},docx:{label:"WORD",icon:"W",cls:"word"},
+  xls:{label:"EXCEL",icon:"X",cls:"excel"},xlsx:{label:"EXCEL",icon:"X",cls:"excel"},csv:{label:"CSV",icon:"▦",cls:"excel"},
+  zip:{label:"ZIP",icon:"▤",cls:"archive"},rar:{label:"RAR",icon:"▤",cls:"archive"},7z:{label:"7Z",icon:"▤",cls:"archive"},
+  jpg:{label:"FOTO",icon:"▧",cls:"image"},jpeg:{label:"FOTO",icon:"▧",cls:"image"},png:{label:"FOTO",icon:"▧",cls:"image"},gif:{label:"FOTO",icon:"▧",cls:"image"},webp:{label:"FOTO",icon:"▧",cls:"image"},avif:{label:"FOTO",icon:"▧",cls:"image"},bmp:{label:"FOTO",icon:"▧",cls:"image"},svg:{label:"FOTO",icon:"▧",cls:"image"},
+  mp3:{label:"AUDIO",icon:"♫",cls:"audio"},wav:{label:"AUDIO",icon:"♫",cls:"audio"},m4a:{label:"AUDIO",icon:"♫",cls:"audio"},ogg:{label:"AUDIO",icon:"♫",cls:"audio"},
+  txt:{label:"TEXT",icon:"T",cls:"textfile"},md:{label:"TEXT",icon:"T",cls:"textfile"},json:{label:"DATA",icon:"{}",cls:"textfile"},
+  ppt:{label:"POWERPOINT",icon:"P",cls:"archive"},pptx:{label:"POWERPOINT",icon:"P",cls:"archive"}
+ };
+ return types[ext]||{label:ext?ext.toUpperCase()+" FILE":"FILE",icon:"▤",cls:"generic"};
 }
 
-async function loadFiles() {
-  $("content").innerHTML=`<div class="empty"><div class="empty-icon">☁</div><strong>Memuat file...</strong>Tunggu sebentar.</div>`;
-  const {data,error}=await db.storage.from(BUCKET).list("",{
-    limit:1000,sortBy:{column:"created_at",order:"desc"}
-  });
-  if(error) {
-    $("content").innerHTML=`<div class="empty"><strong>Gagal memuat file</strong>${escapeHTML(error.message)}</div>`;
-    $("itemCount").textContent="Gagal";
-    return;
-  }
-  allFiles=(data||[]).filter(item=>item.name && item.name!=="." && item.name!=="..");
-  renderFiles();
+function renderFiles(){
+ const query=$("searchInput").value.trim().toLowerCase();
+ const filtered=allFiles.filter(file=>{
+  const matchesTab=currentTab==="video"?isVideo(file):!isVideo(file);
+  return matchesTab&&file.name.toLowerCase().includes(query);
+ });
+ $("videoCount").textContent=allFiles.filter(isVideo).length+" item";
+ $("fileCount").textContent=allFiles.filter(f=>!isVideo(f)).length+" item";
+ $("itemCount").textContent=filtered.length+" item";
+
+ if(!filtered.length){
+  $("content").innerHTML=currentTab==="file"
+   ?`<div class="file-manager"><div class="fm-empty"><div class="fm-empty-icon">▤</div><strong>${query?"File tidak ditemukan":"Folder masih kosong"}</strong>${query?"Coba kata pencarian lain.":"File yang kamu upload akan tersusun rapi di sini."}</div></div>`
+   :`<div class="empty"><div class="empty-icon">🎬</div><strong>${query?"Video tidak ditemukan":"Belum ada video di sini"}</strong>${query?"Coba kata pencarian lain.":"Video yang diunggah akan muncul di sini."}</div>`;
+  return;
+ }
+
+ if(currentTab==="video"){
+  $("content").innerHTML=`<div class="video-list">${filtered.map(file=>{
+   const url=publicUrl(file.name),download=publicUrl(file.name,true);
+   return `<article class="video-card">
+    <video class="video-player" controls playsinline preload="metadata"><source src="${esc(url)}"></video>
+    <div class="video-info">
+     <div style="flex:1;min-width:0"><div class="file-name">${esc(file.name)}</div><div class="file-meta">${formatSize(file.metadata?.size)} · Video</div></div>
+     <div class="actions"><a class="action-btn" href="${esc(download)}">↓ Unduh</a>${currentUser?`<button class="action-btn delete-btn" data-delete="${esc(file.name)}">Hapus</button>`:""}</div>
+    </div>
+   </article>`;
+  }).join("")}</div>`;
+ }else{
+  $("content").innerHTML=`<section class="file-manager">
+   <div class="fm-top">
+    <div class="fm-heading"><div class="fm-heading-icon">▤</div><div><strong>Semua File</strong><small>Kelola koleksi dokumen dan media</small></div></div>
+    <span class="fm-total">${filtered.length} item</span>
+   </div>
+   <div class="fm-labels"><span>Nama file</span><span>Aksi</span></div>
+   <div class="fm-list">${filtered.map(file=>{
+    const info=fileInfo(file.name);
+    const url=publicUrl(file.name),download=publicUrl(file.name,true);
+    const icon=isImage(file)
+      ?`<img src="${esc(url)}" alt="" loading="lazy">`
+      :esc(info.icon);
+    return `<article class="fm-row">
+     <div class="fm-icon ${info.cls}">${icon}</div>
+     <div class="fm-details">
+      <div class="fm-name">${esc(file.name)}</div>
+      <div class="fm-sub"><span class="fm-type">${esc(info.label)}</span><span>${formatSize(file.metadata?.size)}</span></div>
+     </div>
+     <div class="fm-actions">
+      <a class="fm-download" href="${esc(download)}" title="Unduh" aria-label="Unduh file">↓</a>
+      ${currentUser?`<button class="fm-delete" data-delete="${esc(file.name)}" title="Hapus" aria-label="Hapus file">×</button>`:""}
+     </div>
+    </article>`;
+   }).join("")}</div>
+  </section>`;
+ }
+ document.querySelectorAll("[data-delete]").forEach(button=>{
+  button.onclick=()=>deleteFile(button.dataset.delete);
+ });
 }
 
-async function deleteFile(name) {
-  if(!currentUser){toast("Login admin terlebih dahulu");return;}
-  if(!confirm("Yakin ingin menghapus file ini?\n"+name))return;
-  const {error}=await db.storage.from(BUCKET).remove([name]);
-  if(error){toast("Gagal menghapus: "+error.message);return;}
-  toast("File berhasil dihapus");
-  loadFiles();
+async function loadFiles(){
+ $("content").innerHTML=`<div class="empty"><div class="empty-icon">☁</div><strong>Memuat file...</strong>Tunggu sebentar.</div>`;
+ const {data,error}=await db.storage.from(BUCKET).list("",{limit:1000,sortBy:{column:"created_at",order:"desc"}});
+ if(error){
+  $("content").innerHTML=`<div class="empty"><strong>Gagal memuat file</strong>${esc(error.message)}</div>`;
+  $("itemCount").textContent="Gagal";
+  return;
+ }
+ allFiles=(data||[]).filter(item=>item.name&&item.name!=="."&&item.name!=="..");
+ renderFiles();
 }
 
-const dropzone=$("dropzone");
-const fileInput=$("fileInput");
+async function deleteFile(name){
+ if(!currentUser){toast("Login admin terlebih dahulu");return;}
+ if(!confirm("Yakin ingin menghapus file ini?\n"+name))return;
+ const {error}=await db.storage.from(BUCKET).remove([name]);
+ if(error){toast("Gagal menghapus: "+error.message);return;}
+ toast("File berhasil dihapus");
+ loadFiles();
+}
+
+const dropzone=$("dropzone"),fileInput=$("fileInput");
 $("chooseFile").onclick=()=>fileInput.click();
-fileInput.onchange=()=> {
-  if(fileInput.files.length) uploadFiles([...fileInput.files]);
-  fileInput.value="";
+fileInput.onchange=()=>{
+ if(fileInput.files.length)uploadFiles([...fileInput.files]);
+ fileInput.value="";
 };
 ["dragenter","dragover"].forEach(event=>{
-  dropzone.addEventListener(event,e=>{
-    e.preventDefault();dropzone.classList.add("drag");
-  });
+ dropzone.addEventListener(event,e=>{e.preventDefault();dropzone.classList.add("drag");});
 });
 ["dragleave","drop"].forEach(event=>{
-  dropzone.addEventListener(event,e=>{
-    e.preventDefault();dropzone.classList.remove("drag");
-  });
+ dropzone.addEventListener(event,e=>{e.preventDefault();dropzone.classList.remove("drag");});
 });
 dropzone.addEventListener("drop",e=>{
-  const files=[...e.dataTransfer.files];
-  if(files.length)uploadFiles(files);
+ const files=[...e.dataTransfer.files];
+ if(files.length)uploadFiles(files);
 });
 
-async function uploadFiles(files) {
-  if(!currentUser){toast("Login admin terlebih dahulu");return;}
-  $("chooseFile").disabled=true;
-  $("progress").style.display="block";
-  let completed=0;
-  $("uploadStatus").textContent="Menyiapkan upload...";
-  for(const file of files) {
-    const safeName=file.name.replace(/[\/\\]/g,"_");
-    const path=Date.now()+"_"+Math.random().toString(36).slice(2,7)+"_"+safeName;
-    $("uploadStatus").textContent="Mengunggah: "+file.name;
-    const {error}=await db.storage.from(BUCKET).upload(path,file,{
-      cacheControl:"3600",upsert:false,contentType:file.type||undefined
-    });
-    if(error) {
-      toast("Gagal upload "+file.name+": "+error.message);
-    } else {
-      completed++;
-    }
-    $("progressBar").style.width=Math.round((completed/files.length)*100)+"%";
-  }
-  $("uploadStatus").textContent=`Selesai: ${completed} dari ${files.length} file berhasil diunggah.`;
-  $("chooseFile").disabled=false;
-  setTimeout(()=>{
-    $("progress").style.display="none";
-    $("progressBar").style.width="0%";
-  },1800);
-  loadFiles();
+async function uploadFiles(files){
+ if(!currentUser){toast("Login admin terlebih dahulu");return;}
+ $("chooseFile").disabled=true;
+ $("progress").style.display="block";
+ let completed=0;
+ $("uploadStatus").textContent="Menyiapkan upload...";
+ for(const file of files){
+  const safeName=file.name.replace(/[\/\\]/g,"_");
+  const path=Date.now()+"_"+Math.random().toString(36).slice(2,7)+"_"+safeName;
+  $("uploadStatus").textContent="Mengunggah: "+file.name;
+  const {error}=await db.storage.from(BUCKET).upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type||undefined});
+  if(error)toast("Gagal upload "+file.name+": "+error.message);
+  else completed++;
+  $("progressBar").style.width=Math.round((completed/files.length)*100)+"%";
+ }
+ $("uploadStatus").textContent=`Selesai: ${completed} dari ${files.length} file berhasil diunggah.`;
+ $("chooseFile").disabled=false;
+ setTimeout(()=>{$("progress").style.display="none";$("progressBar").style.width="0%";},1800);
+ loadFiles();
 }
+
+async function checkSession(){
+ const {data}=await db.auth.getSession();
+ currentUser=data.session?.user||null;
+ updateAdminUI();
+ loadFiles();
+}
+db.auth.onAuthStateChange((_event,session)=>{
+ currentUser=session?.user||null;
+ updateAdminUI();
+});
 checkSession();
 </script>
 </body>
