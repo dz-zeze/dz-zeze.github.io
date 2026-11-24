@@ -12,119 +12,138 @@
 [data-theme=amoled]{--bg:#000;--panel:#090909;--panel2:#151515;--text:#f7f7f7;--muted:#999;--accent:#9a86ff;--accent2:#45caff;--border:#ffffff1c;--shadow:0 18px 55px #0008}
 *{box-sizing:border-box}
 body{margin:0;background:radial-gradient(ellipse at 15% 0%,#6956df12,transparent 38%),var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif;min-height:100vh}
-button,input,select{font:inherit}button{cursor:pointer}
+button,input,select{font:inherit}
+button{cursor:pointer}
 .wrap{width:min(1080px,100%);margin:auto;padding:22px 18px 55px}
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
 .brand{display:flex;align-items:center;gap:12px}
 .logo{width:49px;height:49px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#8b7cff,#42c8ff);color:white;font-size:26px}
-.brand h1{font-size:21px;margin:0;font-weight:850}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
-.menu-wrap{position:relative}.menu-btn{width:44px;height:44px;border:1px solid var(--border);border-radius:15px;background:var(--panel);color:var(--text);font-size:23px}
-.menu{display:none;position:absolute;right:0;top:52px;width:min(310px,calc(100vw - 26px));padding:15px;background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);z-index:20}.menu.show{display:block}
+.brand h1{font-size:21px;margin:0;font-weight:850}
+.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.menu-wrap{position:relative}
+.menu-btn{width:44px;height:44px;border:1px solid var(--border);border-radius:15px;background:var(--panel);color:var(--text);font-size:23px}
+.menu{display:none;position:absolute;right:0;top:52px;width:min(310px,calc(100vw - 26px));padding:15px;background:var(--panel);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);z-index:20}
+.menu.show{display:block}
 .menu-title,.theme-heading{font-size:11px;color:var(--muted);padding:5px 3px 13px;letter-spacing:1px;font-weight:850}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .menu-card{min-height:120px;padding:15px 10px;border:1px solid var(--border);border-radius:17px;background:var(--panel2);color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px}
 .menu-icon{width:49px;height:49px;display:grid;place-items:center;border-radius:16px;background:#8b7cff30;color:var(--accent);font-size:25px}
-.menu-card strong{font-size:12px}.menu-card small{font-size:10px;color:var(--muted)}
+.menu-card strong{font-size:12px}
+.menu-card small{font-size:10px;color:var(--muted)}
 .theme-box{margin-top:13px;padding:13px;border:1px solid var(--border);border-radius:16px;background:var(--panel2)}
 .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .theme-choice{padding:12px 5px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--text);font-size:11px}
 .theme-choice.active{border-color:var(--accent);color:var(--accent)}
 .theme-choice span{display:block;font-size:19px;margin-bottom:6px}
-.hero{padding:32px 25px;border:1px solid var(--border);border-radius:26px;background:radial-gradient(ellipse at 95% 0%,#8b7cff35,transparent 45%),linear-gradient(135deg,var(--panel),var(--panel2));box-shadow:var(--shadow);margin-bottom:28px}
+.hero{padding:32px 25px;border:1px solid var(--border);border-radius:26px;background:radial-gradient(ellipse at 95% 0%,#8b7cff35,transparent 45%),linear-gradient(135deg,var(--panel),var(--panel2));box-shadow:var(--shadow);margin-bottom:24px}
 .hero-tag{display:inline-flex;padding:7px 12px;border-radius:30px;background:#8b7cff20;color:var(--accent);font-size:10px;font-weight:850;letter-spacing:1.3px}
-.hero h2{font-size:clamp(26px,5vw,37px);margin:17px 0 9px}.hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.8;max-width:520px}
+.hero h2{font-size:clamp(26px,5vw,37px);margin:17px 0 9px}
+.hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.8;max-width:520px}
 .section-label{font-size:11px;color:var(--muted);font-weight:850;letter-spacing:1.5px;margin:27px 2px 14px}
 
-/* MUSIC */
-.music-panel{border:1px solid var(--border);background:linear-gradient(145deg,var(--panel),var(--panel2));border-radius:24px;padding:19px;box-shadow:var(--shadow);margin-bottom:28px;overflow:hidden}
-.music-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
-.music-brand{display:flex;align-items:center;gap:12px}
-.music-logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;color:white;font-size:23px;background:linear-gradient(135deg,#8b5cf6,#42c8ff)}
-.music-heading h3{margin:0;font-size:17px}.music-heading small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
-.music-badge{font-size:9px;color:#43c8a0;background:#27b98220;padding:7px 10px;border-radius:20px;font-weight:800}
-.music-screen{width:100%;aspect-ratio:16/9;min-height:200px;background:#050711;border:1px solid var(--border);border-radius:17px;overflow:hidden}
-.music-screen iframe{width:100%;height:100%;border:0;display:block}
-.music-screen-placeholder{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:radial-gradient(circle at 50% 40%,#7357dc55,transparent 55%),linear-gradient(135deg,#101529,#070a14);text-align:center}
-.music-screen-placeholder span{font-size:55px}.music-screen-placeholder strong{font-size:14px}.music-screen-placeholder small{color:#aab1c5;font-size:11px}
-.music-now{font-size:10px;color:var(--accent);letter-spacing:1.3px;font-weight:850;margin-top:16px}
-.music-title{font-size:18px;font-weight:850;margin:7px 0 5px;overflow-wrap:anywhere}
-.music-subtitle{font-size:11px;color:var(--muted)}
-.music-controls{display:flex;align-items:center;gap:10px;margin-top:14px}
-.music-control{width:43px;height:42px;border-radius:13px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:18px}
-.music-control.main{width:50px;height:48px;background:linear-gradient(110deg,#8069f5,#4bafff);border:0;color:white;font-size:21px}
-.music-tabs{display:flex;gap:8px;margin:18px 0 13px}
-.music-tab{flex:1;padding:11px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--muted);font-size:12px;font-weight:800}
-.music-tab.active{background:#8b7cff20;border-color:var(--accent);color:var(--accent)}
-.music-list-heading{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;margin-bottom:10px}
-.music-list-heading span{color:var(--muted);font-size:10px;font-weight:500}
-.playlist{display:flex;flex-direction:column;gap:7px}
-.playlist-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:var(--panel2);border:1px solid var(--border);min-width:0}
-.playlist-item.playing{border-color:var(--accent);background:#8b7cff12}
-.playlist-play{width:34px;height:34px;border:0;border-radius:10px;background:#8b7cff22;color:var(--accent);flex-shrink:0}
-.playlist-text{flex:1;min-width:0}.playlist-text strong{display:block;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.playlist-text small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
-.music-note{color:var(--muted);font-size:10px;line-height:1.6;margin:12px 2px 0}
+/* DOWNLOADER */
+.downloader{border:1px solid var(--border);background:linear-gradient(145deg,var(--panel),var(--panel2));border-radius:24px;padding:20px;box-shadow:var(--shadow);margin-bottom:28px;overflow:hidden}
+.downloader-heading{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.downloader-logo{width:49px;height:49px;border-radius:16px;display:grid;place-items:center;color:white;font-size:24px;background:linear-gradient(135deg,#8b5cf6,#42c8ff)}
+.downloader-heading h3{margin:0;font-size:17px}
+.downloader-heading small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.downloader-badge{margin-left:auto;font-size:9px;color:#43c8a0;background:#27b98220;padding:7px 10px;border-radius:20px;font-weight:800;white-space:nowrap}
+.downloader-description{font-size:12px;color:var(--muted);line-height:1.7;margin:0 0 15px}
+.url-input{width:100%;padding:15px;border:1px solid var(--border);border-radius:14px;background:var(--bg);color:var(--text);outline:none;font-size:13px}
+.url-input:focus{border-color:var(--accent)}
+.format-label{font-size:11px;color:var(--muted);font-weight:800;margin:18px 0 10px}
+.format-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.format-btn{padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--panel2);color:var(--muted);font-weight:800;font-size:12px}
+.format-btn span{display:block;font-size:23px;margin-bottom:6px}
+.format-btn.active{border-color:var(--accent);background:#8b7cff18;color:var(--accent)}
+.process-btn{width:100%;margin-top:15px;padding:14px;border:0;border-radius:14px;color:white;font-weight:850;background:linear-gradient(110deg,#8069f5,#4bafff)}
+.download-status{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px;min-height:18px;overflow-wrap:anywhere}
+.downloader-note{font-size:10px;color:var(--muted);line-height:1.6;margin:10px 1px 0}
+
 .folders{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px}
 .folder{position:relative;text-align:left;padding:19px 17px;border-radius:21px;border:1px solid var(--border);background:linear-gradient(145deg,var(--panel),var(--panel2));color:var(--text);box-shadow:var(--shadow);min-width:0}
 .folder.active{border-color:var(--accent);background:radial-gradient(ellipse at 100% 0%,#8b7cff28,transparent 65%),var(--panel)}
 .folder-icon{width:55px;height:55px;border-radius:18px;display:grid;place-items:center;font-size:27px;margin-bottom:16px;color:white}
-.video-icon{background:linear-gradient(135deg,#795fff,#ae74ff)}.file-icon{background:linear-gradient(135deg,#169ed2,#54d5e5)}
-.folder strong{display:block;font-size:16px}.folder small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
+.video-icon{background:linear-gradient(135deg,#795fff,#ae74ff)}
+.file-icon{background:linear-gradient(135deg,#169ed2,#54d5e5)}
+.folder strong{display:block;font-size:16px}
+.folder small{display:block;color:var(--muted);margin-top:5px;font-size:11px}
 .folder-count{position:absolute;right:13px;top:15px;color:var(--muted);font-size:10px;background:var(--panel2);padding:6px 9px;border-radius:20px}
 .upload-panel{border:1px solid var(--border);background:linear-gradient(145deg,var(--panel),var(--panel2));padding:20px;border-radius:23px;box-shadow:var(--shadow);margin-bottom:26px}
-.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}.panel-heading h3{margin:0;font-size:16px}
+.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.panel-heading h3{margin:0;font-size:16px}
 .admin-pill{display:none;background:#27b98220;color:#28c58a;padding:7px 11px;border-radius:30px;font-size:10px;font-weight:850}
 .dropzone{margin-top:17px;border:2px dashed #8b7cff66;border-radius:20px;padding:29px 15px;text-align:center;background:#8b7cff09}
 .dropzone.drag{background:#8b7cff22;border-color:var(--accent)}
 .cloud-icon{width:65px;height:65px;border-radius:21px;margin:0 auto 14px;display:grid;place-items:center;font-size:30px;color:white;background:linear-gradient(135deg,#8b7cff,#42c8ff)}
-.dropzone h4{margin:0 0 7px;font-size:16px}.dropzone p{margin:0 0 18px;color:var(--muted);font-size:12px}
+.dropzone h4{margin:0 0 7px;font-size:16px}
+.dropzone p{margin:0 0 18px;color:var(--muted);font-size:12px}
 .primary-btn{border:0;border-radius:13px;padding:12px 20px;color:white;font-weight:800;font-size:13px;background:linear-gradient(110deg,#8069f5,#4bafff)}
-.primary-btn:disabled{opacity:.5;cursor:not-allowed}#fileInput{display:none}
+.primary-btn:disabled{opacity:.5;cursor:not-allowed}
+#fileInput{display:none}
 .upload-status{font-size:12px;color:var(--muted);margin-top:13px;min-height:17px}
 .progress{height:5px;background:var(--panel2);border-radius:10px;overflow:hidden;margin-top:9px;display:none}
 .progress-bar{height:100%;width:0;background:linear-gradient(90deg,#8b7cff,#42c8ff);transition:width .2s}
 .list-heading{display:flex;align-items:center;justify-content:space-between;margin:23px 2px 15px}
-.list-heading h3{font-size:17px;margin:0}.list-heading span{font-size:11px;color:var(--muted)}
+.list-heading h3{font-size:17px;margin:0}
+.list-heading span{font-size:11px;color:var(--muted)}
 .refresh{width:39px;height:36px;border:1px solid var(--border);background:var(--panel);color:var(--text);border-radius:12px;font-size:19px}
 .video-list{display:flex;flex-direction:column;gap:19px}
 .video-card,.file-card{background:linear-gradient(145deg,var(--panel),var(--panel2));border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:var(--shadow);min-width:0}
 .video-player{width:100%;aspect-ratio:16/9;background:#000;display:block;object-fit:contain}
-.video-info{padding:12px 14px}.file-name{font-size:13px;font-weight:750;overflow-wrap:anywhere;flex:1;min-width:0}
+.video-info{padding:12px 14px}
+.file-name{font-size:13px;font-weight:750;overflow-wrap:anywhere;flex:1;min-width:0}
 .file-meta{font-size:11px;color:var(--muted);margin-top:5px}
 .actions{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px;margin-top:12px}
 .action-btn{width:46px;height:44px;display:grid;place-items:center;border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:14px;text-decoration:none;flex-shrink:0}
 .action-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.download-btn{color:#54c8ff;background:#168ecb20;border-color:#42c8ff45}.delete-btn{color:#ff737d;background:#ff596b20;border-color:#ff737d45}
+.download-btn{color:#54c8ff;background:#168ecb20;border-color:#42c8ff45}
+.delete-btn{color:#ff737d;background:#ff596b20;border-color:#ff737d45}
 .file-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.file-card{padding:12px}.file-preview{height:130px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;overflow:hidden;margin-bottom:12px;border:1px solid var(--border)}
-.file-preview img{width:100%;height:100%;object-fit:cover}.file-symbol{font-size:45px}
-.file-card .file-name{display:block;min-height:34px;line-height:1.5;font-size:12px}.file-card .file-meta{margin:5px 0 8px}
+.file-card{padding:12px}
+.file-preview{height:130px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;overflow:hidden;margin-bottom:12px;border:1px solid var(--border)}
+.file-preview img{width:100%;height:100%;object-fit:cover}
+.file-symbol{font-size:45px}
+.file-card .file-name{display:block;min-height:34px;line-height:1.5;font-size:12px}
+.file-card .file-meta{margin:5px 0 8px}
 .file-card .actions{border-top:1px solid var(--border);padding-top:11px;margin-top:11px}
 .empty{text-align:center;padding:43px 15px;border:1px dashed var(--border);border-radius:20px;color:var(--muted);background:var(--panel);font-size:12px}
-.empty-icon{font-size:37px;margin-bottom:12px}.empty strong{display:block;color:var(--text);margin-bottom:7px;font-size:14px}
+.empty-icon{font-size:37px;margin-bottom:12px}
+.empty strong{display:block;color:var(--text);margin-bottom:7px;font-size:14px}
 footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1.3px;margin-top:38px}
 .modal-bg{display:none;position:fixed;inset:0;background:#000b;backdrop-filter:blur(5px);z-index:30;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
-.modal-bg.show{display:flex}.modal{width:min(390px,100%);background:var(--panel);border:1px solid var(--border);border-radius:23px;padding:24px;box-shadow:var(--shadow);max-height:92vh;overflow-y:auto}
-.modal h3{margin:0 0 8px;font-size:20px}.modal p{color:var(--muted);font-size:12px;margin:0 0 18px;line-height:1.6}
+.modal-bg.show{display:flex}
+.modal{width:min(390px,100%);background:var(--panel);border:1px solid var(--border);border-radius:23px;padding:24px;box-shadow:var(--shadow);max-height:92vh;overflow-y:auto}
+.modal h3{margin:0 0 8px;font-size:20px}
+.modal p{color:var(--muted);font-size:12px;margin:0 0 18px;line-height:1.6}
 .modal input{width:100%;padding:13px;margin-bottom:10px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);color:var(--text);outline:none}
-.modal-actions{display:flex;gap:9px;margin-top:8px}.modal-actions button{flex:1}
+.modal-actions{display:flex;gap:9px;margin-top:8px}
+.modal-actions button{flex:1}
 .secondary-btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--panel2);color:var(--text);border:1px solid var(--border);padding:12px 17px;border-radius:14px;box-shadow:var(--shadow);font-size:12px;z-index:50;transition:.25s;max-width:90%;text-align:center}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.hd-modal{width:min(510px,100%)}.hd-brand{display:flex;align-items:center;gap:12px;margin-bottom:15px}
+.hd-modal{width:min(510px,100%)}
+.hd-brand{display:flex;align-items:center;gap:12px;margin-bottom:15px}
 .hd-logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#8069f5,#42c8ff);display:grid;place-items:center;color:white;font-size:24px}
-.hd-brand h3{margin:0}.hd-brand small{color:var(--muted);font-size:11px}
+.hd-brand h3{margin:0}
+.hd-brand small{color:var(--muted);font-size:11px}
 .hd-upload{border:2px dashed #8b7cff66;border-radius:17px;padding:23px;text-align:center;background:#8b7cff09;margin:14px 0}
-.hd-upload label{display:block;cursor:pointer}.hd-upload strong{display:block;margin:9px 0 5px;font-size:14px}.hd-upload small{font-size:11px;color:var(--muted)}
-#hdInput{display:none}.hd-preview{display:none;gap:10px;margin:14px 0}.hd-preview>div{flex:1;min-width:0}
+.hd-upload label{display:block;cursor:pointer}
+.hd-upload strong{display:block;margin:9px 0 5px;font-size:14px}
+.hd-upload small{font-size:11px;color:var(--muted)}
+#hdInput{display:none}
+.hd-preview{display:none;gap:10px;margin:14px 0}
+.hd-preview>div{flex:1;min-width:0}
 .hd-preview img{width:100%;aspect-ratio:1;object-fit:contain;background:#050505;border-radius:12px;border:1px solid var(--border)}
 .hd-preview span{display:block;text-align:center;font-size:11px;color:var(--muted);margin-top:6px}
 .hd-options{background:var(--panel2);border-radius:14px;padding:13px;margin:12px 0}
-.hd-options label{font-size:12px;display:block;margin-bottom:9px}.hd-options input{width:100%;margin:0;accent-color:var(--accent)}
-.hd-note{font-size:11px!important;line-height:1.6}.hd-status{font-size:12px;color:var(--muted);margin:10px 0;min-height:18px}
+.hd-options label{font-size:12px;display:block;margin-bottom:9px}
+.hd-options input{width:100%;margin:0;accent-color:var(--accent)}
+.hd-note{font-size:11px!important;line-height:1.6}
+.hd-status{font-size:12px;color:var(--muted);margin:10px 0;min-height:18px}
 .hd-close{width:100%;margin-top:10px}
 @media(min-width:700px){.wrap{padding-top:30px}.file-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{padding:40px}.folder{padding:23px}.file-preview{height:155px}}
-@media(max-width:600px){.music-panel{padding:14px}.music-screen{min-height:190px}}
+@media(max-width:600px){.downloader{padding:15px}}
 @media(max-width:420px){.wrap{padding:17px 13px 40px}.hero{padding:25px 20px}.video-info{padding:11px}.file-preview{height:115px}.action-btn{width:43px;height:42px}}
 </style>
 </head>
@@ -151,37 +170,26 @@ footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:1.3px;
 
 <section class="hero">
 <div class="hero-tag">✦ PERSONAL CLOUD STORAGE</div>
-<h2>SELAMAT DATANG</h2>
-<p>Ini adalah layanan Zeze Cloud. Tonton video langsung yang sudah saya sediakan. Download juga apa pun yang kalian suka di sini !!!</p>
+<h2>WELCOME</h2>
+<p>terima kasih sudah mampir ke sini</p>
 </section>
 
-<!-- ZEZE MUSIC -->
-<section class="music-panel">
-<div class="music-heading">
-<div class="music-brand"><div class="music-logo">♫</div><div><h3>ZEZE MUSIC</h3><small>Putar lagu langsung dari YouTube</small></div></div>
-<span class="music-badge">● ONLINE PLAYER</span>
+<section class="downloader">
+<div class="downloader-heading">
+<div class="downloader-logo">⇩</div>
+<div><h3>ZEZE DOWNLOADER</h3><small>Video & Audio Link Tool</small></div>
+<span class="downloader-badge">● ONLINE</span>
 </div>
-
-<div class="music-screen" id="musicScreen">
-<div class="music-screen-placeholder"><span>♫</span><strong>ZEZE MUSIC</strong><small>Pilih lagu di bawah untuk mulai mendengarkan</small></div>
+<p class="downloader-description">Tempel tautan YouTube, TikTok, atau Instagram di bawah ini. Pilih format yang kamu inginkan.</p>
+<input class="url-input" id="downloadUrl" type="url" placeholder="Tempel link YouTube / TikTok / Instagram..." autocomplete="url">
+<div class="format-label">PILIH FORMAT</div>
+<div class="format-options">
+<button class="format-btn active" data-format="MP4"><span>🎬</span>MP4 VIDEO</button>
+<button class="format-btn" data-format="MP3"><span>🎵</span>MP3 AUDIO</button>
 </div>
-
-<div class="music-now">NOW PLAYING</div>
-<div class="music-title" id="musicTitle">Belum ada lagu diputar</div>
-<div class="music-subtitle" id="musicSubtitle">Pilih lagu dari daftar musik</div>
-<div class="music-controls">
-<button class="music-control" id="musicPrev" title="Sebelumnya">⏮</button>
-<button class="music-control main" id="musicPlay" title="Putar / Jeda">▶</button>
-<button class="music-control" id="musicNext" title="Berikutnya">⏭</button>
-</div>
-
-<div class="music-tabs">
-<button class="music-tab active" data-music-category="id">🇮🇩 Indonesia</button>
-<button class="music-tab" data-music-category="world">🌎 Internasional</button>
-</div>
-<div class="music-list-heading">DAFTAR LAGU <span id="musicCount">0 lagu</span></div>
-<div class="playlist" id="playlist"></div>
-<p class="music-note">Musik menggunakan pemutar resmi YouTube. Beberapa video mungkin tidak bisa diputar jika pemilik video membatasi pemutaran di situs lain. Gunakan tombol kontrol YouTube di dalam layar untuk mengatur volume dan posisi lagu.</p>
+<button class="process-btn" id="processDownload">⇩ LANJUTKAN</button>
+<div class="download-status" id="downloadStatus">Masukkan tautan untuk memulai.</div>
+<p class="downloader-note">Gunakan hanya untuk konten milik sendiri atau yang kamu punya izin untuk mengunduhnya. Fitur ini saat ini membuka sumber tautan, belum melakukan konversi atau unduhan langsung.</p>
 </section>
 
 <div class="section-label">JELAJAHI PENYIMPANAN</div>
@@ -245,11 +253,41 @@ function toast(message){$("toast").textContent=message;$("toast").classList.add(
 function publicUrl(path,download=false){return db.storage.from(BUCKET).getPublicUrl(path,{download}).data.publicUrl;}
 
 /* TEMA */
-function setTheme(theme){document.documentElement.dataset.theme=theme;localStorage.setItem("zeze-theme",theme);document.querySelectorAll("[data-theme-choice]").forEach(b=>b.classList.toggle("active",b.dataset.themeChoice===theme));}
+function setTheme(theme){
+document.documentElement.dataset.theme=theme;
+localStorage.setItem("zeze-theme",theme);
+document.querySelectorAll("[data-theme-choice]").forEach(b=>b.classList.toggle("active",b.dataset.themeChoice===theme));
+}
 setTheme(localStorage.getItem("zeze-theme")||"dark");
 $("menuButton").onclick=()=>$("menu").classList.toggle("show");
 document.addEventListener("click",e=>{if(!e.target.closest(".menu-wrap"))$("menu").classList.remove("show");});
 document.querySelectorAll("[data-theme-choice]").forEach(b=>b.onclick=()=>{setTheme(b.dataset.themeChoice);toast("Tema berhasil diubah");});
+
+/* DOWNLOADER */
+let selectedFormat="MP4";
+document.querySelectorAll("[data-format]").forEach(button=>{
+button.onclick=()=>{
+selectedFormat=button.dataset.format;
+document.querySelectorAll("[data-format]").forEach(b=>b.classList.toggle("active",b===button));
+$("downloadStatus").textContent="Format dipilih: "+selectedFormat;
+};
+});
+$("processDownload").onclick=()=>{
+const raw=$("downloadUrl").value.trim();
+if(!raw){toast("Tempel link terlebih dahulu");$("downloadUrl").focus();return;}
+let url;
+try{url=new URL(raw);}catch(e){toast("Link tidak valid");return;}
+if(!["http:","https:"].includes(url.protocol)){toast("Format link tidak didukung");return;}
+const host=url.hostname.toLowerCase().replace(/^www\./,"");
+let platform="";
+if(host==="youtube.com"||host==="m.youtube.com"||host==="youtu.be"||host==="music.youtube.com")platform="YouTube";
+else if(host==="tiktok.com"||host==="vm.tiktok.com"||host==="vt.tiktok.com")platform="TikTok";
+else if(host==="instagram.com"||host==="instagr.am")platform="Instagram";
+else{toast("Link bukan dari YouTube, TikTok, atau Instagram");return;}
+$("downloadStatus").textContent=platform+" terdeteksi. Membuka sumber resmi. Format pilihan: "+selectedFormat+".";
+window.open(url.href,"_blank","noopener,noreferrer");
+toast("Sumber "+platform+" dibuka");
+};
 
 /* MODAL */
 $("openHD").onclick=()=>{$("menu").classList.remove("show");$("hdModal").classList.add("show");};
@@ -372,90 +410,6 @@ $("chooseFile").disabled=false;isUploading=false;
 setTimeout(()=>{$("progress").style.display="none";$("progressBar").style.width="0%";},1800);
 await loadFiles();
 }
-
-/* ZEZE MUSIC - LAGU PILIHAN */
-const musicCatalog={
-id:[
-{title:"Jatuh Suka",artist:"TULUS",id:"NRGDT2UUlsk"},
-{title:"Kelana",artist:"TULUS",id:"Wc2ykyBEgIw"}
-],
-world:[
-{title:"Bad Guy",artist:"Billie Eilish",id:"4NRXx6U8ABQ"},
-{title:"Despacito",artist:"Luis Fonsi ft. Daddy Yankee",id:"kJQP7kiw5Fk"},
-{title:"Shape of You",artist:"Ed Sheeran",id:"JGwWNGJdvx8"}
-]
-};
-let musicCategory="id",musicIndex=-1,ytPlayer=null,ytReady=false,pendingSong=null;
-
-function currentSongs(){return musicCatalog[musicCategory];}
-function renderPlaylist(){
-const songs=currentSongs();
-$("musicCount").textContent=songs.length+" lagu";
-$("playlist").innerHTML=songs.map((song,i)=>`
-<div class="playlist-item ${musicCategory===activeCategory&&i===musicIndex?"playing":""}">
-<button class="playlist-play" data-song="${i}">${i===musicIndex&&musicCategory===activeCategory?"♫":"▶"}</button>
-<div class="playlist-text"><strong>${escapeHTML(song.title)}</strong><small>${escapeHTML(song.artist)}</small></div>
-</div>`).join("");
-document.querySelectorAll("[data-song]").forEach(b=>b.onclick=()=>playSong(Number(b.dataset.song)));
-}
-let activeCategory="id";
-function setCategory(category){
-musicCategory=category;
-document.querySelectorAll("[data-music-category]").forEach(b=>b.classList.toggle("active",b.dataset.musicCategory===category));
-renderPlaylist();
-}
-document.querySelectorAll("[data-music-category]").forEach(b=>b.onclick=()=>setCategory(b.dataset.musicCategory));
-
-function updateMusicInfo(song){
-$("musicTitle").textContent=song.title;
-$("musicSubtitle").textContent=song.artist+" · "+(musicIndex+1)+" dari "+currentSongs().length;
-}
-function playSong(index){
-const songs=currentSongs();
-if(index<0||index>=songs.length)return;
-musicIndex=index;activeCategory=musicCategory;
-const song=songs[index];updateMusicInfo(song);renderPlaylist();
-if(ytReady&&ytPlayer){
-ytPlayer.loadVideoById(song.id);
-$("musicPlay").textContent="Ⅱ";
-}else{
-pendingSong=song;
-createYouTubePlayer(song.id);
-}
-}
-function createYouTubePlayer(videoId){
-$("musicScreen").innerHTML='<div id="ytMusicPlayer"></div>';
-if(window.YT&&window.YT.Player){
-ytPlayer=new YT.Player("ytMusicPlayer",{
-width:"100%",height:"100%",videoId:videoId,
-playerVars:{autoplay:1,playsinline:1,rel:0,controls:1,origin:location.origin},
-events:{
-onReady:e=>{ytReady=true;e.target.playVideo();$("musicPlay").textContent="Ⅱ";},
-onStateChange:e=>{if(e.data===YT.PlayerState.PLAYING)$("musicPlay").textContent="Ⅱ";else if(e.data===YT.PlayerState.PAUSED||e.data===YT.PlayerState.ENDED)$("musicPlay").textContent="▶";if(e.data===YT.PlayerState.ENDED)nextSong();}
-}
-});
-}else{
-pendingSong={id:videoId};
-}
-}
-window.onYouTubeIframeAPIReady=function(){
-if(pendingSong){createYouTubePlayer(pendingSong.id);pendingSong=null;}
-};
-const ytScript=document.createElement("script");
-ytScript.src="https://www.youtube.com/iframe_api";
-document.head.appendChild(ytScript);
-
-function nextSong(){const songs=currentSongs();if(!songs.length)return;playSong(musicIndex<0?0:(musicIndex+1)%songs.length);}
-function prevSong(){const songs=currentSongs();if(!songs.length)return;playSong(musicIndex<=0?songs.length-1:musicIndex-1);}
-$("musicNext").onclick=nextSong;
-$("musicPrev").onclick=prevSong;
-$("musicPlay").onclick=()=>{
-if(!ytPlayer||!ytReady){if(musicIndex<0)playSong(0);else toast("Pemutar sedang disiapkan");return;}
-const state=ytPlayer.getPlayerState();
-if(state===YT.PlayerState.PLAYING){ytPlayer.pauseVideo();$("musicPlay").textContent="▶";}
-else{ytPlayer.playVideo();$("musicPlay").textContent="Ⅱ";}
-};
-renderPlaylist();
 
 /* HD PHOTO */
 let hdOriginalFile=null,hdOriginalURL=null,hdResultBlob=null,hdResultURL=null;
