@@ -3,150 +3,421 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ZEZE · Personal Cloud</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZEZE · Elegant Cloud</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:#061321;--panel:rgba(5,25,43,.72);--panel2:rgba(11,39,61,.78);--text:#effaff;--muted:#a7c0d2;--cyan:#55d9ff;--cyan2:#a8efff;--border:rgba(105,218,255,.52);--shadow:0 15px 45px #0008}
-[data-theme="dark"]{--bg:#090e17;--panel:rgba(15,22,34,.86);--panel2:rgba(28,40,57,.86);--text:#f2f5f8;--muted:#a7b0bc;--cyan:#8ac9ee;--cyan2:#d5efff;--border:#83b8d455}
-[data-theme="light"]{--bg:#dce9f1;--panel:rgba(242,249,253,.82);--panel2:rgba(222,238,247,.9);--text:#193449;--muted:#607b8e;--cyan:#268ab5;--cyan2:#8bd7f3;--border:#428db766;--shadow:0 15px 35px #35566a30}
-[data-theme="amoled"]{--bg:#000;--panel:rgba(0,8,15,.94);--panel2:rgba(5,18,29,.96);--text:#fff;--muted:#9eabb5;--cyan:#63dfff;--cyan2:#d4f7ff;--border:#55d9ff55}
+:root{
+--bg:#080b11;
+--panel:rgba(12,27,43,.76);
+--panel2:rgba(19,39,57,.78);
+--text:#edf5fa;
+--muted:#a0b2c1;
+--accent:#a9d9eb;
+--cyan:#79cbe8;
+--silver:#d4e5ed;
+--border:rgba(160,204,225,.32);
+--shadow:0 18px 55px rgba(0,0,0,.38);
+--wallpaper:url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1800");
+}
+[data-theme="neon"]{
+--wallpaper:url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1800");
+--accent:#a9d9eb;--cyan:#79cbe8;
+}
+[data-theme="dark"]{
+--wallpaper:url("https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1800");
+--accent:#b3c8ed;--cyan:#88a9e9;
+--panel:rgba(9,15,32,.82);
+--panel2:rgba(19,29,52,.83);
+}
+[data-theme="light"]{
+--wallpaper:url("https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=1800");
+--bg:#e9edf0;--panel:rgba(29,39,53,.66);
+--panel2:rgba(40,53,67,.72);
+--text:#fff;--muted:#e0e7ee;
+--accent:#b9e6f5;--cyan:#8dd7f1;
+--border:rgba(220,240,255,.42);
+}
+[data-theme="amoled"]{
+--wallpaper:url("https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1800");
+--bg:#000;--panel:rgba(0,0,0,.76);
+--panel2:rgba(8,12,20,.86);
+--text:#fff;--muted:#a6aeba;
+--accent:#b6e8f5;--cyan:#65c9ed;
+--silver:#e2f2f8;--border:rgba(160,220,240,.3);
+}
+
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,Arial,sans-serif;background-color:var(--bg);background-image:linear-gradient(180deg,rgba(2,10,21,.48),rgba(2,12,24,.72)),url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2000&q=90');background-size:cover;background-position:center;background-attachment:fixed}
-button,input,select{font:inherit}button{cursor:pointer}
-.wrap{width:min(1080px,100%);margin:auto;padding:24px 16px 45px}
-.glass,.hero,.music-panel,.folder,.upload-panel,.video-card,.file-card,.menu,.modal{background:var(--panel);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--border);box-shadow:var(--shadow)}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+body{
+margin:0;min-height:100vh;color:var(--text);
+font-family:Inter,system-ui,Arial,sans-serif;
+background-color:var(--bg);
+background-image:
+linear-gradient(180deg,rgba(3,12,23,.43),rgba(3,12,23,.70)),
+var(--wallpaper);
+background-position:center;
+background-size:cover;
+background-repeat:no-repeat;
+background-attachment:fixed;
+transition:background-image .35s,background-color .35s;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.wrap{width:min(1080px,100%);margin:auto;padding:22px 16px 50px}
+
+.glass,.menu,.hero,.folder,.upload-panel,.video-card,.file-card,
+.music-panel,.empty,.modal,.theme-box{
+background:var(--panel);
+backdrop-filter:blur(20px);
+-webkit-backdrop-filter:blur(20px);
+border:1px solid var(--border);
+box-shadow:var(--shadow);
+}
+
+header{
+display:flex;justify-content:space-between;
+align-items:center;margin-bottom:25px
+}
 .brand{display:flex;align-items:center;gap:13px}
-.logo{width:58px;height:58px;border-radius:19px;display:grid;place-items:center;background:linear-gradient(145deg,#28658b,#0a233a);border:1px solid var(--cyan);box-shadow:0 0 25px #48cfff55;color:#dffaff;font-size:30px}
-.brand h1{font:700 32px 'Cormorant Garamond',serif;letter-spacing:3px;margin:0}
-.brand small{color:var(--muted);font-size:12px}
+.logo{
+width:53px;height:53px;border-radius:17px;
+display:grid;place-items:center;
+background:linear-gradient(145deg,#31536b,#172b40);
+border:1px solid #a9d9eb77;
+box-shadow:0 0 25px #65b8df30;
+color:#d8f1fa;font-size:26px;
+}
+.brand h1{margin:0;font-family:"Cormorant Garamond",serif;font-size:27px;letter-spacing:2px}
+.brand small{color:var(--muted);font-size:11px;letter-spacing:.4px}
+
 .menu-wrap{position:relative}
-.menu-btn{width:48px;height:48px;border-radius:16px;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:26px}
-.menu{display:none;position:absolute;right:0;top:56px;width:min(300px,calc(100vw - 32px));padding:15px;border-radius:20px;z-index:20}
+.menu-btn{
+width:45px;height:45px;border-radius:15px;
+color:var(--text);font-size:25px;
+display:grid;place-items:center;
+background:var(--panel2);
+border:1px solid var(--border);
+}
+.menu{
+display:none;position:absolute;right:0;top:53px;
+width:min(310px,calc(100vw - 30px));
+padding:15px;border-radius:20px;z-index:20
+}
 .menu.show{display:block}
-.menu-title,.section-label{font-size:11px;letter-spacing:2px;color:var(--muted);font-weight:800;margin:5px 2px 12px}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.menu-card,.theme-choice{background:var(--panel2);border:1px solid var(--border);border-radius:13px;color:var(--text);padding:12px 7px}
+.menu-title,.section-label{
+font-size:11px;color:var(--muted);
+font-weight:800;letter-spacing:2px;
+margin:5px 2px 13px
+}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.menu-card,.theme-choice{
+color:var(--text);background:var(--panel2);
+border:1px solid var(--border);
+border-radius:14px;padding:14px 8px
+}
+.menu-card{min-height:94px}
 .menu-card strong,.menu-card small{display:block}
-.menu-card small{font-size:10px;color:var(--muted);margin-top:5px}
-.theme-box{padding:12px;margin-top:12px;border:1px solid var(--border);border-radius:14px;background:var(--panel2)}
+.menu-card small{color:var(--muted);font-size:10px;margin-top:5px}
+.theme-box{margin-top:12px;padding:12px;border-radius:15px}
 .theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.theme-choice{font-size:10px;padding:10px 2px}
-.theme-choice.active{border-color:var(--cyan);box-shadow:0 0 15px #4bd7ff55}
+.theme-choice{font-size:10px;padding:10px 3px}
+.theme-choice.active{
+border-color:var(--cyan);
+box-shadow:0 0 14px #65bde355
+}
 
 /* WELCOME */
-.hero{position:relative;overflow:hidden;text-align:center;padding:30px 18px;border-radius:27px;margin-bottom:22px;background:linear-gradient(145deg,rgba(9,47,73,.62),rgba(2,15,29,.56))}
-.hero:before,.music-panel:before,.folder:before,.upload-panel:before{content:"";position:absolute;inset:8px;border:1px solid #a4eaff30;border-radius:19px;pointer-events:none}
-.hero-crown{font:38px 'Cormorant Garamond';color:var(--cyan2);text-shadow:0 0 18px var(--cyan)}
-.hero-tag{color:var(--cyan);font-size:11px;letter-spacing:4px;font-weight:700}
-.hero h2{font:600 clamp(38px,8vw,56px) 'Cormorant Garamond';letter-spacing:6px;margin:10px 0}
-.hero-line{height:1px;width:150px;margin:12px auto;background:linear-gradient(90deg,transparent,var(--cyan2),transparent)}
-.hero p{color:#c6e4f4;line-height:1.8;font-size:14px;margin:0}
+.hero{
+padding:35px 20px;border-radius:25px;
+margin-bottom:22px;text-align:center;
+background:linear-gradient(145deg,rgba(8,26,45,.55),rgba(7,17,31,.58));
+position:relative;overflow:hidden;
+}
+.hero:before{
+content:"";position:absolute;inset:10px;
+border:1px solid rgba(180,220,235,.3);
+border-radius:19px;pointer-events:none
+}
+.hero-crown{
+font-family:"Cormorant Garamond",serif;
+font-size:35px;color:var(--silver);
+margin-bottom:5px;text-shadow:0 0 18px #8ccce755
+}
+.hero-tag{
+color:var(--cyan);font-size:11px;
+letter-spacing:3px;font-weight:600
+}
+.hero h2{
+font-family:"Cormorant Garamond",serif;
+font-size:clamp(34px,7vw,47px);
+font-weight:600;letter-spacing:5px;
+margin:12px 0 8px
+}
+.hero-line{
+width:110px;height:1px;
+background:linear-gradient(90deg,transparent,var(--silver),transparent);
+margin:13px auto
+}
+.hero p{color:var(--muted);font-size:13px;line-height:1.9;margin:0}
 
-/* MUSIC PLAYER */
-.music-panel{position:relative;overflow:hidden;padding:18px;border-radius:25px;margin-bottom:28px;background:linear-gradient(135deg,rgba(5,42,68,.76),rgba(2,18,33,.76))}
-.music-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;position:relative;z-index:1}
-.music-heading strong{font:600 21px 'Cormorant Garamond';letter-spacing:2px}
-.music-heading small{color:var(--muted);font-size:11px}
-.music-layout{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:14px;position:relative;z-index:1}
-.music-left{min-width:0;padding:8px 5px;display:flex;flex-direction:column}
-.music-brand{display:flex;align-items:center;gap:13px;margin-bottom:10px}
-.album{width:94px;height:94px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#09263e 47%,#50c9ed 51%,#1b4866 64%,#b4efff 70%,#0b2036 77%);border:2px solid #a9edff99;box-shadow:0 0 23px #50d9ff99,inset 0 0 18px #0009;color:#e4faff;font:34px 'Cormorant Garamond'}
+/* MUSIC */
+.music-panel{
+padding:17px;border-radius:24px;
+margin-bottom:27px;
+background:linear-gradient(135deg,rgba(14,42,65,.75),rgba(5,17,31,.72));
+position:relative;overflow:hidden;
+}
+.music-panel:before{
+content:"";position:absolute;inset:7px;
+border:1px solid rgba(172,218,236,.2);
+border-radius:18px;pointer-events:none
+}
+.music-heading{
+display:flex;justify-content:space-between;
+align-items:center;margin-bottom:13px;
+position:relative;z-index:1
+}
+.music-heading strong{
+font-family:"Cormorant Garamond",serif;
+font-size:19px;letter-spacing:2px;font-weight:600
+}
+.music-heading small{font-size:10px;color:var(--muted)}
+.music-layout{
+display:grid;
+grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
+gap:12px;position:relative;z-index:1
+}
+.music-left{
+min-width:0;padding:8px 3px;
+display:flex;flex-direction:column
+}
+.music-brand{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.album{
+width:76px;height:76px;flex-shrink:0;
+border-radius:50%;display:grid;place-items:center;
+background:radial-gradient(circle,#172b40 48%,#6ba9c5 51%,#263f56 65%,#a8dce9 70%,#142639 77%);
+border:2px solid #a6d9eb88;
+box-shadow:0 0 20px #78c6e744,inset 0 0 15px #0008;
+color:#e5f6fc;font-family:"Cormorant Garamond",serif;
+font-size:23px;letter-spacing:1px;
+}
 .music-panel.playing .album{animation:spin 9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.music-title{font-weight:800;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
-.music-sub{color:var(--muted);font-size:10px;margin-top:5px;letter-spacing:1px}
-.eq{height:28px;display:flex;align-items:end;gap:4px;margin-top:10px}
-.eq i{width:5px;height:18%;border-radius:5px;background:linear-gradient(var(--cyan2),var(--cyan))}
+.music-title{font-weight:700;font-size:12px;overflow-wrap:anywhere;line-height:1.5}
+.music-sub{color:var(--muted);font-size:9px;margin-top:4px;letter-spacing:1px}
+.eq{height:27px;display:flex;align-items:end;gap:4px;margin-top:9px}
+.eq i{
+width:4px;border-radius:5px;
+background:linear-gradient(var(--silver),var(--cyan));
+height:12%;transition:.2s
+}
 .music-panel.playing .eq i{animation:eq .65s ease-in-out infinite alternate}
-.eq i:nth-child(2n){animation-delay:.18s}
-.eq i:nth-child(3n){animation-delay:.32s}
+.eq i:nth-child(2n){animation-delay:.2s}
+.eq i:nth-child(3n){animation-delay:.35s}
 @keyframes eq{to{height:100%}}
-.music-seek{width:100%;accent-color:var(--cyan);margin:13px 0 4px}
-.times{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
-.music-controls{display:flex;justify-content:center;align-items:center;gap:13px;margin:15px 0}
-.music-controls button{width:42px;height:42px;border-radius:50%;background:var(--panel2);border:1px solid var(--border);color:var(--text);font-size:16px}
-.music-controls .play{width:58px;height:58px;background:linear-gradient(145deg,#b8f2ff,#38a9d5);color:#08243a;border:1px solid #d5f8ff;box-shadow:0 0 24px #59d8ff88;font-size:22px}
-.volume-row{display:flex;align-items:center;gap:9px;color:var(--muted)}
+.music-seek{width:100%;accent-color:var(--cyan);margin:12px 0 4px;height:5px}
+.times{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}
+.music-controls{display:flex;justify-content:center;align-items:center;gap:12px;margin:13px 0}
+.music-controls button{
+border:1px solid var(--border);background:var(--panel2);
+color:var(--text);width:39px;height:39px;border-radius:50%;font-size:15px
+}
+.music-controls .play{
+width:50px;height:50px;
+background:linear-gradient(145deg,#b6e8f5,#5289ac);
+color:#102333;border:1px solid #d9f6ff;
+box-shadow:0 0 22px #80c9e555;font-size:19px
+}
+.volume-row{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11px}
 .volume-row input{flex:1;min-width:0;accent-color:var(--cyan)}
-.music-right{min-width:0;border-left:1px solid var(--border);padding:7px 0 7px 14px}
-.playlist-heading{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:10px}
-.playlist-heading strong{font:600 18px 'Cormorant Garamond';letter-spacing:1px}
-.playlist-heading small{font-size:10px;color:var(--muted)}
-.song-list{display:grid;gap:9px;max-height:280px;overflow:auto}
-.song-row{display:flex;align-items:center;gap:8px;padding:10px 8px;border:1px solid var(--border);border-radius:15px;background:#061a2c88;min-width:0}
-.song-row.active{border-color:var(--cyan);background:#23779b33;box-shadow:inset 0 0 15px #6fc7e522}
-.song-play{width:34px;height:34px;flex-shrink:0;border-radius:50%;border:1px solid var(--border);background:linear-gradient(145deg,#286587,#0b2a43);color:#e6faff}
+.music-right{min-width:0;border-left:1px solid var(--border);padding:5px 0 5px 11px}
+.playlist-heading{
+display:flex;justify-content:space-between;
+align-items:center;padding-bottom:9px;
+border-bottom:1px solid var(--border);margin-bottom:9px
+}
+.playlist-heading strong{
+font-family:"Cormorant Garamond",serif;
+font-size:15px;letter-spacing:1px;font-weight:500
+}
+.playlist-heading small{font-size:9px;color:var(--muted)}
+.song-list{display:grid;gap:8px;max-height:280px;overflow-y:auto;padding-right:2px}
+.song-row{
+display:flex;align-items:center;gap:7px;
+padding:9px 7px;border:1px solid var(--border);
+border-radius:14px;background:rgba(12,25,38,.52);min-width:0
+}
+.song-row.active{
+border-color:var(--cyan);
+background:rgba(75,153,186,.20);
+box-shadow:inset 0 0 15px #6fc7e510
+}
+.song-play{
+border:1px solid #9ccfe655;border-radius:50%;
+width:31px;height:31px;
+background:linear-gradient(145deg,#315875,#172d43);
+color:#e2f6ff;flex-shrink:0;font-size:10px
+}
 .song-info{flex:1;min-width:0}
-.song-info strong{display:block;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
-.song-info small{color:var(--muted);font-size:10px}
-.song-delete{width:34px!important;height:34px!important;border-radius:10px!important}
-.music-empty{padding:22px 6px;color:var(--muted);font-size:12px}
-.music-empty:before{content:'♫';display:block;font-size:30px;color:var(--cyan);margin-bottom:8px}
+.song-info strong{display:block;font-size:10px;overflow-wrap:anywhere;line-height:1.5}
+.song-info small{color:var(--muted);font-size:9px}
 
-/* FOLDERS */
-.section-label{text-align:center;margin:10px 0 15px;letter-spacing:3px}
-.folders{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
-.folder{position:relative;overflow:hidden;text-align:left;color:var(--text);padding:18px 15px;border-radius:22px;background:linear-gradient(145deg,rgba(20,72,103,.7),rgba(4,24,42,.78));min-width:0}
-.folder.active{border-color:var(--cyan);box-shadow:0 0 22px #57d9ff44}
-.folder-count{float:right;color:var(--cyan);font-size:12px;position:relative}
-.folder-icon{width:70px;height:70px;display:grid;place-items:center;margin-bottom:12px;border-radius:20px;font-size:34px;background:linear-gradient(145deg,#28658b,#0b2944);border:1px solid var(--border);box-shadow:0 0 20px #54cfff44;position:relative}
-.folder strong,.folder small{display:block;position:relative}
-.folder strong{font-size:15px;letter-spacing:2px}
-.folder small{color:var(--muted);font-size:11px;margin-top:5px}
+/* TOMBOL TITIK TIGA */
+.song-more{
+width:32px;height:32px;flex-shrink:0;
+display:grid;place-items:center;
+border:1px solid rgba(255,155,175,.45);
+border-radius:50%;
+background:rgba(103,40,59,.38);
+color:#ffb0bd;
+font-size:22px;font-weight:700;
+line-height:1;padding:0;
+transform:none;
+}
+.song-more:active{transform:scale(.94)}
+.music-empty{font-size:11px;color:var(--muted);padding:20px 5px}
+.music-empty:before{content:"♫";display:block;font-size:30px;color:var(--cyan);margin-bottom:7px}
+
+/* FOLDER */
+.section-label{margin:8px 3px 13px}
+.folders{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:23px}
+.folder{
+color:var(--text);text-align:left;padding:17px 14px;
+border-radius:20px;min-width:0;position:relative;overflow:hidden;
+background:linear-gradient(145deg,rgba(16,48,70,.75),rgba(8,23,39,.72));
+transition:.2s
+}
+.folder:before{
+content:"";position:absolute;inset:5px;
+border:1px solid rgba(180,220,235,.2);
+border-radius:15px;pointer-events:none
+}
+.folder.active{border-color:var(--cyan);box-shadow:0 0 23px #6ec6e52b,inset 0 0 20px #8ccde510}
+.folder-count{float:right;color:var(--cyan);font-size:11px;position:relative}
+.folder-icon{
+width:65px;height:65px;display:grid;place-items:center;
+margin-bottom:13px;border-radius:19px;font-size:31px;color:#e3f7ff;
+background:linear-gradient(145deg,#284e69,#14283d);
+border:1px solid #a8d9eb66;box-shadow:0 0 22px #6db9d52b;
+position:relative
+}
+.folder strong{display:block;font-size:14px;letter-spacing:2px;position:relative}
+.folder small{display:block;color:var(--muted);font-size:10px;margin-top:5px;position:relative}
 
 /* UPLOAD */
-.upload-panel{position:relative;overflow:hidden;padding:19px;border-radius:23px;margin-bottom:25px;background:linear-gradient(145deg,rgba(15,61,89,.78),rgba(3,22,39,.8))}
+.upload-panel{
+padding:18px;border-radius:22px;margin-bottom:24px;
+background:linear-gradient(145deg,rgba(17,47,69,.78),rgba(8,24,40,.72));
+position:relative;overflow:hidden
+}
+.upload-panel:before{
+content:"";position:absolute;inset:6px;
+border:1px solid rgba(180,220,235,.2);
+border-radius:17px;pointer-events:none
+}
 .panel-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;position:relative}
-.panel-heading h3{font:600 25px 'Cormorant Garamond';margin:0}
-.admin-pill{font-size:11px;color:#6fffe0}
-.dropzone{position:relative;margin-top:15px;padding:28px 12px;text-align:center;border:1px dashed var(--cyan);border-radius:18px;background:linear-gradient(145deg,#1c638533,#061e3588)}
-.dropzone.drag{background:#4ebfe744}
-.cloud-icon{width:65px;height:65px;margin:auto;border-radius:20px;display:grid;place-items:center;color:var(--cyan2);font-size:38px;text-shadow:0 0 15px var(--cyan)}
-.dropzone h4{margin:8px 0;font-size:16px}
-.dropzone p{font-size:12px;color:var(--muted)}
-.primary-btn{border:1px solid #c9f5ff88;border-radius:25px;padding:12px 22px;color:#06253a;font-weight:800;background:linear-gradient(120deg,#c3f4ff,#4bb9e4);box-shadow:0 7px 20px #4d9dc555}
+.panel-heading h3{font-family:"Cormorant Garamond",serif;font-size:23px;margin:0}
+.admin-pill{color:#80d6ba;font-size:10px}
+.dropzone{
+margin-top:16px;padding:25px 12px;text-align:center;
+border:1px dashed rgba(157,211,233,.65);border-radius:18px;
+background:linear-gradient(145deg,rgba(70,126,158,.18),rgba(16,32,49,.40));
+transition:.2s;position:relative
+}
+.dropzone.drag{background:rgba(92,170,206,.22);border-color:var(--silver)}
+.cloud-icon{
+width:65px;height:65px;margin:0 auto 13px;border-radius:20px;
+display:grid;place-items:center;
+background:linear-gradient(145deg,#345e7b,#1c344b);
+border:1px solid #b6e4f177;box-shadow:0 0 25px #6cbada35;color:#e4f7ff
+}
+.cloud-icon svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.dropzone h4{margin:8px 0;font-size:15px}
+.dropzone p{font-size:11px;color:var(--muted);line-height:1.6}
+.primary-btn{
+border:1px solid #c4e9f477;border-radius:13px;padding:12px 19px;
+color:#102b3c;font-weight:800;
+background:linear-gradient(120deg,#c5eaf5,#72b6d5);
+box-shadow:0 7px 20px #4d9dc52a
+}
 .primary-btn:disabled{opacity:.5}
 #fileInput,#hdInput{display:none}
 .upload-status,.file-meta{font-size:11px;color:var(--muted);margin-top:9px}
 .progress{height:5px;background:var(--panel2);border-radius:9px;margin-top:8px;display:none}
-.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan2),var(--cyan))}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--silver),var(--cyan))}
 
-/* FILE LIST */
-.list-heading{display:flex;justify-content:space-between;align-items:center;margin:22px 3px 13px}
-.list-heading h3{font-size:18px;margin:0}
+/* FILE */
+.list-heading{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 13px}
+.list-heading h3{font-size:17px;margin:0;font-weight:700}
 .list-heading span{font-size:11px;color:var(--muted)}
-.video-list{display:grid;gap:15px}
-.video-card,.file-card{position:relative;overflow:hidden;min-width:0;border-radius:20px;background:linear-gradient(145deg,#17496a88,#061a2dcc)}
+.video-list{display:grid;gap:17px}
+.video-card,.file-card{
+border-radius:21px;overflow:hidden;min-width:0;
+background:linear-gradient(145deg,rgba(18,49,70,.78),rgba(7,22,38,.78)),var(--panel);
+border:1px solid rgba(155,206,228,.35);
+box-shadow:0 15px 35px #0005,0 0 18px #72bde510;position:relative
+}
+.video-card:before,.file-card:before{
+content:"";position:absolute;inset:5px;
+border:1px solid rgba(180,220,235,.12);
+border-radius:16px;pointer-events:none;z-index:1
+}
 .video-player{display:block;width:100%;aspect-ratio:16/9;background:#000;object-fit:contain}
-.video-info{padding:13px}
+.video-info{padding:14px;position:relative}
 .file-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
 .file-card{padding:11px}
-.file-preview{height:125px;border-radius:14px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(145deg,#214a67,#0b1e32);border:1px solid var(--border);margin-bottom:10px}
+.file-preview{
+height:120px;border-radius:14px;overflow:hidden;
+display:grid;place-items:center;background:linear-gradient(145deg,#213c53,#101e2f);
+border:1px solid var(--border);margin-bottom:10px
+}
 .file-preview img{width:100%;height:100%;object-fit:cover}
-.file-symbol{font-size:42px;color:var(--cyan2)}
+.file-symbol{font-size:42px;color:var(--silver)}
 .file-name{font-size:12px;font-weight:750;overflow-wrap:anywhere;line-height:1.5}
 .actions{display:flex;justify-content:space-between;gap:10px;margin-top:11px;position:relative;z-index:2}
-.action-btn{width:42px;height:40px;display:grid;place-items:center;border:1px solid var(--border);border-radius:12px;background:#174565aa;color:#9cdef3;text-decoration:none}
-.action-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.delete-btn{color:#ff9eaa;border-color:#ff829966;background:#542438aa}
-.empty{text-align:center;padding:38px 14px;border-radius:19px;color:var(--muted);background:var(--panel);border:1px solid var(--border);font-size:12px}
+.action-btn{
+width:44px;height:42px;display:grid;place-items:center;
+border:1px solid var(--border);border-radius:13px;
+background:linear-gradient(145deg,rgba(54,104,133,.35),rgba(18,35,53,.75));
+color:#9cdef3;text-decoration:none
+}
+.action-btn svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.download-btn{color:#91d8f0}
+.delete-btn{color:#ff9aa4;border:1px solid rgba(255,120,140,.4);background:linear-gradient(145deg,rgba(115,45,59,.4),rgba(49,25,38,.7))}
+.action-btn:active{transform:scale(.95)}
+.empty{text-align:center;padding:40px 14px;border-radius:19px;color:var(--muted);font-size:12px}
 .empty strong{display:block;color:var(--text);margin:8px}
-footer{text-align:center;color:var(--muted);font:500 14px 'Cormorant Garamond';letter-spacing:3px;margin-top:35px}
+footer{text-align:center;color:var(--muted);font-family:"Cormorant Garamond",serif;font-size:13px;letter-spacing:2px;margin-top:36px}
 
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:#000b;backdrop-filter:blur(9px);z-index:30;align-items:center;justify-content:center;padding:16px}
+.modal-bg{
+display:none;position:fixed;inset:0;background:#000b;
+backdrop-filter:blur(9px);z-index:30;
+align-items:center;justify-content:center;padding:16px
+}
 .modal-bg.show{display:flex}
-.modal{width:min(440px,100%);padding:22px;border-radius:22px;max-height:92vh;overflow:auto}
-.modal h3{margin:0 0 9px;font:600 27px 'Cormorant Garamond'}
+.modal{
+width:min(440px,100%);padding:22px;border-radius:22px;
+max-height:92vh;overflow:auto
+}
+.modal h3{margin:0 0 9px;font-family:"Cormorant Garamond",serif;font-size:25px}
 .modal p{font-size:12px;color:var(--muted);line-height:1.6}
-.modal input:not([type=range]),.modal select{width:100%;padding:12px;margin:5px 0;border:1px solid var(--border);border-radius:11px;background:var(--panel2);color:var(--text)}
+.modal input{
+width:100%;padding:12px;margin:5px 0;
+border:1px solid var(--border);border-radius:11px;
+background:var(--panel2);color:var(--text)
+}
 .modal-actions{display:flex;gap:9px;margin-top:10px}
 .modal-actions>*{flex:1}
 .secondary-btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:12px;padding:12px}
-.toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#102d43ed;border:1px solid var(--border);padding:12px 17px;border-radius:13px;z-index:50;font-size:12px;transition:.2s}
+.toast{
+position:fixed;bottom:18px;left:50%;transform:translate(-50%,20px);
+opacity:0;pointer-events:none;background:#142434ed;
+border:1px solid var(--border);padding:12px 17px;
+border-radius:13px;z-index:50;font-size:12px;transition:.2s
+}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .hd-preview{display:none;gap:9px}
 .hd-preview>div{flex:1;min-width:0}
@@ -160,48 +431,50 @@ footer{text-align:center;color:var(--muted);font:500 14px 'Cormorant Garamond';l
 .wrap{padding-top:30px}
 .file-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 .file-preview{height:155px}
-.folders{gap:17px}
+.folders{gap:16px}
 .folder{padding:22px}
 }
-@media(max-width:430px){
+@media(max-width:390px){
 .wrap{padding-left:12px;padding-right:12px}
 .music-panel{padding:13px}
-.music-heading strong{font-size:17px}
-.music-layout{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:8px}
-.album{width:66px;height:66px;font-size:24px}
+.music-layout{gap:8px;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr)}
+.album{width:62px;height:62px;font-size:19px}
 .music-brand{gap:7px}
 .music-title{font-size:10px}
 .music-controls{gap:6px}
-.music-controls button{width:34px;height:34px;font-size:12px}
-.music-controls .play{width:47px;height:47px;font-size:18px}
+.music-controls button{width:32px;height:32px;font-size:12px}
+.music-controls .play{width:43px;height:43px;font-size:17px}
 .music-right{padding-left:8px}
-.playlist-heading strong{font-size:14px}
 .song-row{padding:7px 5px;gap:5px}
 .song-info strong{font-size:9px}
-.song-play{width:27px;height:27px}
-.song-delete{width:28px!important;height:28px!important}
+.song-play{width:25px;height:25px}
+.song-more{width:28px;height:28px;font-size:20px}
 .folder{padding:14px 10px}
 .folder strong{font-size:12px}
-.folder-icon{width:57px;height:57px;font-size:28px}
-.hero p{font-size:12px}
+.folder-icon{width:56px;height:56px;font-size:27px}
 }
 </style>
 </head>
+
 <body>
 <div class="wrap">
-
 <header>
 <div class="brand">
 <div class="logo">♕</div>
 <div><h1>ZEZE</h1><small>Your personal media space</small></div>
 </div>
 <div class="menu-wrap">
-<button class="menu-btn" id="menuButton">⋮</button>
+<button class="menu-btn" id="menuButton" aria-label="Menu">⋮</button>
 <div class="menu" id="menu">
 <div class="menu-title">ZEZE MENU</div>
 <div class="menu-grid">
-<button class="menu-card" id="loginMenu"><strong id="loginCardTitle">♕ Login Admin</strong><small id="loginCardSub">Kelola penyimpanan</small></button>
-<button class="menu-card" id="openHD"><strong>✧ HD Foto</strong><small>Perjelas foto</small></button>
+<button class="menu-card" id="loginMenu">
+<strong id="loginCardTitle">🔐 Login Admin</strong>
+<small id="loginCardSub">Kelola penyimpanan</small>
+</button>
+<button class="menu-card" id="openHD">
+<strong>✧ HD Foto</strong><small>Perjelas foto</small>
+</button>
 </div>
 <div class="theme-box">
 <div class="menu-title">PILIH TEMA</div>
@@ -221,7 +494,8 @@ footer{text-align:center;color:var(--muted);font:500 14px 'Cormorant Garamond';l
 <div class="hero-tag">✧ ZEZE PERSONAL CLOUD ✧</div>
 <h2>WELCOME</h2>
 <div class="hero-line"></div>
-<p>Terima kasih sudah mampir di Zeze Cloud<br>Putar lagu sambil memilih apa yang mau di-download.</p>
+<p>Terima kasih sudah mampir di Zeze Cloud<br>
+Putar lagu sambil memilih apa yang mau di-download.</p>
 </section>
 
 <section class="music-panel" id="musicPanel">
@@ -229,15 +503,16 @@ footer{text-align:center;color:var(--muted);font:500 14px 'Cormorant Garamond';l
 <strong>♫ ZEZE MUSIC COLLECTION</strong>
 <small id="musicTotal">0 lagu</small>
 </div>
-<div id="musicContent"><div class="music-empty">Memuat musik...</div></div>
+<div id="musicContent">
+<div class="music-empty">Belum ada musik. Upload MP3 melalui akun admin.</div>
+</div>
 </section>
 
 <div class="section-label">✧ JELAJAHI PENYIMPANAN ✧</div>
-
 <section class="folders">
 <button class="folder active" id="videoFolder">
 <span class="folder-count" id="videoCount">0</span>
-<span class="folder-icon">▶</span>
+<span class="folder-icon">▷</span>
 <strong>VIDEO</strong><small>Koleksi video</small>
 </button>
 <button class="folder" id="fileFolder">
@@ -253,7 +528,9 @@ footer{text-align:center;color:var(--muted);font:500 14px 'Cormorant Garamond';l
 <span class="admin-pill" id="adminPill">ADMIN AKTIF</span>
 </div>
 <div class="dropzone" id="dropzone">
-<div class="cloud-icon">☁</div>
+<div class="cloud-icon">
+<svg viewBox="0 0 24 24"><path d="M12 16V4m-5 5 5-5 5 5"/><path d="M5 15v5h14v-5"/></svg>
+</div>
 <h4>Letakkan file kamu di sini</h4>
 <p>Video · MP3 · Foto · Dokumen</p>
 <button class="primary-btn" id="chooseFile">＋ Pilih File</button>
@@ -289,29 +566,40 @@ footer{text-align:center;color:var(--muted);font:500 14px 'Cormorant Garamond';l
 <h3>✧ Zeze HD Photo</h3>
 <p>Upscaling dan penajaman foto langsung di browser.</p>
 <input type="file" id="hdInput" accept="image/*">
-<button class="secondary-btn" id="chooseHD">Pilih Foto</button>
+<button class="secondary-btn" onclick="document.getElementById('hdInput').click()">Pilih Foto</button>
 <div class="hd-preview" id="hdPreview">
 <div><img id="hdOriginal"><span>ASLI</span></div>
 <div><img id="hdResult"><span>HASIL HD</span></div>
 </div>
-<div class="hd-options">Kekuatan penajaman: <b id="strengthValue">65%</b><input type="range" id="hdStrength" min="0" max="100" value="65"></div>
-<div class="hd-options">Ukuran hasil<select id="hdScale"><option value="1">Asli</option><option value="2" selected>2x HD</option><option value="3">3x Ultra</option></select></div>
+<div class="hd-options">
+Kekuatan penajaman: <b id="strengthValue">65%</b>
+<input type="range" id="hdStrength" min="0" max="100" value="65">
+</div>
+<div class="hd-options">
+Ukuran hasil
+<select id="hdScale">
+<option value="1">Asli</option>
+<option value="2" selected>2x HD</option>
+<option value="3">3x Ultra</option>
+</select>
+</div>
 <div class="hd-status" id="hdStatus">Pilih foto untuk memulai.</div>
 <button class="primary-btn" id="processHD" disabled>✧ Proses Foto HD</button>
 <button class="primary-btn" id="saveHD" style="display:none">⬇ Simpan Hasil</button>
 <button class="secondary-btn" id="closeHD">Tutup</button>
 </div>
 </div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL='https://sgcrivgrlxeqkryreabc.supabase.co';
-const SUPABASE_KEY='sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o';
-const BUCKET='zeze-cloud';
+const SUPABASE_URL="https://sgcrivgrlxeqkryreabc.supabase.co";
+const SUPABASE_KEY="sb_publishable_Ve4X8ArfrWWj5hvCvB4raw_fIcdid3o";
+const BUCKET="zeze-cloud";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=id=>document.getElementById(id);
 
-let currentUser=null,allFiles=[],currentTab='video',isUploading=false;
+let currentUser=null,allFiles=[],currentTab="video",isUploading=false;
 let playlist=[],songIndex=0,hdFile=null,hdOriginalURL=null,hdResultURL=null,hdBlob=null;
 
 const videoExt=/\.(mp4|webm|mov|m4v|ogv)$/i;
@@ -335,11 +623,14 @@ function url(n,dl=false){
 return db.storage.from(BUCKET).getPublicUrl(n,{download:dl}).data.publicUrl;
 }
 
-/* TEMA */
+/* TEMA DENGAN BACKGROUND BERBEDA */
 function setTheme(t){
-document.documentElement.dataset.theme=t==='neon'?'':t;
+if(!['neon','dark','light','amoled'].includes(t))t='neon';
+document.documentElement.dataset.theme=t;
 localStorage.setItem('zeze-theme',t);
-document.querySelectorAll('[data-theme-choice]').forEach(b=>b.classList.toggle('active',b.dataset.themeChoice===t));
+document.querySelectorAll('[data-theme-choice]').forEach(b=>{
+b.classList.toggle('active',b.dataset.themeChoice===t);
+});
 }
 setTheme(localStorage.getItem('zeze-theme')||'neon');
 
@@ -349,14 +640,13 @@ if(!e.target.closest('.menu-wrap'))$('menu').classList.remove('show');
 });
 document.querySelectorAll('[data-theme-choice]').forEach(b=>b.onclick=()=>{
 setTheme(b.dataset.themeChoice);
-toast('Tema diubah');
+toast('Tema berhasil diubah');
 });
 
 $('openHD').onclick=()=>{
 $('menu').classList.remove('show');
 $('hdModal').classList.add('show');
 };
-$('chooseHD').onclick=()=>$('hdInput').click();
 $('closeHD').onclick=()=>$('hdModal').classList.remove('show');
 $('hdModal').addEventListener('click',e=>{
 if(e.target===$('hdModal'))$('hdModal').classList.remove('show');
@@ -380,25 +670,20 @@ $('adminPill').style.display=currentUser?'inline':'none';
 $('loginCardTitle').textContent=currentUser?'↪ Logout Admin':'♕ Login Admin';
 $('loginCardSub').textContent=currentUser?'Keluar dari akun admin':'Kelola penyimpanan';
 }
-
 $('loginMenu').onclick=async()=>{
 $('menu').classList.remove('show');
 if(currentUser){
 let{error}=await db.auth.signOut();
 if(error)return toast(error.message);
-currentUser=null;
-updateAdmin();
-loadFiles();
+currentUser=null;updateAdmin();loadFiles();
 return toast('Logout berhasil');
 }
 $('loginModal').classList.add('show');
 };
-
 $('cancelLogin').onclick=()=>$('loginModal').classList.remove('show');
 $('loginModal').addEventListener('click',e=>{
 if(e.target===$('loginModal'))$('loginModal').classList.remove('show');
 });
-
 $('submitLogin').onclick=async()=>{
 let email=$('emailInput').value.trim();
 let password=$('passwordInput').value;
@@ -410,19 +695,12 @@ if(error)throw error;
 currentUser=data.user;
 $('loginModal').classList.remove('show');
 $('passwordInput').value='';
-updateAdmin();
-toast('Login berhasil');
-loadFiles();
-}catch(e){
-toast('Login gagal: '+e.message);
-}finally{
-$('submitLogin').disabled=false;
-}
+updateAdmin();toast('Login berhasil');loadFiles();
+}catch(e){toast('Login gagal: '+e.message)}
+finally{$('submitLogin').disabled=false}
 };
-
 db.auth.onAuthStateChange((_e,s)=>{
-currentUser=s?.user||null;
-updateAdmin();
+currentUser=s?.user||null;updateAdmin();
 });
 
 /* JENIS FILE */
@@ -430,7 +708,7 @@ function isVideo(f){return videoExt.test(f.name)}
 function isAudio(f){return audioExt.test(f.name)}
 function isImage(f){return imageExt.test(f.name)}
 
-/* LOAD FILE */
+/* LOAD */
 async function loadFiles(){
 $('content').innerHTML='<div class="empty">☁<strong>Memuat file...</strong></div>';
 let{data,error}=await db.storage.from(BUCKET).list('',{
@@ -441,27 +719,27 @@ $('content').innerHTML='<div class="empty"><strong>Gagal memuat file</strong>'+e
 return;
 }
 allFiles=(data||[]).filter(f=>f.name&&f.name!=='.'&&f.name!=='..');
-renderMusic();
-renderFiles();
+renderMusic();renderFiles();
 }
 
-/* TOMBOL AKSI */
+/* AKSI FILE */
 const downloadIcon='<svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 19v2h16v-2"/></svg>';
 const trashIcon='<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 14h12l1-14M9 7V4h6v3"/></svg>';
 
 function dlButton(u,n){
-return `<a class="action-btn" href="${esc(u)}" download="${esc(n)}" title="Download">${downloadIcon}</a>`;
+return `<a class="action-btn download-btn" href="${esc(u)}" download="${esc(n)}" title="Download" aria-label="Download">${downloadIcon}</a>`;
 }
 function delButton(n){
-return currentUser?`<button class="action-btn delete-btn" data-delete="${esc(n)}" title="Hapus">${trashIcon}</button>`:'';
+return currentUser?`<button class="action-btn delete-btn" data-delete="${esc(n)}" title="Hapus" aria-label="Hapus">${trashIcon}</button>`:'';
 }
 async function deleteFile(n){
 if(!currentUser)return toast('Login admin terlebih dahulu');
 if(!confirm('Hapus file ini secara permanen?\n'+n))return;
 let{error}=await db.storage.from(BUCKET).remove([n]);
 if(error)return toast('Gagal menghapus: '+error.message);
-let a=$('audioPlayer');
-if(a&&playlist[songIndex]?.name===n)a.pause();
+if(playlist[songIndex]?.name===n){
+let player=$('audioPlayer');if(player)player.pause();
+}
 toast('File berhasil dihapus');
 await loadFiles();
 }
@@ -470,18 +748,18 @@ await loadFiles();
 function renderFiles(){
 let videos=allFiles.filter(isVideo);
 let others=allFiles.filter(f=>!isVideo(f)&&!isAudio(f));
-
 $('videoCount').textContent=videos.length;
 $('fileCount').textContent=others.length;
-
 let list=currentTab==='video'?videos:others;
 $('itemCount').textContent=list.length+' item';
 
 if(!list.length){
-$('content').innerHTML='<div class="empty"><div style="font-size:35px">♧</div><strong>Belum ada file di sini</strong>File yang diunggah akan muncul di sini.</div>';
+$('content').innerHTML=`<div class="empty">
+<div style="font-size:35px">♧</div>
+<strong>Belum ada file di sini</strong>
+File yang diunggah akan muncul di sini.</div>`;
 return;
 }
-
 if(currentTab==='video'){
 $('content').innerHTML='<div class="video-list">'+list.map(f=>`
 <article class="video-card">
@@ -511,8 +789,9 @@ ${delButton(f.name)}
 </div>
 </article>`).join('')+'</div>';
 }
-
-document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteFile(b.dataset.delete));
+document.querySelectorAll('[data-delete]').forEach(b=>{
+b.onclick=()=>deleteFile(b.dataset.delete);
+});
 }
 
 /* MUSIC PLAYER */
@@ -525,7 +804,6 @@ songIndex=0;
 $('musicContent').innerHTML='<div class="music-empty">Belum ada musik. Upload MP3 melalui akun admin, lalu musik akan muncul di sini.</div>';
 return;
 }
-
 if(songIndex>=playlist.length)songIndex=0;
 let f=playlist[songIndex];
 
@@ -535,26 +813,19 @@ $('musicContent').innerHTML=`
 <div class="music-brand">
 <div class="album">AZ</div>
 <div style="min-width:0">
-<div class="music-title">${esc(f.name)}</div>
+<div class="music-title" id="nowTitle">${esc(f.name)}</div>
 <div class="music-sub">ZEZE · MUSIC PLAYER</div>
 <div class="eq">${'<i></i>'.repeat(14)}</div>
 </div>
 </div>
-
 <audio id="audioPlayer" preload="metadata" src="${esc(url(f.name))}"></audio>
-
 <input class="music-seek" id="seek" type="range" min="0" max="100" value="0">
-<div class="times">
-<span id="elapsed">0:00</span>
-<span id="duration">0:00</span>
-</div>
-
+<div class="times"><span id="elapsed">0:00</span><span id="duration">0:00</span></div>
 <div class="music-controls">
-<button id="prevSong">|◀</button>
-<button class="play" id="togglePlay">▶</button>
-<button id="nextSong">▶|</button>
+<button id="prevSong" aria-label="Lagu sebelumnya">|◀</button>
+<button class="play" id="togglePlay" aria-label="Putar">▶</button>
+<button id="nextSong" aria-label="Lagu berikutnya">▶|</button>
 </div>
-
 <div class="volume-row">
 <span>◖</span>
 <input id="volume" type="range" min="0" max="1" step=".01" value=".8">
@@ -574,20 +845,22 @@ ${playlist.map((x,i)=>`
 <strong>${esc(x.name)}</strong>
 <small>${size(x.metadata?.size)} · Audio</small>
 </div>
-${currentUser?`<button class="action-btn delete-btn song-delete" data-song-delete="${esc(x.name)}">${trashIcon}</button>`:''}
+${currentUser?`
+<button class="song-more" data-song-delete="${esc(x.name)}"
+title="Pilihan lagu" aria-label="Pilihan lagu">⋮</button>`:''}
 </div>`).join('')}
 </div>
 </div>
 </div>`;
 
 let a=$('audioPlayer');
-let fmt=n=>!isFinite(n)?'0:00':Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');
+let fmt=n=>!isFinite(n)?'0:00':
+Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');
 
 $('togglePlay').onclick=()=>{
 if(a.paused)a.play().catch(()=>toast('Gagal memutar audio'));
 else a.pause();
 };
-
 a.onplay=()=>{
 $('togglePlay').textContent='Ⅱ';
 $('musicPanel').classList.add('playing');
@@ -596,7 +869,6 @@ a.onpause=()=>{
 $('togglePlay').textContent='▶';
 $('musicPanel').classList.remove('playing');
 };
-
 a.ontimeupdate=()=>{
 if(a.duration){
 $('seek').value=a.currentTime/a.duration*100;
@@ -614,7 +886,10 @@ $('volume').oninput=()=>a.volume=$('volume').value;
 function changeSong(step,autoplay=true){
 songIndex=(songIndex+step+playlist.length)%playlist.length;
 renderMusic();
-if(autoplay)$('audioPlayer').play().catch(()=>{});
+if(autoplay){
+let next=$('audioPlayer');
+if(next)next.play().catch(()=>{});
+}
 }
 $('prevSong').onclick=()=>changeSong(-1);
 $('nextSong').onclick=()=>changeSong(1);
@@ -626,6 +901,7 @@ renderMusic();
 $('audioPlayer').play().catch(()=>toast('Gagal memutar audio'));
 });
 
+/* TITIK TIGA UNTUK HAPUS LAGU */
 document.querySelectorAll('[data-song-delete]').forEach(b=>{
 b.onclick=()=>deleteFile(b.dataset.songDelete);
 });
@@ -633,22 +909,18 @@ b.onclick=()=>deleteFile(b.dataset.songDelete);
 
 /* UPLOAD */
 $('chooseFile').onclick=()=>$('fileInput').click();
-
 $('fileInput').onchange=()=>{
 if($('fileInput').files.length)uploadFiles([...$('fileInput').files]);
 $('fileInput').value='';
 };
-
-['dragenter','dragover'].forEach(ev=>$('dropzone').addEventListener(ev,e=>{
-e.preventDefault();
-$('dropzone').classList.add('drag');
+['dragenter','dragover'].forEach(ev=>
+$('dropzone').addEventListener(ev,e=>{
+e.preventDefault();$('dropzone').classList.add('drag');
 }));
-
-['dragleave','drop'].forEach(ev=>$('dropzone').addEventListener(ev,e=>{
-e.preventDefault();
-$('dropzone').classList.remove('drag');
+['dragleave','drop'].forEach(ev=>
+$('dropzone').addEventListener(ev,e=>{
+e.preventDefault();$('dropzone').classList.remove('drag');
 }));
-
 $('dropzone').addEventListener('drop',e=>{
 let f=[...e.dataTransfer.files];
 if(f.length)uploadFiles(f);
@@ -657,39 +929,26 @@ if(f.length)uploadFiles(f);
 async function uploadFiles(files){
 if(!currentUser)return toast('Login admin terlebih dahulu');
 if(isUploading)return toast('Upload masih berjalan');
-
 isUploading=true;
 $('chooseFile').disabled=true;
 $('progress').style.display='block';
-
 let ok=0,bad=0;
-
 for(let f of files){
 $('uploadStatus').textContent='Mengunggah: '+f.name;
-
 let{error}=await db.storage.from(BUCKET).upload(f.name,f,{
-cacheControl:'3600',
-upsert:false,
-contentType:f.type||undefined
+cacheControl:'3600',upsert:false,contentType:f.type||undefined
 });
-
-if(error){
-bad++;
-toast(f.name+': '+error.message);
-}else ok++;
-
+if(error){bad++;toast(f.name+': '+error.message)}
+else ok++;
 $('progressBar').style.width=((ok+bad)/files.length*100)+'%';
 }
-
 $('uploadStatus').textContent=`Selesai: ${ok} berhasil, ${bad} gagal.`;
 $('chooseFile').disabled=false;
 isUploading=false;
-
 setTimeout(()=>{
 $('progress').style.display='none';
 $('progressBar').style.width='0';
 },1500);
-
 loadFiles();
 }
 
@@ -699,22 +958,18 @@ let f=$('hdInput').files[0];
 if(!f)return;
 if(!f.type.startsWith('image/'))return toast('Pilih gambar valid');
 if(f.size>20*1024*1024)return toast('Maksimal 20 MB');
-
 hdFile=f;
 if(hdOriginalURL)URL.revokeObjectURL(hdOriginalURL);
 hdOriginalURL=URL.createObjectURL(f);
-
 $('hdOriginal').src=hdOriginalURL;
 $('hdPreview').style.display='flex';
 $('processHD').disabled=false;
 $('saveHD').style.display='none';
 $('hdStatus').textContent='Foto siap diproses';
 };
-
 $('hdStrength').oninput=()=>{
 $('strengthValue').textContent=$('hdStrength').value+'%';
 };
-
 function loadImg(src){
 return new Promise((res,rej)=>{
 let i=new Image();
@@ -723,38 +978,28 @@ i.onerror=rej;
 i.src=src;
 });
 }
-
 $('processHD').onclick=async()=>{
 if(!hdFile)return;
-
 let b=$('processHD');
-b.disabled=true;
-b.textContent='Memproses...';
-
+b.disabled=true;b.textContent='Memproses...';
 try{
 let im=await loadImg(hdOriginalURL);
 let scale=+$('hdScale').value;
 let w=Math.round(im.naturalWidth*scale);
 let h=Math.round(im.naturalHeight*scale);
-
 if(w*h>40000000)throw Error('Resolusi terlalu besar, coba 2x');
-
 let c=document.createElement('canvas');
-c.width=w;
-c.height=h;
+c.width=w;c.height=h;
 let x=c.getContext('2d',{willReadFrequently:true});
-
 x.imageSmoothingEnabled=true;
 x.imageSmoothingQuality='high';
 x.filter='contrast(1.08) saturate(1.08)';
 x.drawImage(im,0,0,w,h);
 x.filter='none';
-
 let d=x.getImageData(0,0,w,h);
 let src=d.data;
 let out=new Uint8ClampedArray(src);
 let amt=+$('hdStrength').value/100;
-
 for(let y=1;y<h-1;y++){
 for(let z=1;z<w-1;z++){
 let k=(y*w+z)*4;
@@ -764,31 +1009,25 @@ let v=src[k+ch]*5
 -src[((y+1)*w+z)*4+ch]
 -src[(y*w+z-1)*4+ch]
 -src[(y*w+z+1)*4+ch];
-
 out[k+ch]=Math.max(0,Math.min(255,
 src[k+ch]+(v-src[k+ch])*amt*.35));
 }
 }
 }
-
 x.putImageData(new ImageData(out,w,h),0,0);
 hdBlob=await new Promise(r=>c.toBlob(r,'image/jpeg',.94));
 if(!hdBlob)throw Error('Gagal membuat foto');
-
 if(hdResultURL)URL.revokeObjectURL(hdResultURL);
 hdResultURL=URL.createObjectURL(hdBlob);
 $('hdResult').src=hdResultURL;
 $('saveHD').style.display='block';
 $('hdStatus').textContent=`Berhasil ${w} × ${h} px · ${size(hdBlob.size)}`;
-
 }catch(e){
 $('hdStatus').textContent=e.message;
 }finally{
-b.disabled=false;
-b.textContent='✧ Proses Foto HD';
+b.disabled=false;b.textContent='✧ Proses Foto HD';
 }
 };
-
 $('saveHD').onclick=()=>{
 if(!hdBlob)return;
 let a=document.createElement('a');
